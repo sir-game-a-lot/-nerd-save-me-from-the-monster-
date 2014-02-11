@@ -3,13 +3,13 @@ using UnityEditor;
 using System.Collections;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dUISoundItem))]
+[CustomEditor(typeof(tk2dUISoundItem))]
 public class tk2dUISoundItemEditor : tk2dUIBaseItemControlEditor
 {
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        blaze2dUISoundItem soundBtn = (blaze2dUISoundItem)target;
+        tk2dUISoundItem soundBtn = (tk2dUISoundItem)target;
 
         soundBtn.downButtonSound = EditorGUILayout.ObjectField("Down Sound",soundBtn.downButtonSound, typeof(AudioClip),false,null) as AudioClip;
         soundBtn.upButtonSound = EditorGUILayout.ObjectField("Up Sound", soundBtn.upButtonSound, typeof(AudioClip), false, null) as AudioClip;

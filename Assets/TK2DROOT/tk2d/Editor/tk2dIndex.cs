@@ -91,7 +91,7 @@ public class tk2dIndex : ScriptableObject
 		return spriteCollectionIndex.ToArray();
 	}
 	
-	public void AddSpriteCollectionData(blaze2dSpriteCollectionData sc)
+	public void AddSpriteCollectionData(tk2dSpriteCollectionData sc)
 	{
 #if UNITY_EDITOR
 		// prune list
@@ -174,7 +174,7 @@ public class tk2dIndex : ScriptableObject
 		return spriteAnimationIndex.ToArray();
 	}
 	
-	public void AddSpriteAnimation(blaze2dSpriteAnimation anim)
+	public void AddSpriteAnimation(tk2dSpriteAnimation anim)
 	{
 #if UNITY_EDITOR
 		string guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(anim));
@@ -192,7 +192,7 @@ public class tk2dIndex : ScriptableObject
 		return fontIndex.ToArray();
 	}
 	
-	public void AddOrUpdateFont(blaze2dFont font)
+	public void AddOrUpdateFont(tk2dFont font)
 	{
 #if UNITY_EDITOR
 		string guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(font));

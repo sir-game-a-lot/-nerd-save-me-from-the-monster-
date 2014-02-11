@@ -26,20 +26,20 @@ public static class tk2dTileMapEditorUtility {
 
 	static void OnUndoRedo() {
 		foreach (GameObject go in Selection.gameObjects) {
-			blaze2dUtil.UndoEnabled = false;
-			blaze2dTileMap tilemap = go.GetComponent<blaze2dTileMap>();
+			tk2dUtil.UndoEnabled = false;
+			tk2dTileMap tilemap = go.GetComponent<tk2dTileMap>();
 			if (tilemap != null) {
 				tilemap.ForceBuild();
 			}
-			blaze2dUtil.UndoEnabled = true;
+			tk2dUtil.UndoEnabled = true;
 		}
 	}
 }
 
-[CustomEditor(typeof(blaze2dTileMap))]
+[CustomEditor(typeof(tk2dTileMap))]
 public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 {
-	blaze2dTileMap tileMap { get { return (blaze2dTileMap)target; } }
+	tk2dTileMap tileMap { get { return (tk2dTileMap)target; } }
 	tk2dTileMapEditorData editorData;
 
 	tk2dTileMapSceneGUI sceneGUI;
@@ -79,8 +79,8 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 	int partitionSizeX, partitionSizeY;
 
 	// Sprite collection accessor, cleanup when changed
-	blaze2dSpriteCollectionData _spriteCollection = null;
-	blaze2dSpriteCollectionData SpriteCollection
+	tk2dSpriteCollectionData _spriteCollection = null;
+	tk2dSpriteCollectionData SpriteCollection
 	{
 		get
 		{
@@ -170,8 +170,8 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 			//if (buildKey != tileMap.buildKey)
 				//tk2dEditor.TileMap.TileMapUtility.CleanRenderData(tileMap);
 			
-			blaze2dTileMap.BuildFlags buildFlags = blaze2dTileMap.BuildFlags.EditMode;
-			if (!incremental) buildFlags |= blaze2dTileMap.BuildFlags.ForceBuild;
+			tk2dTileMap.BuildFlags buildFlags = tk2dTileMap.BuildFlags.EditMode;
+			if (!incremental) buildFlags |= tk2dTileMap.BuildFlags.ForceBuild;
 			tileMap.Build(buildFlags);
 		}
 	}
@@ -396,7 +396,7 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 #endif
 
 #if !(UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
-				bool using2DPhysics = (tileMap.SpriteCollectionInst != null && tileMap.SpriteCollectionInst.FirstValidDefinition != null && tileMap.SpriteCollectionInst.FirstValidDefinition.physicsEngine == blaze2dSpriteDefinition.PhysicsEngine.Physics2D);
+				bool using2DPhysics = (tileMap.SpriteCollectionInst != null && tileMap.SpriteCollectionInst.FirstValidDefinition != null && tileMap.SpriteCollectionInst.FirstValidDefinition.physicsEngine == tk2dSpriteDefinition.PhysicsEngine.Physics2D);
 				if (using2DPhysics) {
 					tileMap.data.Layers[layer].physicsMaterial2D = (PhysicsMaterial2D)EditorGUILayout.ObjectField("Physics Material (2D)", tileMap.data.Layers[layer].physicsMaterial2D, typeof(PhysicsMaterial2D), false);
 				}
@@ -482,7 +482,7 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 
 		// Sprite collection
 		GUILayout.BeginHorizontal();
-		blaze2dSpriteCollectionData newSpriteCollection = tk2dSpriteGuiUtility.SpriteCollectionList("Sprite Collection", tileMap.Editor__SpriteCollection);
+		tk2dSpriteCollectionData newSpriteCollection = tk2dSpriteGuiUtility.SpriteCollectionList("Sprite Collection", tileMap.Editor__SpriteCollection);
 		if (newSpriteCollection != tileMap.Editor__SpriteCollection) {
 #if (UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
 			Undo.RegisterSceneUndo("Set TileMap Sprite Collection");
@@ -505,14 +505,14 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 		if (tileMap.Editor__SpriteCollection != null && GUILayout.Button(">", EditorStyles.miniButton, GUILayout.Width(19))) {
 			tk2dSpriteCollectionEditorPopup v = EditorWindow.GetWindow( typeof(tk2dSpriteCollectionEditorPopup), false, "Sprite Collection Editor" ) as tk2dSpriteCollectionEditorPopup;
 			string assetPath = AssetDatabase.GUIDToAssetPath(tileMap.Editor__SpriteCollection.spriteCollectionGUID);
-			var spriteCollection = AssetDatabase.LoadAssetAtPath(assetPath, typeof(blaze2dSpriteCollection)) as blaze2dSpriteCollection;
+			var spriteCollection = AssetDatabase.LoadAssetAtPath(assetPath, typeof(tk2dSpriteCollection)) as tk2dSpriteCollection;
 			v.SetGeneratorAndSelectedSprite(spriteCollection, tileMap.Editor__SpriteCollection.FirstValidDefinitionIndex);
 		}
 		GUILayout.EndHorizontal();
 		GUILayout.Space(8);
 
 		// Tilemap data
-		blaze2dTileMapData newData = (blaze2dTileMapData)EditorGUILayout.ObjectField("Tile Map Data", tileMap.data, typeof(blaze2dTileMapData), false);
+		tk2dTileMapData newData = (tk2dTileMapData)EditorGUILayout.ObjectField("Tile Map Data", tileMap.data, typeof(tk2dTileMapData), false);
 		if (newData != tileMap.data)
 		{
 #if (UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
@@ -539,7 +539,7 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 #else
 					Undo.RegisterCompleteObjectUndo(tileMap, "Create TileMap Data");
 #endif
-					blaze2dTileMapData tileMapData = ScriptableObject.CreateInstance<blaze2dTileMapData>();
+					tk2dTileMapData tileMapData = ScriptableObject.CreateInstance<tk2dTileMapData>();
 					AssetDatabase.CreateAsset(tileMapData, assetPath);
 					tileMap.data = tileMapData;
 					EditorUtility.SetDirty(tileMap);
@@ -622,7 +622,7 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 			// Create a default tilemap with given dimensions
 			if (!tileMap.AreSpritesInitialized())
 			{
-				blaze2dRuntime.TileMap.BuilderUtil.InitDataStore(tileMap);
+				tk2dRuntime.TileMap.BuilderUtil.InitDataStore(tileMap);
 				tk2dEditor.TileMap.TileMapUtility.ResizeTileMap(tileMap, width, height, tileMap.partitionSizeX, tileMap.partitionSizeY);	
 			}
 			
@@ -687,12 +687,12 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 
 			// sort method
 			tk2dGuiUtility.BeginChangeCheck();
-			tileMap.data.tileType = (blaze2dTileMapData.TileType)EditorGUILayout.EnumPopup("Tile Type", tileMap.data.tileType);
-			if (tileMap.data.tileType != blaze2dTileMapData.TileType.Rectangular) {
+			tileMap.data.tileType = (tk2dTileMapData.TileType)EditorGUILayout.EnumPopup("Tile Type", tileMap.data.tileType);
+			if (tileMap.data.tileType != tk2dTileMapData.TileType.Rectangular) {
 				tk2dGuiUtility.InfoBox("Non-rectangular tile types are still in beta testing.", tk2dGuiUtility.WarningLevel.Info);
 			}
 
-			tileMap.data.sortMethod = (blaze2dTileMapData.SortMethod)EditorGUILayout.EnumPopup("Sort Method", tileMap.data.sortMethod);
+			tileMap.data.sortMethod = (tk2dTileMapData.SortMethod)EditorGUILayout.EnumPopup("Sort Method", tileMap.data.sortMethod);
 			
 			if (tk2dGuiUtility.EndChangeCheck())
 			{
@@ -730,8 +730,8 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 			// preview tile origin and size setting
 			Vector2 spritePixelOrigin = Vector2.zero;
 			Vector2 spritePixelSize = Vector2.one;
-			blaze2dSpriteDefinition[] spriteDefs = tileMap.SpriteCollectionInst.spriteDefinitions;
-			blaze2dSpriteDefinition spriteDef = (tilePropertiesPreviewIdx < spriteDefs.Length) ? spriteDefs[tilePropertiesPreviewIdx] : null;
+			tk2dSpriteDefinition[] spriteDefs = tileMap.SpriteCollectionInst.spriteDefinitions;
+			tk2dSpriteDefinition spriteDef = (tilePropertiesPreviewIdx < spriteDefs.Length) ? spriteDefs[tilePropertiesPreviewIdx] : null;
 			if (!spriteDef.Valid) spriteDef = null;
 			if (spriteDef != null) {
 				spritePixelOrigin = new Vector2(spriteDef.untrimmedBoundsData[0].x / spriteDef.texelSize.x, spriteDef.untrimmedBoundsData[0].y / spriteDef.texelSize.y);
@@ -1037,7 +1037,7 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 				// brush name
 				string selectionDesc = "";
 				if (activeBrush.tiles.Length == 1) {
-					int tile = blaze2dRuntime.TileMap.BuilderUtil.GetTileFromRawTile(activeBrush.tiles[0].spriteId);
+					int tile = tk2dRuntime.TileMap.BuilderUtil.GetTileFromRawTile(activeBrush.tiles[0].spriteId);
 					if (tile >= 0 && tile < SpriteCollection.spriteDefinitions.Length)
 						selectionDesc = SpriteCollection.spriteDefinitions[tile].name;
 				}
@@ -1090,7 +1090,7 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 	/// Initialize tilemap data to sensible values.
 	/// Mainly, tileSize and tileOffset
 	/// </summary>
-	void Init(blaze2dTileMapData tileMapData)
+	void Init(tk2dTileMapData tileMapData)
 	{
 		if (tileMap.SpriteCollectionInst != null) {
 			tileMapData.tileSize = tileMap.SpriteCollectionInst.spriteDefinitions[0].untrimmedBoundsData[1];
@@ -1146,13 +1146,13 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 #if (UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
 				Undo.RegisterSceneUndo("Tilemap Enter Edit Mode");
 #else
-				blaze2dUtil.BeginGroup("Tilemap Enter Edit Mode");
+				tk2dUtil.BeginGroup("Tilemap Enter Edit Mode");
 				Undo.RegisterCompleteObjectUndo(tileMap, "Tilemap Enter Edit Mode");
 #endif
 				tileMap.BeginEditMode();
 				InitEditor();
 #if !(UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
-				blaze2dUtil.EndGroup();
+				tk2dUtil.EndGroup();
 #endif
 
 				Repaint();
@@ -1168,12 +1168,12 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 #if (UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
 			Undo.RegisterSceneUndo("Tilemap Leave Edit Mode");
 #else
-			blaze2dUtil.BeginGroup("Tilemap Leave Edit Mode");
+			tk2dUtil.BeginGroup("Tilemap Leave Edit Mode");
 			Undo.RegisterCompleteObjectUndo(tileMap, "Tilemap Leave Edit Mode");
 #endif
 			tileMap.EndEditMode();
 #if !(UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
-			blaze2dUtil.EndGroup();
+			tk2dUtil.EndGroup();
 #endif
 
 			Repaint();
@@ -1200,7 +1200,7 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 		else
 		{
 			// In case things have changed
-			if (blaze2dRuntime.TileMap.BuilderUtil.InitDataStore(tileMap))
+			if (tk2dRuntime.TileMap.BuilderUtil.InitDataStore(tileMap))
 				Build(true);
 			
 			string[] toolBarButtonNames = System.Enum.GetNames(typeof(tk2dTileMapEditorData.EditMode));
@@ -1236,7 +1236,7 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 		if (!Application.isPlaying && tileMap.AllowEdit)
 		{
 			// build if necessary
-			if (blaze2dRuntime.TileMap.BuilderUtil.InitDataStore(tileMap))
+			if (tk2dRuntime.TileMap.BuilderUtil.InitDataStore(tileMap))
 				Build(true);
 			else		
 				Build(false);
@@ -1246,11 +1246,11 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
     [MenuItem("GameObject/Create Other/tk2d/TileMap", false, 13850)]
 	static void Create()
 	{
-		blaze2dSpriteCollectionData sprColl = null;
+		tk2dSpriteCollectionData sprColl = null;
 		if (sprColl == null)
 		{
 			// try to inherit from other TileMaps in scene
-			blaze2dTileMap sceneTileMaps = GameObject.FindObjectOfType(typeof(blaze2dTileMap)) as blaze2dTileMap;
+			tk2dTileMap sceneTileMaps = GameObject.FindObjectOfType(typeof(tk2dTileMap)) as tk2dTileMap;
 			if (sceneTileMaps)
 			{
 				sprColl = sceneTileMaps.Editor__SpriteCollection;
@@ -1265,7 +1265,7 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 				if (v.managedSpriteCollection) continue; // don't wanna pick a managed one
 				
 				GameObject scgo = AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(v.spriteCollectionDataGUID), typeof(GameObject)) as GameObject;
-				var sc = scgo.GetComponent<blaze2dSpriteCollectionData>();
+				var sc = scgo.GetComponent<tk2dSpriteCollectionData>();
 				if (sc != null && sc.spriteDefinitions != null && sc.spriteDefinitions.Length > 0 && sc.allowMultipleAtlases == false)
 				{
 					sprColl = sc;
@@ -1283,7 +1283,7 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 		GameObject go = tk2dEditorUtility.CreateGameObjectInScene("TileMap");
 		go.transform.position = Vector3.zero;
 		go.transform.rotation = Quaternion.identity;
-		blaze2dTileMap tileMap = go.AddComponent<blaze2dTileMap>();
+		tk2dTileMap tileMap = go.AddComponent<tk2dTileMap>();
 		tileMap.BeginEditMode();
 	
 		Selection.activeGameObject = go;

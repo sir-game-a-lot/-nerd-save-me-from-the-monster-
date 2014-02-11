@@ -7,8 +7,8 @@ namespace tk2dEditor.SpriteAnimationEditor
 	public class ClipEditor
 	{
 		// Accessors
-		blaze2dSpriteAnimationClip clip = null;
-		public blaze2dSpriteAnimationClip Clip
+		tk2dSpriteAnimationClip clip = null;
+		public tk2dSpriteAnimationClip Clip
 		{
 			get { return clip; }
 			set { SetClip(value); }
@@ -27,7 +27,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 		TimelineEditor timelineEditor = new TimelineEditor();
 
 		// Events
-		public delegate void ClipEventDelegate(blaze2dSpriteAnimationClip clip, int data);
+		public delegate void ClipEventDelegate(tk2dSpriteAnimationClip clip, int data);
 		public event ClipEventDelegate clipNameChangedEvent;
 		public event ClipEventDelegate clipDeletedEvent;
 		public event ClipEventDelegate clipSelectionChangedEvent;
@@ -45,13 +45,13 @@ namespace tk2dEditor.SpriteAnimationEditor
 
 		// Sprite changed callback
 		// Create an instance - only ever use the instance through the property
-		void SpriteChangedCallbackImpl(blaze2dSpriteCollectionData spriteCollection, int spriteId, object data) {
+		void SpriteChangedCallbackImpl(tk2dSpriteCollectionData spriteCollection, int spriteId, object data) {
 			FrameGroup fg = data as FrameGroup;
 			// Ensure the user hasn't switched sprite collection
 			if (fg != null && frameGroups.IndexOf(fg) != -1) {
 				fg.spriteCollection = spriteCollection;
 				fg.spriteId = spriteId;
-				foreach (blaze2dSpriteAnimationFrame frame in fg.frames) {
+				foreach (tk2dSpriteAnimationFrame frame in fg.frames) {
 					frame.spriteCollection = spriteCollection;
 					frame.spriteId = spriteId;
 				}
@@ -84,9 +84,9 @@ namespace tk2dEditor.SpriteAnimationEditor
 		// Frame groups
 		public class FrameGroup
 		{
-			public blaze2dSpriteCollectionData spriteCollection;
+			public tk2dSpriteCollectionData spriteCollection;
 			public int spriteId;
-			public List<blaze2dSpriteAnimationFrame> frames = new List<blaze2dSpriteAnimationFrame>();
+			public List<tk2dSpriteAnimationFrame> frames = new List<tk2dSpriteAnimationFrame>();
 			public int startFrame = 0; // this is a cache value used during the draw loop
 
 			public bool SetFrameCount(int targetFrameCount)
@@ -99,7 +99,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 				}
 				while (frames.Count < targetFrameCount)
 				{
-					blaze2dSpriteAnimationFrame f = new blaze2dSpriteAnimationFrame();
+					tk2dSpriteAnimationFrame f = new tk2dSpriteAnimationFrame();
 					f.spriteCollection = spriteCollection;
 					f.spriteId = spriteId;
 					frames.Add(f);
@@ -108,12 +108,12 @@ namespace tk2dEditor.SpriteAnimationEditor
 				return changed;
 			}
 
-			public List<blaze2dSpriteAnimationFrame> DuplicateFrames(List<blaze2dSpriteAnimationFrame> source)
+			public List<tk2dSpriteAnimationFrame> DuplicateFrames(List<tk2dSpriteAnimationFrame> source)
 			{
-				List<blaze2dSpriteAnimationFrame> dest = new List<blaze2dSpriteAnimationFrame>();
-				foreach (blaze2dSpriteAnimationFrame f in source)
+				List<tk2dSpriteAnimationFrame> dest = new List<tk2dSpriteAnimationFrame>();
+				foreach (tk2dSpriteAnimationFrame f in source)
 				{
-					blaze2dSpriteAnimationFrame q = new blaze2dSpriteAnimationFrame();
+					tk2dSpriteAnimationFrame q = new tk2dSpriteAnimationFrame();
 					q.CopyFrom(f);
 					dest.Add(q);
 				}
@@ -122,7 +122,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 			
 			public void Update()
 			{
-				foreach (blaze2dSpriteAnimationFrame frame in frames)
+				foreach (tk2dSpriteAnimationFrame frame in frames)
 				{
 					frame.spriteCollection = spriteCollection;
 					frame.spriteId = spriteId;
@@ -132,7 +132,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 		List<FrameGroup> frameGroups = new List<FrameGroup>();
 
 		// Sprite animator
-		blaze2dSpriteAnimator _animator = null;
+		tk2dSpriteAnimator _animator = null;
 
 		void InitAnimator() {
 			if (_animator == null) {
@@ -143,23 +143,23 @@ namespace tk2dEditor.SpriteAnimationEditor
 				#else
 					go.SetActive(false);
 				#endif
-				go.AddComponent<blaze2dSprite>();
-				_animator = go.AddComponent<blaze2dSpriteAnimator>();
+				go.AddComponent<tk2dSprite>();
+				_animator = go.AddComponent<tk2dSpriteAnimator>();
 			}
 		}
 
-		blaze2dSpriteAnimator Animator {
+		tk2dSpriteAnimator Animator {
 			get {
 				InitAnimator();
 				return _animator;
 			}
 		}
 
-		bool CheckValidClip(blaze2dSpriteAnimationClip clip) {
+		bool CheckValidClip(tk2dSpriteAnimationClip clip) {
 			bool nullCollectionFound = false;
 			bool invalidSpriteIdFound = false;
 			for (int i = 0; i < clip.frames.Length; ++i) {
-				blaze2dSpriteAnimationFrame frame = clip.frames[i];
+				tk2dSpriteAnimationFrame frame = clip.frames[i];
 				if (frame.spriteCollection == null) {
 					nullCollectionFound = true;
 				}
@@ -183,7 +183,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 			if (invalidSpriteIdFound) {
 				if (EditorUtility.DisplayDialog("Invalid sprite found in clip.", "An invalid sprite has been found in the selected clip. Has the sprite been deleted from the collection?\n\nDo you wish to replace this with a valid sprite from the collection?\n\nThis may not be correct, but you will be able to edit the clip after this.", "Yes", "No")) {
 					for (int i = 0; i < clip.frames.Length; ++i) {
-						blaze2dSpriteAnimationFrame frame = clip.frames[i];
+						tk2dSpriteAnimationFrame frame = clip.frames[i];
 						if (!frame.spriteCollection.IsValidSpriteId(frame.spriteId)) {
 							frame.spriteId = frame.spriteCollection.FirstValidDefinitionIndex;
 						}
@@ -199,7 +199,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 		}
 
 		// Internal set clip, reset all 
-		void SetClip(blaze2dSpriteAnimationClip clip)
+		void SetClip(tk2dSpriteAnimationClip clip)
 		{
 			if (this.clip != clip)
 			{
@@ -217,12 +217,12 @@ namespace tk2dEditor.SpriteAnimationEditor
 					if (CheckValidClip(clip)) {
 						// check if clip is valid?
 						frameGroups.Clear();
-						blaze2dSpriteCollectionData lastSc = null;
+						tk2dSpriteCollectionData lastSc = null;
 						int lastSpriteId = -1;
 						FrameGroup frameGroup = null;
 						for (int i = 0; i < clip.frames.Length; ++i)
 						{
-							blaze2dSpriteAnimationFrame f = clip.frames[i];
+							tk2dSpriteAnimationFrame f = clip.frames[i];
 							if (f.spriteCollection != lastSc || f.spriteId != lastSpriteId)
 							{
 								if (frameGroup != null) frameGroups.Add(frameGroup);
@@ -270,7 +270,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 					if (frameGroups != null && frame < frameGroups.Count)
 					{
 						FrameGroup fg = frameGroups[frame];
-						blaze2dSpriteCollectionData sc = fg.spriteCollection.inst;
+						tk2dSpriteCollectionData sc = fg.spriteCollection.inst;
 						preview.Draw(r, sc.spriteDefinitions[fg.spriteId]);
 					}
 				}
@@ -308,15 +308,15 @@ namespace tk2dEditor.SpriteAnimationEditor
 			float newClipTime = EditorGUILayout.FloatField("Clip time", clipTime);
 			if (newClipTime > 0 && newClipTime != clipTime)
 				clip.fps = clip.frames.Length / newClipTime;
-			blaze2dSpriteAnimationClip.WrapMode newWrapMode = (blaze2dSpriteAnimationClip.WrapMode)EditorGUILayout.EnumPopup("Wrap Mode", clip.wrapMode);
-			if (clip.wrapMode == blaze2dSpriteAnimationClip.WrapMode.LoopSection)
+			tk2dSpriteAnimationClip.WrapMode newWrapMode = (tk2dSpriteAnimationClip.WrapMode)EditorGUILayout.EnumPopup("Wrap Mode", clip.wrapMode);
+			if (clip.wrapMode == tk2dSpriteAnimationClip.WrapMode.LoopSection)
 			{
 				clip.loopStart = EditorGUILayout.IntField("Loop Start", clip.loopStart);
 				clip.loopStart = Mathf.Clamp(clip.loopStart, 0, clip.frames.Length - 1);
 			}
 			if (newWrapMode != clip.wrapMode)
 			{
-				if (newWrapMode == blaze2dSpriteAnimationClip.WrapMode.Single && clip.frames.Length > 1)
+				if (newWrapMode == tk2dSpriteAnimationClip.WrapMode.Single && clip.frames.Length > 1)
 				{
 					// Will we be truncating the animation?
 					if (EditorUtility.DisplayDialog("Wrap mode -> Single", "This will truncate your clip to a single frame. Do you want to continue?", "Yes", "No"))
@@ -447,7 +447,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 			{
 				if (playAnimation && !Animator.Playing)
 				{
-					if (repeatPlayAnimation || clip.wrapMode == blaze2dSpriteAnimationClip.WrapMode.Single)
+					if (repeatPlayAnimation || clip.wrapMode == tk2dSpriteAnimationClip.WrapMode.Single)
 					{
 						if (repeatPlayWaitTime > 0.0f)
 						{
@@ -497,7 +497,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 		{
 			GUILayout.Label("Trigger", EditorStyles.largeLabel, GUILayout.ExpandWidth(true));
 			
-			blaze2dSpriteAnimationFrame frame = clip.frames[timelineEditor.CurrentState.selectedTrigger];
+			tk2dSpriteAnimationFrame frame = clip.frames[timelineEditor.CurrentState.selectedTrigger];
 			EditorGUILayout.LabelField("Frame", timelineEditor.CurrentState.selectedTrigger.ToString());
 
 			frame.eventInfo = EditorGUILayout.TextField("Info", frame.eventInfo);
@@ -548,9 +548,9 @@ namespace tk2dEditor.SpriteAnimationEditor
 			inspectorWidth -= (int)tk2dGuiUtility.DragableHandle(4819518, viewRect, 0, tk2dGuiUtility.DragDirection.Horizontal);
 		}
 
-		public static void RecalculateFrames(blaze2dSpriteAnimationClip clip, List<FrameGroup> frameGroups)
+		public static void RecalculateFrames(tk2dSpriteAnimationClip clip, List<FrameGroup> frameGroups)
 		{
-			List<blaze2dSpriteAnimationFrame> frames = new List<blaze2dSpriteAnimationFrame>();
+			List<tk2dSpriteAnimationFrame> frames = new List<tk2dSpriteAnimationFrame>();
 			foreach (var v in frameGroups)
 				frames.AddRange(v.frames);
 			clip.frames = frames.ToArray();

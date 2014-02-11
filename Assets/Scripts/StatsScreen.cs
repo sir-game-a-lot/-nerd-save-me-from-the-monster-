@@ -7,7 +7,7 @@ public class StatsScreen : MonoBehaviour
 	public static StatsScreen instance;
 
 	public GameObject root;
-	public blaze2dUIItem retryBut;
+	public tk2dUIItem retryBut;
 	// Use this for initialization
 	void Awake ()
 	{

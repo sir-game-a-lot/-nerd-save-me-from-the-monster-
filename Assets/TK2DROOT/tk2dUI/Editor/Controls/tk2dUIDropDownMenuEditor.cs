@@ -3,7 +3,7 @@ using UnityEditor;
 using System.Collections;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dUIDropDownMenu))]
+[CustomEditor(typeof(tk2dUIDropDownMenu))]
 public class tk2dUIDropDownMenuEditor : Editor
 {
     public override void OnInspectorGUI()
@@ -11,16 +11,16 @@ public class tk2dUIDropDownMenuEditor : Editor
         tk2dGuiUtility.LookLikeInspector();
         base.OnInspectorGUI();
 
-		blaze2dUIDropDownMenu dropdownMenu = (blaze2dUIDropDownMenu)target;
-		dropdownMenu.MenuLayoutItem = EditorGUILayout.ObjectField("Menu LayoutItem", dropdownMenu.MenuLayoutItem, typeof(blaze2dUILayout), true) as blaze2dUILayout;
-		dropdownMenu.TemplateLayoutItem = EditorGUILayout.ObjectField("Template LayoutItem", dropdownMenu.TemplateLayoutItem, typeof(blaze2dUILayout), true) as blaze2dUILayout;
+		tk2dUIDropDownMenu dropdownMenu = (tk2dUIDropDownMenu)target;
+		dropdownMenu.MenuLayoutItem = EditorGUILayout.ObjectField("Menu LayoutItem", dropdownMenu.MenuLayoutItem, typeof(tk2dUILayout), true) as tk2dUILayout;
+		dropdownMenu.TemplateLayoutItem = EditorGUILayout.ObjectField("Template LayoutItem", dropdownMenu.TemplateLayoutItem, typeof(tk2dUILayout), true) as tk2dUILayout;
 
 		if (dropdownMenu.MenuLayoutItem == null)
 			dropdownMenu.height = EditorGUILayout.FloatField("Height", dropdownMenu.height, GUILayout.ExpandWidth(false));
 
         tk2dUIMethodBindingHelper methodBindingUtil = new tk2dUIMethodBindingHelper();
         dropdownMenu.SendMessageTarget = methodBindingUtil.BeginMessageGUI(dropdownMenu.SendMessageTarget);
-        methodBindingUtil.MethodBinding( "On Selected Item Change", typeof(blaze2dUIDropDownMenu), dropdownMenu.SendMessageTarget, ref dropdownMenu.SendMessageOnSelectedItemChangeMethodName );
+        methodBindingUtil.MethodBinding( "On Selected Item Change", typeof(tk2dUIDropDownMenu), dropdownMenu.SendMessageTarget, ref dropdownMenu.SendMessageOnSelectedItemChangeMethodName );
         methodBindingUtil.EndMessageGUI();
 
 		if (GUI.changed) {
@@ -31,8 +31,8 @@ public class tk2dUIDropDownMenuEditor : Editor
     public void OnSceneGUI()
     {
         bool wasChange=false;
-        blaze2dUIDropDownMenu dropdownMenu = (blaze2dUIDropDownMenu)target;
-        blaze2dUIDropDownItem dropdownItemTemplate = dropdownMenu.dropDownItemTemplate;
+        tk2dUIDropDownMenu dropdownMenu = (tk2dUIDropDownMenu)target;
+        tk2dUIDropDownItem dropdownItemTemplate = dropdownMenu.dropDownItemTemplate;
 
 		// Get rescaled transforms
         Matrix4x4 m = dropdownMenu.transform.localToWorldMatrix;

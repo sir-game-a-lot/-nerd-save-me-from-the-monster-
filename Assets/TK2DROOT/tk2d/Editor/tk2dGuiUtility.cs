@@ -203,24 +203,24 @@ public static class tk2dGuiUtility
 		return hasChanged;
 	}
 
-	public static void SpriteCollectionSize( blaze2dSpriteCollectionSize scs ) {
+	public static void SpriteCollectionSize( tk2dSpriteCollectionSize scs ) {
 		GUILayout.BeginHorizontal();
-		scs.type = (blaze2dSpriteCollectionSize.Type)EditorGUILayout.EnumPopup("Size", scs.type);
-		blaze2dCamera cam = blaze2dCamera.Editor__Inst;
+		scs.type = (tk2dSpriteCollectionSize.Type)EditorGUILayout.EnumPopup("Size", scs.type);
+		tk2dCamera cam = tk2dCamera.Editor__Inst;
 		GUI.enabled = cam != null;
 		if (GUILayout.Button(new GUIContent("g", "Grab from tk2dCamera"), EditorStyles.miniButton, GUILayout.ExpandWidth(false))) {
-			scs.CopyFrom( blaze2dSpriteCollectionSize.ForTk2dCamera(cam) );
+			scs.CopyFrom( tk2dSpriteCollectionSize.ForTk2dCamera(cam) );
 			GUI.changed = true;
 		}
 		GUI.enabled = true;
 		GUILayout.EndHorizontal();
 		EditorGUI.indentLevel++;
 		switch (scs.type) {
-			case blaze2dSpriteCollectionSize.Type.Explicit:
+			case tk2dSpriteCollectionSize.Type.Explicit:
 				scs.orthoSize = EditorGUILayout.FloatField("Ortho Size", scs.orthoSize);
 				scs.height = EditorGUILayout.FloatField("Target Height", scs.height);
 				break;
-			case blaze2dSpriteCollectionSize.Type.PixelsPerMeter:
+			case tk2dSpriteCollectionSize.Type.PixelsPerMeter:
 				scs.pixelsPerMeter = EditorGUILayout.FloatField("Pixels Per Meter", scs.pixelsPerMeter);
 				break;
 		}
@@ -248,7 +248,7 @@ public static class tk2dGuiUtility
 #endif
 	}
 
-	public static string PlatformPopup(blaze2dSystem system, string label, string platform)
+	public static string PlatformPopup(tk2dSystem system, string label, string platform)
 	{
 		if (system == null)
 			return label;

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dUIItem))]
+[CustomEditor(typeof(tk2dUIItem))]
 public class tk2dUIItemEditor : Editor
 {
     SerializedProperty extraBoundsProp;
@@ -24,7 +24,7 @@ public class tk2dUIItemEditor : Editor
 
         bool changeOccurred = false;
         tk2dGuiUtility.LookLikeControls(180);
-        blaze2dUIItem btn = (blaze2dUIItem)target;
+        tk2dUIItem btn = (tk2dUIItem)target;
 
         bool newIsChildOfAnotherMenuBtn = EditorGUILayout.Toggle("Child of Another UIItem?", btn.InternalGetIsChildOfAnotherUIItem());
 
@@ -39,10 +39,10 @@ public class tk2dUIItemEditor : Editor
         btn.isHoverEnabled = EditorGUILayout.Toggle("Is Hover Events Enabled?", btn.isHoverEnabled);
 
         btn.sendMessageTarget = methodBindingUtil.BeginMessageGUI(btn.sendMessageTarget);
-        methodBindingUtil.MethodBinding( "On Down", typeof(blaze2dUIItem), btn.sendMessageTarget, ref btn.SendMessageOnDownMethodName );
-        methodBindingUtil.MethodBinding( "On Up", typeof(blaze2dUIItem), btn.sendMessageTarget, ref btn.SendMessageOnUpMethodName );
-        methodBindingUtil.MethodBinding( "On Click", typeof(blaze2dUIItem), btn.sendMessageTarget, ref btn.SendMessageOnClickMethodName );
-        methodBindingUtil.MethodBinding( "On Release", typeof(blaze2dUIItem), btn.sendMessageTarget, ref btn.SendMessageOnReleaseMethodName );
+        methodBindingUtil.MethodBinding( "On Down", typeof(tk2dUIItem), btn.sendMessageTarget, ref btn.SendMessageOnDownMethodName );
+        methodBindingUtil.MethodBinding( "On Up", typeof(tk2dUIItem), btn.sendMessageTarget, ref btn.SendMessageOnUpMethodName );
+        methodBindingUtil.MethodBinding( "On Click", typeof(tk2dUIItem), btn.sendMessageTarget, ref btn.SendMessageOnClickMethodName );
+        methodBindingUtil.MethodBinding( "On Release", typeof(tk2dUIItem), btn.sendMessageTarget, ref btn.SendMessageOnReleaseMethodName );
         methodBindingUtil.EndMessageGUI();
 
         if (btn.collider != null) {
@@ -84,13 +84,13 @@ public class tk2dUIItemEditor : Editor
     }
 
     //checks through hierarchy to find UIItem at this level or above to be used in inspector field
-    public static blaze2dUIItem FindAppropriateButtonInHierarchy(GameObject go)
+    public static tk2dUIItem FindAppropriateButtonInHierarchy(GameObject go)
     {
-        blaze2dUIItem btn = null;
+        tk2dUIItem btn = null;
 
         while (go != null)
         {
-            btn = go.GetComponent<blaze2dUIItem>();
+            btn = go.GetComponent<tk2dUIItem>();
             if (btn != null)
             {
                 break;
@@ -103,9 +103,9 @@ public class tk2dUIItemEditor : Editor
     }
 
     //locates tk2dUIManager in scene
-    public static blaze2dUIManager FindUIManagerInScene()
+    public static tk2dUIManager FindUIManagerInScene()
     {
-        return GameObject.FindObjectOfType(typeof(blaze2dUIManager)) as blaze2dUIManager;
+        return GameObject.FindObjectOfType(typeof(tk2dUIManager)) as tk2dUIManager;
     }
 
     //creates tk2dUIManager
@@ -115,7 +115,7 @@ public class tk2dUIItemEditor : Editor
         GameObject go = tk2dEditorUtility.CreateGameObjectInScene("tk2dUIManager");
         go.transform.parent = null;
         go.transform.position = Vector3.zero;
-        go.AddComponent<blaze2dUIManager>();
+        go.AddComponent<tk2dUIManager>();
 
         Selection.activeGameObject = go;
         Undo.RegisterCreatedObjectUndo(go, "Create tk2dUIManager");

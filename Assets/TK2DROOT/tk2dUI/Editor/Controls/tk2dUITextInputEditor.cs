@@ -3,7 +3,7 @@ using UnityEditor;
 using System.Collections;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dUITextInput))]
+[CustomEditor(typeof(tk2dUITextInput))]
 public class tk2dUITextInputEditor : Editor
 {
     public override void OnInspectorGUI()
@@ -11,12 +11,12 @@ public class tk2dUITextInputEditor : Editor
         tk2dGuiUtility.LookLikeInspector();
         base.OnInspectorGUI();
 
-		blaze2dUITextInput textInput = (blaze2dUITextInput)target;
-		textInput.LayoutItem = EditorGUILayout.ObjectField("LayoutItem", textInput.LayoutItem, typeof(blaze2dUILayout), true) as blaze2dUILayout;
+		tk2dUITextInput textInput = (tk2dUITextInput)target;
+		textInput.LayoutItem = EditorGUILayout.ObjectField("LayoutItem", textInput.LayoutItem, typeof(tk2dUILayout), true) as tk2dUILayout;
 
         tk2dUIMethodBindingHelper methodBindingUtil = new tk2dUIMethodBindingHelper();
         textInput.SendMessageTarget = methodBindingUtil.BeginMessageGUI(textInput.SendMessageTarget);
-        methodBindingUtil.MethodBinding( "On Text Change", typeof(blaze2dUITextInput), textInput.SendMessageTarget, ref textInput.SendMessageOnTextChangeMethodName );
+        methodBindingUtil.MethodBinding( "On Text Change", typeof(tk2dUITextInput), textInput.SendMessageTarget, ref textInput.SendMessageOnTextChangeMethodName );
         methodBindingUtil.EndMessageGUI();
 
         if (GUI.changed)
@@ -28,7 +28,7 @@ public class tk2dUITextInputEditor : Editor
     public void OnSceneGUI()
     {
         bool wasChange=false;
-        blaze2dUITextInput textInput = (blaze2dUITextInput)target;
+        tk2dUITextInput textInput = (tk2dUITextInput)target;
 
         // Get rescaled transforms
         Matrix4x4 m = textInput.inputLabel.transform.localToWorldMatrix;

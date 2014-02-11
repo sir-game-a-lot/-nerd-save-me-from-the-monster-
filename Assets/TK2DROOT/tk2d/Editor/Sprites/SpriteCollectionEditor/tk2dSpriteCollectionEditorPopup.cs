@@ -50,7 +50,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 
 public class tk2dSpriteCollectionEditorPopup : EditorWindow, IEditorHost
 {
-	blaze2dSpriteCollection _spriteCollection; // internal tmp var
+	tk2dSpriteCollection _spriteCollection; // internal tmp var
 	SpriteView spriteView;
 	SettingsView settingsView;
 	FontView fontView;
@@ -227,7 +227,7 @@ public class tk2dSpriteCollectionEditorPopup : EditorWindow, IEditorHost
 		selectedEntries = new List<SpriteCollectionEditorEntry>();
 	}
 	
-	public void SetGenerator(blaze2dSpriteCollection spriteCollection)
+	public void SetGenerator(tk2dSpriteCollection spriteCollection)
 	{
 		this._spriteCollection = spriteCollection;
 		this.firstRun = true;
@@ -235,7 +235,7 @@ public class tk2dSpriteCollectionEditorPopup : EditorWindow, IEditorHost
 		PopulateEntries();
 	}
 	
-	public void SetGeneratorAndSelectedSprite(blaze2dSpriteCollection spriteCollection, int selectedSprite)
+	public void SetGeneratorAndSelectedSprite(tk2dSpriteCollection spriteCollection, int selectedSprite)
 	{
 		searchFilter = "";
 		SetGenerator(spriteCollection);
@@ -709,7 +709,7 @@ public class tk2dSpriteCollectionEditorPopup : EditorWindow, IEditorHost
 				string name = spriteCollectionProxy.FindUniqueTextureName(tex.name);
 				int slot = spriteCollectionProxy.FindOrCreateEmptySpriteSlot();
 				spriteCollectionProxy.textureParams[slot].name = name;
-				spriteCollectionProxy.textureParams[slot].colliderType = blaze2dSpriteCollectionDefinition.ColliderType.UserDefined;
+				spriteCollectionProxy.textureParams[slot].colliderType = tk2dSpriteCollectionDefinition.ColliderType.UserDefined;
 				spriteCollectionProxy.textureParams[slot].texture = (Texture2D)obj;
 				addedIndices.Add(slot);
 			}
@@ -811,12 +811,12 @@ public class tk2dSpriteCollectionEditorPopup : EditorWindow, IEditorHost
 	void CheckForAssetsInResources()
 	{
 		assetsInResources.Clear();
-		foreach (blaze2dSpriteCollectionDefinition tex in SpriteCollection.textureParams)
+		foreach (tk2dSpriteCollectionDefinition tex in SpriteCollection.textureParams)
 		{
 			if (tex.texture == null) continue;
 			if (InResources(tex.texture) && assetsInResources.IndexOf(tex.texture) == -1) assetsInResources.Add(tex.texture);
 		}
-		foreach (blaze2dSpriteCollectionFont font in SpriteCollection.fonts)
+		foreach (tk2dSpriteCollectionFont font in SpriteCollection.fonts)
 		{
 			if (font.texture != null && InResources(font.texture) && assetsInResources.IndexOf(font.texture) == -1) assetsInResources.Add(font.texture);
 			if (font.bmFont != null && InResources(font.bmFont) && assetsInResources.IndexOf(font.bmFont) == -1) assetsInResources.Add(font.bmFont);

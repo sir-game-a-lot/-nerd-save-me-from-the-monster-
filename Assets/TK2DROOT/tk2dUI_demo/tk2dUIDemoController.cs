@@ -10,7 +10,7 @@ public class tk2dUIDemoController : tk2dUIBaseDemoController
     /// <summary>
     /// Button that will change to next page
     /// </summary>
-    public blaze2dUIItem nextPage;
+    public tk2dUIItem nextPage;
 
     /// <summary>
     /// GameObject containing everything in page 1
@@ -20,7 +20,7 @@ public class tk2dUIDemoController : tk2dUIBaseDemoController
     /// <summary>
     /// Button that will change to prev page
     /// </summary>
-    public blaze2dUIItem prevPage;
+    public tk2dUIItem prevPage;
 
     /// <summary>
     /// GameObject containing everything in page 2
@@ -30,11 +30,11 @@ public class tk2dUIDemoController : tk2dUIBaseDemoController
     /// <summary>
     /// Used to demo progress bar movement
     /// </summary>
-    public blaze2dUIProgressBar progressBar;
+    public tk2dUIProgressBar progressBar;
     private float timeSincePageStart = 0;
     private const float TIME_TO_COMPLETE_PROGRESS_BAR = 2f;
     private float progressBarChaseVelocity = 0.0f;
-    public blaze2dUIScrollbar slider;
+    public tk2dUIScrollbar slider;
 
     private GameObject currWindow;
 
@@ -84,13 +84,13 @@ public class tk2dUIDemoController : tk2dUIBaseDemoController
         {
             progressBar.Value = timeSincePageStart/TIME_TO_COMPLETE_PROGRESS_BAR;
             yield return null;
-            timeSincePageStart += blaze2dUITime.deltaTime;
+            timeSincePageStart += tk2dUITime.deltaTime;
         }
 
         while (currWindow == window2) 
         {
             float smoothTime = 0.5f;
-            progressBar.Value = Mathf.SmoothDamp( progressBar.Value, slider.Value, ref progressBarChaseVelocity, smoothTime, Mathf.Infinity, blaze2dUITime.deltaTime );
+            progressBar.Value = Mathf.SmoothDamp( progressBar.Value, slider.Value, ref progressBarChaseVelocity, smoothTime, Mathf.Infinity, tk2dUITime.deltaTime );
 
             yield return 0;
         }

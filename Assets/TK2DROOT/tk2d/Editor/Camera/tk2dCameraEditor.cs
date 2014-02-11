@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-[CustomEditor(typeof(blaze2dCamera))]
+[CustomEditor(typeof(tk2dCamera))]
 public class tk2dCameraEditor : Editor 
 {
 	struct Preset
@@ -71,12 +71,12 @@ public class tk2dCameraEditor : Editor
 	public override void OnInspectorGUI()
 	{
 		//DrawDefaultInspector();
-		blaze2dCamera _target = (blaze2dCamera)target;
+		tk2dCamera _target = (tk2dCamera)target;
 	
 		// sanity
 		if (_target.resolutionOverride == null)
 		{
-			_target.resolutionOverride = new blaze2dCameraResolutionOverride[0];
+			_target.resolutionOverride = new tk2dCameraResolutionOverride[0];
 			GUI.changed = true;
 		}
 
@@ -86,7 +86,7 @@ public class tk2dCameraEditor : Editor
 		
 		if (toolbarSelection == 0) {
 			GUILayout.BeginHorizontal();
-			blaze2dCamera newInherit = EditorGUILayout.ObjectField("Inherit config", _target.InheritConfig, typeof(blaze2dCamera), true) as blaze2dCamera;
+			tk2dCamera newInherit = EditorGUILayout.ObjectField("Inherit config", _target.InheritConfig, typeof(tk2dCamera), true) as tk2dCamera;
 			if (newInherit != _target.InheritConfig) {
 				if (newInherit != _target) {
 					_target.InheritConfig = newInherit;
@@ -120,7 +120,7 @@ public class tk2dCameraEditor : Editor
 
 		if (toolbarSelection == 3) {
 
-			bool isPerspective = _target.SettingsRoot.CameraSettings.projection == blaze2dCameraSettings.ProjectionType.Perspective;
+			bool isPerspective = _target.SettingsRoot.CameraSettings.projection == tk2dCameraSettings.ProjectionType.Perspective;
 
 			EditorGUILayout.LabelField("Anchored Viewport Clipping", EditorStyles.boldLabel);
 			EditorGUI.indentLevel++;
@@ -155,7 +155,7 @@ public class tk2dCameraEditor : Editor
 		{
 			_target.UpdateCameraMatrix();
 			EditorUtility.SetDirty(target);
-			blaze2dCameraAnchor[] allAlignmentObjects = GameObject.FindObjectsOfType(typeof(blaze2dCameraAnchor)) as blaze2dCameraAnchor[];
+			tk2dCameraAnchor[] allAlignmentObjects = GameObject.FindObjectsOfType(typeof(tk2dCameraAnchor)) as tk2dCameraAnchor[];
 			foreach (var v in allAlignmentObjects)
 			{
 				EditorUtility.SetDirty(v);
@@ -165,15 +165,15 @@ public class tk2dCameraEditor : Editor
 		GUILayout.Space(16.0f);
 	}
 
-	void DrawConfigGUI(blaze2dCamera _target) {
+	void DrawConfigGUI(tk2dCamera _target) {
 		bool cameraOverrideChanged = false;
 		GUILayout.Space(8);
 
 		// Game view stuff		
 		float gameViewPixelWidth = 0, gameViewPixelHeight = 0;
 		float gameViewAspect = 0;
-		bool gameViewFound = blaze2dCamera.Editor__GetGameViewSize( out gameViewPixelWidth, out gameViewPixelHeight, out gameViewAspect);
-		bool gameViewReflectionError = blaze2dCamera.Editor__gameViewReflectionError;
+		bool gameViewFound = tk2dCamera.Editor__GetGameViewSize( out gameViewPixelWidth, out gameViewPixelHeight, out gameViewAspect);
+		bool gameViewReflectionError = tk2dCamera.Editor__gameViewReflectionError;
 		bool gameViewResolutionSet = (gameViewFound && gameViewPixelWidth != 0 && gameViewPixelHeight != 0);
 		if (!gameViewFound && ++refreshCount < 3) { 
 			HandleUtility.Repaint();
@@ -284,8 +284,8 @@ public class tk2dCameraEditor : Editor
 
 		if (cameraOverrideChanged) {
 			// Propagate values to all tk2dCameras in scene
-			blaze2dCamera[] otherCameras = Resources.FindObjectsOfTypeAll(typeof(blaze2dCamera)) as blaze2dCamera[];
-			foreach (blaze2dCamera thisCamera in otherCameras)
+			tk2dCamera[] otherCameras = Resources.FindObjectsOfTypeAll(typeof(tk2dCamera)) as tk2dCamera[];
+			foreach (tk2dCamera thisCamera in otherCameras)
 			{
 				thisCamera.forceResolutionInEditor = _target.forceResolutionInEditor;
 				thisCamera.forceResolution = _target.forceResolution;
@@ -293,13 +293,13 @@ public class tk2dCameraEditor : Editor
 			}
 
 			// Update all anchors after that
-			blaze2dCameraAnchor[] anchors = Resources.FindObjectsOfTypeAll(typeof(blaze2dCameraAnchor)) as blaze2dCameraAnchor[];
+			tk2dCameraAnchor[] anchors = Resources.FindObjectsOfTypeAll(typeof(tk2dCameraAnchor)) as tk2dCameraAnchor[];
 			foreach (var anchor in anchors)
 				anchor.ForceUpdateTransform();					
 		}
 	}
 
-	void DrawCameraGUI(blaze2dCamera target, bool complete) {
+	void DrawCameraGUI(tk2dCamera target, bool complete) {
 		bool allowProjectionParameters = target.SettingsRoot == target;
 		bool oldGuiEnabled = GUI.enabled;
 
@@ -323,26 +323,26 @@ public class tk2dCameraEditor : Editor
 			EditorGUILayout.Space();
 		}
 
-		blaze2dCameraSettings cameraSettings = target.CameraSettings;
-		blaze2dCameraSettings inheritedSettings = target.SettingsRoot.CameraSettings;
+		tk2dCameraSettings cameraSettings = target.CameraSettings;
+		tk2dCameraSettings inheritedSettings = target.SettingsRoot.CameraSettings;
 		TransparencySortMode transparencySortMode = inheritedSettings.transparencySortMode;
 
 		GUI.enabled &= allowProjectionParameters;
-		inheritedSettings.projection = (blaze2dCameraSettings.ProjectionType)EditorGUILayout.EnumPopup("Projection", inheritedSettings.projection);
+		inheritedSettings.projection = (tk2dCameraSettings.ProjectionType)EditorGUILayout.EnumPopup("Projection", inheritedSettings.projection);
 		EditorGUI.indentLevel++;
-		if (inheritedSettings.projection == blaze2dCameraSettings.ProjectionType.Orthographic) {
-			inheritedSettings.orthographicType = (blaze2dCameraSettings.OrthographicType)EditorGUILayout.EnumPopup("Type", inheritedSettings.orthographicType);
+		if (inheritedSettings.projection == tk2dCameraSettings.ProjectionType.Orthographic) {
+			inheritedSettings.orthographicType = (tk2dCameraSettings.OrthographicType)EditorGUILayout.EnumPopup("Type", inheritedSettings.orthographicType);
 			switch (inheritedSettings.orthographicType) {
-				case blaze2dCameraSettings.OrthographicType.OrthographicSize:
+				case tk2dCameraSettings.OrthographicType.OrthographicSize:
 					inheritedSettings.orthographicSize = Mathf.Max( 0.001f, EditorGUILayout.FloatField("Orthographic Size", inheritedSettings.orthographicSize) );
 					break;
-				case blaze2dCameraSettings.OrthographicType.PixelsPerMeter:
+				case tk2dCameraSettings.OrthographicType.PixelsPerMeter:
 					inheritedSettings.orthographicPixelsPerMeter = Mathf.Max( 0.001f, EditorGUILayout.FloatField("Pixels per Meter", inheritedSettings.orthographicPixelsPerMeter) );
 					break;
 			}
-			inheritedSettings.orthographicOrigin = (blaze2dCameraSettings.OrthographicOrigin)EditorGUILayout.EnumPopup("Origin", inheritedSettings.orthographicOrigin);
+			inheritedSettings.orthographicOrigin = (tk2dCameraSettings.OrthographicOrigin)EditorGUILayout.EnumPopup("Origin", inheritedSettings.orthographicOrigin);
 		}
-		else if (inheritedSettings.projection == blaze2dCameraSettings.ProjectionType.Perspective) {
+		else if (inheritedSettings.projection == tk2dCameraSettings.ProjectionType.Perspective) {
 			inheritedSettings.fieldOfView = EditorGUILayout.Slider("Field of View", inheritedSettings.fieldOfView, 1, 179);
 			transparencySortMode = (TransparencySortMode)EditorGUILayout.EnumPopup("Sort mode", transparencySortMode);
 		}
@@ -384,11 +384,11 @@ public class tk2dCameraEditor : Editor
 		EditorGUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));
 		if (GUILayout.Button("Create Anchor", EditorStyles.miniButton, GUILayout.ExpandWidth(false)))
 		{
-			blaze2dCamera cam = (blaze2dCamera)target;
+			tk2dCamera cam = (tk2dCamera)target;
 			
 			GameObject go = new GameObject("Anchor");
 			go.transform.parent = cam.transform;
-			blaze2dCameraAnchor cameraAnchor = go.AddComponent<blaze2dCameraAnchor>();
+			tk2dCameraAnchor cameraAnchor = go.AddComponent<tk2dCameraAnchor>();
 			cameraAnchor.AnchorCamera = cam.camera;
 			tk2dCameraAnchorEditor.UpdateAnchorName( cameraAnchor );
 			
@@ -397,19 +397,19 @@ public class tk2dCameraEditor : Editor
 		EditorGUILayout.EndHorizontal();
 	}
 
-	void DrawOverrideGUI(blaze2dCamera _camera) {
+	void DrawOverrideGUI(tk2dCamera _camera) {
 		var frameBorderStyle = EditorStyles.textField;
 
 		tk2dGuiUtility.LookLikeControls(64);
 
-		blaze2dCamera _target = _camera.SettingsRoot;
-		if (_target.CameraSettings.projection == blaze2dCameraSettings.ProjectionType.Perspective) {
+		tk2dCamera _target = _camera.SettingsRoot;
+		if (_target.CameraSettings.projection == tk2dCameraSettings.ProjectionType.Perspective) {
 			tk2dGuiUtility.InfoBox("Overrides not supported with perspective camera.", tk2dGuiUtility.WarningLevel.Info);
 		}
 		else {
 			GUI.enabled = _target == _camera;
 
-			blaze2dCameraResolutionOverride usedOverride = _target.CurrentResolutionOverride;
+			tk2dCameraResolutionOverride usedOverride = _target.CurrentResolutionOverride;
 
 			if (_target.resolutionOverride.Length == 0) {
 				EditorGUILayout.HelpBox("There are no overrides on this tk2dCamera.\n\nThe camera will always scale itself to be pixel perfect at any resolution. " +
@@ -422,7 +422,7 @@ public class tk2dCameraEditor : Editor
 			System.Action<int> deferredAction = null;
 			for (int i = 0; i < _target.resolutionOverride.Length; ++i)
 			{
-				blaze2dCameraResolutionOverride ovr = _target.resolutionOverride[i];
+				tk2dCameraResolutionOverride ovr = _target.resolutionOverride[i];
 
 				EditorGUILayout.BeginVertical(frameBorderStyle);
 				GUILayout.Space(8);
@@ -453,7 +453,7 @@ public class tk2dCameraEditor : Editor
 				if (GUILayout.Button("", tk2dEditorSkin.GetStyle("TilemapDeleteItem"))) {
 					int idx = i;
 					deferredAction = delegate(int q) {
-						List<blaze2dCameraResolutionOverride> list = new List<blaze2dCameraResolutionOverride>(_target.resolutionOverride);
+						List<tk2dCameraResolutionOverride> list = new List<tk2dCameraResolutionOverride>(_target.resolutionOverride);
 						list.RemoveAt(idx);
 						_target.resolutionOverride = list.ToArray();
 					};
@@ -461,20 +461,20 @@ public class tk2dCameraEditor : Editor
 
 				GUILayout.EndHorizontal();
 
-				ovr.matchBy = (blaze2dCameraResolutionOverride.MatchByType)EditorGUILayout.EnumPopup("Match By", ovr.matchBy);
+				ovr.matchBy = (tk2dCameraResolutionOverride.MatchByType)EditorGUILayout.EnumPopup("Match By", ovr.matchBy);
 
 				int tmpIndent = EditorGUI.indentLevel;
 				EditorGUI.indentLevel = 0;
 				switch (ovr.matchBy) {
-					case blaze2dCameraResolutionOverride.MatchByType.Wildcard:
+					case tk2dCameraResolutionOverride.MatchByType.Wildcard:
 						break;
-					case blaze2dCameraResolutionOverride.MatchByType.Resolution:
+					case tk2dCameraResolutionOverride.MatchByType.Resolution:
 						Vector2 res = new Vector2(ovr.width, ovr.height);
 						res = ResolutionControl(" ", res);
 						ovr.width = (int)res.x;
 						ovr.height = (int)res.y;
 						break;
-					case blaze2dCameraResolutionOverride.MatchByType.AspectRatio:
+					case tk2dCameraResolutionOverride.MatchByType.AspectRatio:
 						GUILayout.BeginHorizontal();
 						EditorGUILayout.PrefixLabel(" ");
 						ovr.aspectRatioNumerator = EditorGUILayout.FloatField(ovr.aspectRatioNumerator, GUILayout.Width(40));
@@ -485,14 +485,14 @@ public class tk2dCameraEditor : Editor
 				}
 				EditorGUI.indentLevel = tmpIndent;
 
-				ovr.autoScaleMode = (blaze2dCameraResolutionOverride.AutoScaleMode)EditorGUILayout.EnumPopup("Auto Scale", ovr.autoScaleMode);
-				if (ovr.autoScaleMode == blaze2dCameraResolutionOverride.AutoScaleMode.None)
+				ovr.autoScaleMode = (tk2dCameraResolutionOverride.AutoScaleMode)EditorGUILayout.EnumPopup("Auto Scale", ovr.autoScaleMode);
+				if (ovr.autoScaleMode == tk2dCameraResolutionOverride.AutoScaleMode.None)
 				{
 					EditorGUI.indentLevel++;
 					ovr.scale = EditorGUILayout.FloatField("Scale", ovr.scale);
 					EditorGUI.indentLevel--;
 				}
-				if (ovr.autoScaleMode == blaze2dCameraResolutionOverride.AutoScaleMode.StretchToFit)
+				if (ovr.autoScaleMode == tk2dCameraResolutionOverride.AutoScaleMode.StretchToFit)
 				{
 					string msg = "The native resolution image will be stretched to fit the target display. " +
 					"Image quality will suffer if non-uniform scaling occurs.";
@@ -500,8 +500,8 @@ public class tk2dCameraEditor : Editor
 				}
 				else
 				{
-					ovr.fitMode = (blaze2dCameraResolutionOverride.FitMode)EditorGUILayout.EnumPopup("Fit Mode", ovr.fitMode);
-					if (ovr.fitMode == blaze2dCameraResolutionOverride.FitMode.Constant)
+					ovr.fitMode = (tk2dCameraResolutionOverride.FitMode)EditorGUILayout.EnumPopup("Fit Mode", ovr.fitMode);
+					if (ovr.fitMode == tk2dCameraResolutionOverride.FitMode.Constant)
 					{
 						EditorGUI.indentLevel++;
 						ovr.offsetPixels.x = EditorGUILayout.FloatField("X", ovr.offsetPixels.x);
@@ -538,11 +538,11 @@ public class tk2dCameraEditor : Editor
 			GUILayout.FlexibleSpace();
 			if (GUILayout.Button("Add override", GUILayout.ExpandWidth(false)))
 			{
-				blaze2dCameraResolutionOverride ovr = new blaze2dCameraResolutionOverride();
+				tk2dCameraResolutionOverride ovr = new tk2dCameraResolutionOverride();
 				ovr.name = "New override";
-				ovr.matchBy = blaze2dCameraResolutionOverride.MatchByType.Wildcard;
-				ovr.autoScaleMode = blaze2dCameraResolutionOverride.AutoScaleMode.FitVisible;
-				ovr.fitMode = blaze2dCameraResolutionOverride.FitMode.Center;
+				ovr.matchBy = tk2dCameraResolutionOverride.MatchByType.Wildcard;
+				ovr.autoScaleMode = tk2dCameraResolutionOverride.AutoScaleMode.FitVisible;
+				ovr.fitMode = tk2dCameraResolutionOverride.FitMode.Center;
 				System.Array.Resize(ref _target.resolutionOverride, _target.resolutionOverride.Length + 1);
 				_target.resolutionOverride[_target.resolutionOverride.Length - 1] = ovr;
 				GUI.changed = true;
@@ -590,7 +590,7 @@ public class tk2dCameraEditor : Editor
 
 	void OnSceneGUI()
 	{
-		blaze2dCamera target = this.target as blaze2dCamera;
+		tk2dCamera target = this.target as tk2dCamera;
 		Handles.color = new Color32(255,255,255,255);
 		DrawCameraBounds( target.camera.worldToCameraMatrix, target.Editor__GetFinalProjectionMatrix() );
 		Handles.color = new Color32(55,203,105,102);
@@ -644,7 +644,7 @@ public class tk2dCameraEditor : Editor
 		camera.orthographicSize = 480.0f; // arbitrary large number
 		camera.farClipPlane = 1000.0f;
 		camera.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
-		blaze2dCamera newCamera = go.AddComponent<blaze2dCamera>();
+		tk2dCamera newCamera = go.AddComponent<tk2dCamera>();
 		newCamera.version = 1;
 		go.AddComponent("FlareLayer");
 		go.AddComponent("GUILayer");
@@ -709,7 +709,7 @@ namespace tk2dEditor
 			GUILayout.EndVertical();
 		}
 
-		public void OnSceneGUI(blaze2dCamera target)
+		public void OnSceneGUI(tk2dCamera target)
 		{
 			this.target = target;
 
@@ -744,7 +744,7 @@ namespace tk2dEditor
 			Handles.EndGUI();
 		}
 
-		blaze2dCamera target;
+		tk2dCamera target;
 
 		Camera previewCamera = null;
 		Rect previewWindowRect;

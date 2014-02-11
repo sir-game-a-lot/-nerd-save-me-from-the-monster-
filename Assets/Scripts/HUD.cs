@@ -5,9 +5,9 @@ public class HUD : MonoBehaviour
 {
 	public static HUD instance;
 
-	public blaze2dUIItem startGameBut;
+	public tk2dUIItem startGameBut;
 	public GameObject ScoreTestRoot;
-	public blaze2dTextMesh ScoreText;
+	public tk2dTextMesh ScoreText;
 	// Use this for initialization
 	void Awake ()
 	{

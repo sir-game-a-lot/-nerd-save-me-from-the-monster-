@@ -48,7 +48,7 @@ public static class tk2dSpriteGuiUtility
         return System.String.Compare(na, nb);
     }
 
-    public delegate void SpriteChangedCallback(blaze2dSpriteCollectionData spriteCollection, int spriteIndex, object callbackData);
+    public delegate void SpriteChangedCallback(tk2dSpriteCollectionData spriteCollection, int spriteIndex, object callbackData);
 	
 	class SpriteCollectionLUT
 	{
@@ -59,7 +59,7 @@ public static class tk2dSpriteGuiUtility
 	}
 	static Dictionary<string, SpriteCollectionLUT> spriteSelectorLUT = new Dictionary<string, SpriteCollectionLUT>();
 	
-	static int GetNamedSpriteInNewCollection(blaze2dSpriteCollectionData spriteCollection, int spriteId, blaze2dSpriteCollectionData newCollection) {
+	static int GetNamedSpriteInNewCollection(tk2dSpriteCollectionData spriteCollection, int spriteId, tk2dSpriteCollectionData newCollection) {
 		int newSpriteId = spriteId;
 		string oldSpriteName = (spriteCollection == null || spriteCollection.inst == null) ? "" : spriteCollection.inst.spriteDefinitions[spriteId].name;
 		int distance = -1;
@@ -81,8 +81,8 @@ public static class tk2dSpriteGuiUtility
 
 	public static bool showOpenEditShortcuts = true;
 
-	public static void SpriteSelector( blaze2dSpriteCollectionData spriteCollection, int spriteId, SpriteChangedCallback callback, object callbackData) {
-		blaze2dSpriteCollectionData newCollection = spriteCollection;
+	public static void SpriteSelector( tk2dSpriteCollectionData spriteCollection, int spriteId, SpriteChangedCallback callback, object callbackData) {
+		tk2dSpriteCollectionData newCollection = spriteCollection;
 		int newSpriteId = spriteId;
 
 		GUILayout.BeginHorizontal();
@@ -112,7 +112,7 @@ public static class tk2dSpriteGuiUtility
 			if ( showOpenEditShortcuts &&
 				 newCollection != null && newCollection.dataGuid != TransientGUID && 
 				 GUILayout.Button( "e", EditorStyles.miniButton, GUILayout.Width(18), GUILayout.MaxHeight( 14f ) ) ) {
-				blaze2dSpriteCollection gen = AssetDatabase.LoadAssetAtPath( AssetDatabase.GUIDToAssetPath(newCollection.spriteCollectionGUID), typeof(blaze2dSpriteCollection) ) as blaze2dSpriteCollection;
+				tk2dSpriteCollection gen = AssetDatabase.LoadAssetAtPath( AssetDatabase.GUIDToAssetPath(newCollection.spriteCollectionGUID), typeof(tk2dSpriteCollection) ) as tk2dSpriteCollection;
 				if ( gen != null ) {
 					tk2dSpriteCollectionEditorPopup v = EditorWindow.GetWindow( typeof(tk2dSpriteCollectionEditorPopup), false, "Sprite Collection Editor" ) as tk2dSpriteCollectionEditorPopup;
 					v.SetGeneratorAndSelectedSprite(gen, newSpriteId);
@@ -137,7 +137,7 @@ public static class tk2dSpriteGuiUtility
 				bool valid = false;
 				if (DragAndDrop.objectReferences.Length == 1 && DragAndDrop.objectReferences[0] is GameObject) {
 					GameObject go = DragAndDrop.objectReferences[0] as GameObject;
-					if (go.GetComponent<blaze2dSpriteCollection>() || go.GetComponent<blaze2dSpriteCollectionData>()) {
+					if (go.GetComponent<tk2dSpriteCollection>() || go.GetComponent<tk2dSpriteCollectionData>()) {
 						valid = true;
 					}
 					Event.current.Use();
@@ -156,8 +156,8 @@ public static class tk2dSpriteGuiUtility
 				Event.current.Use();
 
 				GameObject go = DragAndDrop.objectReferences[0] as GameObject;
-				blaze2dSpriteCollection sc = go.GetComponent<blaze2dSpriteCollection>();
-				blaze2dSpriteCollectionData scd = go.GetComponent<blaze2dSpriteCollectionData>();
+				tk2dSpriteCollection sc = go.GetComponent<tk2dSpriteCollection>();
+				tk2dSpriteCollectionData scd = go.GetComponent<tk2dSpriteCollectionData>();
 				if (sc != null && scd == null) {
 					scd = sc.spriteCollection;
 				}
@@ -176,13 +176,13 @@ public static class tk2dSpriteGuiUtility
 		}
 	}
 
-	public static void SpriteSelectorPopup( blaze2dSpriteCollectionData spriteCollection, int spriteId, SpriteChangedCallback callback, object callbackData) {
+	public static void SpriteSelectorPopup( tk2dSpriteCollectionData spriteCollection, int spriteId, SpriteChangedCallback callback, object callbackData) {
 		tk2dSpritePickerPopup.DoPickSprite(spriteCollection, spriteId, "Select sprite", callback, callbackData);
 	}
 
-	static int SpriteList(string label, int spriteId, blaze2dSpriteCollectionData rootSpriteCollection)
+	static int SpriteList(string label, int spriteId, tk2dSpriteCollectionData rootSpriteCollection)
 	{
-		blaze2dSpriteCollectionData spriteCollection = rootSpriteCollection.inst;
+		tk2dSpriteCollectionData spriteCollection = rootSpriteCollection.inst;
 		int newSpriteId = spriteId;
 		
 		// cope with guid not existing
@@ -251,15 +251,15 @@ public static class tk2dSpriteGuiUtility
 	static string[] spriteCollectionNames = new string[0];
 	static string[] spriteCollectionNamesInclTransient = new string[0];
 
-	public static void GetSpriteCollectionAndCreate( System.Action<blaze2dSpriteCollectionData> create ) {
+	public static void GetSpriteCollectionAndCreate( System.Action<tk2dSpriteCollectionData> create ) {
 		// try to inherit from other Sprites in scene
-		blaze2dBaseSprite spr = GameObject.FindObjectOfType(typeof(blaze2dBaseSprite)) as blaze2dBaseSprite;
+		tk2dBaseSprite spr = GameObject.FindObjectOfType(typeof(tk2dBaseSprite)) as tk2dBaseSprite;
 		if (spr) {
 			create( spr.Collection );
 			return;
 		}
 		else {
-			blaze2dSpriteCollectionData data = GetDefaultSpriteCollection();
+			tk2dSpriteCollectionData data = GetDefaultSpriteCollection();
 			if (data != null) {
 				create( data );
 				return;
@@ -268,7 +268,7 @@ public static class tk2dSpriteGuiUtility
 		EditorUtility.DisplayDialog("Create Sprite", "Unable to create sprite as no valid SpriteCollections have been found.", "Ok");
 	}
 
-	public static blaze2dSpriteCollectionData GetDefaultSpriteCollection() {
+	public static tk2dSpriteCollectionData GetDefaultSpriteCollection() {
 		BuildLookupIndex(false);
 		
 		foreach (tk2dSpriteCollectionIndex indexEntry in allSpriteCollections)
@@ -281,7 +281,7 @@ public static class tk2dSpriteGuiUtility
 					{
 						GameObject scgo = AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(indexEntry.spriteCollectionDataGUID), typeof(GameObject)) as GameObject;
 						if (scgo != null)
-							return scgo.GetComponent<blaze2dSpriteCollectionData>();
+							return scgo.GetComponent<tk2dSpriteCollectionData>();
 					}
 				}
 			}
@@ -323,19 +323,19 @@ public static class tk2dSpriteGuiUtility
 		allSpriteCollections.Clear();
 	}
 	
-	static blaze2dSpriteCollectionData GetSpriteCollectionDataAtIndex(int index, blaze2dSpriteCollectionData defaultValue)
+	static tk2dSpriteCollectionData GetSpriteCollectionDataAtIndex(int index, tk2dSpriteCollectionData defaultValue)
 	{
 		if (index >= allSpriteCollections.Count) return defaultValue;
 		GameObject go = AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(allSpriteCollections[index].spriteCollectionDataGUID), typeof(GameObject)) as GameObject;
 		if (go == null) return defaultValue;
-		blaze2dSpriteCollectionData data = go.GetComponent<blaze2dSpriteCollectionData>();
+		tk2dSpriteCollectionData data = go.GetComponent<tk2dSpriteCollectionData>();
 		if (data == null) return defaultValue;
 		return data;
 	}
 	
 	public static string TransientGUID { get { return "transient"; } }
 	
-	public static int GetValidSpriteId(blaze2dSpriteCollectionData spriteCollection, int spriteId)
+	public static int GetValidSpriteId(tk2dSpriteCollectionData spriteCollection, int spriteId)
 	{
 		if (! (spriteId > 0 && spriteId < spriteCollection.spriteDefinitions.Length && 
 			spriteCollection.spriteDefinitions[spriteId].Valid) )
@@ -346,7 +346,7 @@ public static class tk2dSpriteGuiUtility
 		return spriteId;
 	}
 	
-	public static blaze2dSpriteCollectionData SpriteCollectionList(blaze2dSpriteCollectionData currentValue) {
+	public static tk2dSpriteCollectionData SpriteCollectionList(tk2dSpriteCollectionData currentValue) {
 		// Initialize guid if not present
 		if (currentValue != null && (currentValue.dataGuid == null || currentValue.dataGuid.Length == 0))
 		{
@@ -398,7 +398,7 @@ public static class tk2dSpriteGuiUtility
 				int newSelection = EditorGUILayout.Popup(currentSelection, spriteCollectionNames);
 				if (newSelection != currentSelection)
 				{
-					blaze2dSpriteCollectionData newData = GetSpriteCollectionDataAtIndex(newSelection, currentValue);
+					tk2dSpriteCollectionData newData = GetSpriteCollectionDataAtIndex(newSelection, currentValue);
 					if (newData == null)
 					{
 						Debug.LogError("Unable to load sprite collection. Please rebuild index and try again.");
@@ -421,7 +421,7 @@ public static class tk2dSpriteGuiUtility
 		return currentValue;
 	}
 
-	public static blaze2dSpriteCollectionData SpriteCollectionList(string label, blaze2dSpriteCollectionData currentValue)
+	public static tk2dSpriteCollectionData SpriteCollectionList(string label, tk2dSpriteCollectionData currentValue)
 	{
 		GUILayout.BeginHorizontal();
 		if (label.Length > 0)

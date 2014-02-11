@@ -3,7 +3,7 @@ using UnityEditor;
 using System.Collections;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dUIMultiStateToggleButton))]
+[CustomEditor(typeof(tk2dUIMultiStateToggleButton))]
 public class tk2dUIMultiStateToggleButtonEditor : tk2dUIBaseItemControlEditor
 {
     private bool listVisibility = true;
@@ -17,7 +17,7 @@ public class tk2dUIMultiStateToggleButtonEditor : tk2dUIBaseItemControlEditor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        blaze2dUIMultiStateToggleButton multiStateToggleBtn = (blaze2dUIMultiStateToggleButton)target;
+        tk2dUIMultiStateToggleButton multiStateToggleBtn = (tk2dUIMultiStateToggleButton)target;
 
         serializedObj.Update();
         ListIterator("states", ref listVisibility);
@@ -26,7 +26,7 @@ public class tk2dUIMultiStateToggleButtonEditor : tk2dUIBaseItemControlEditor
         multiStateToggleBtn.activateOnPress = EditorGUILayout.Toggle("Activate On Press", multiStateToggleBtn.activateOnPress);
 
         BeginMessageGUI();
-        methodBindingUtil.MethodBinding( "On State Toggle", typeof(blaze2dUIMultiStateToggleButton), multiStateToggleBtn.SendMessageTarget, ref multiStateToggleBtn.SendMessageOnStateToggleMethodName );
+        methodBindingUtil.MethodBinding( "On State Toggle", typeof(tk2dUIMultiStateToggleButton), multiStateToggleBtn.SendMessageTarget, ref multiStateToggleBtn.SendMessageOnStateToggleMethodName );
         EndMessageGUI();
 
         if (GUI.changed)

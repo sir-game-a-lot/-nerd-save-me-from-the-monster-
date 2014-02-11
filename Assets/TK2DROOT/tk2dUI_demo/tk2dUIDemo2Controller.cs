@@ -3,7 +3,7 @@ using System.Collections;
 
 public class tk2dUIDemo2Controller : tk2dUIBaseDemoController {
 
-	public blaze2dUILayout windowLayout;
+	public tk2dUILayout windowLayout;
 
 	Vector3[] rectMin = new Vector3[] {
 		Vector3.zero,
@@ -48,7 +48,7 @@ public class tk2dUIDemo2Controller : tk2dUIBaseDemoController {
 	void LateUpdate() {
 		// Get screen extents		
 		int last = rectMin.Length - 1;
-		rectMin[last].Set(blaze2dCamera.Instance.ScreenExtents.xMin, blaze2dCamera.Instance.ScreenExtents.yMin, 0);
-		rectMax[last].Set(blaze2dCamera.Instance.ScreenExtents.xMax, blaze2dCamera.Instance.ScreenExtents.yMax, 0);
+		rectMin[last].Set(tk2dCamera.Instance.ScreenExtents.xMin, tk2dCamera.Instance.ScreenExtents.yMin, 0);
+		rectMax[last].Set(tk2dCamera.Instance.ScreenExtents.xMax, tk2dCamera.Instance.ScreenExtents.yMax, 0);
 	}
 }

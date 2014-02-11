@@ -145,7 +145,7 @@ public class tk2dSpriteCollectionBuilder
 
             if (thisChangedPaths.Count > 0)
             {
-				blaze2dSpriteCollection spriteCollectionSource = AssetDatabase.LoadAssetAtPath( AssetDatabase.GUIDToAssetPath(thisScg.spriteCollectionGUID), typeof(blaze2dSpriteCollection) ) as blaze2dSpriteCollection;
+				tk2dSpriteCollection spriteCollectionSource = AssetDatabase.LoadAssetAtPath( AssetDatabase.GUIDToAssetPath(thisScg.spriteCollectionGUID), typeof(tk2dSpriteCollection) ) as tk2dSpriteCollection;
 				if (spriteCollectionSource != null)
 				{
             		Rebuild(spriteCollectionSource);
@@ -159,7 +159,7 @@ public class tk2dSpriteCollectionBuilder
 	
 	static int defaultPad = 2;
 	
-	static int GetPadAmount(blaze2dSpriteCollection gen, int spriteId)
+	static int GetPadAmount(tk2dSpriteCollection gen, int spriteId)
 	{
 		int basePadAmount = 0;
 		
@@ -172,7 +172,7 @@ public class tk2dSpriteCollectionBuilder
 		return Mathf.Max(0, basePadAmount);
 	}
 
-	static void PadTexture(Texture2D tex, int pad, blaze2dSpriteCollectionDefinition.Pad padMode)
+	static void PadTexture(Texture2D tex, int pad, tk2dSpriteCollectionDefinition.Pad padMode)
 	{
 		Color bgColor = new Color(0,0,0,0);
 		Color c0 = bgColor, c1 = bgColor;
@@ -181,8 +181,8 @@ public class tk2dSpriteCollectionBuilder
 			for (int x = 0; x < tex.width; ++x)
 			{
 				switch (padMode) {
-					case blaze2dSpriteCollectionDefinition.Pad.Extend: c0 = tex.GetPixel(x, pad); c1 = tex.GetPixel(x, tex.height - 1 - pad); break;
-					case blaze2dSpriteCollectionDefinition.Pad.TileXY: c1 = tex.GetPixel(x, pad); c0 = tex.GetPixel(x, tex.height - 1 - pad); break;
+					case tk2dSpriteCollectionDefinition.Pad.Extend: c0 = tex.GetPixel(x, pad); c1 = tex.GetPixel(x, tex.height - 1 - pad); break;
+					case tk2dSpriteCollectionDefinition.Pad.TileXY: c1 = tex.GetPixel(x, pad); c0 = tex.GetPixel(x, tex.height - 1 - pad); break;
 				}
 				tex.SetPixel(x, y, c0);
 				tex.SetPixel(x, tex.height - 1 - y, c1);
@@ -193,8 +193,8 @@ public class tk2dSpriteCollectionBuilder
 			for (int y = 0; y < tex.height; ++y)
 			{
 				switch (padMode) {
-					case blaze2dSpriteCollectionDefinition.Pad.Extend: c0 = tex.GetPixel(pad, y); c1 = tex.GetPixel(tex.width - 1 - pad, y); break;
-					case blaze2dSpriteCollectionDefinition.Pad.TileXY: c1 = tex.GetPixel(pad, y); c0 = tex.GetPixel(tex.width - 1 - pad, y); break;
+					case tk2dSpriteCollectionDefinition.Pad.Extend: c0 = tex.GetPixel(pad, y); c1 = tex.GetPixel(tex.width - 1 - pad, y); break;
+					case tk2dSpriteCollectionDefinition.Pad.TileXY: c1 = tex.GetPixel(pad, y); c0 = tex.GetPixel(tex.width - 1 - pad, y); break;
 				}
 				tex.SetPixel(x, y, c0);
 				tex.SetPixel(tex.width - 1 - x, y, c1);
@@ -204,7 +204,7 @@ public class tk2dSpriteCollectionBuilder
 
 
 
-	static void SetUpSourceTextureFormats(blaze2dSpriteCollection gen)
+	static void SetUpSourceTextureFormats(tk2dSpriteCollection gen)
 	{
 		// make sure all textures are in the right format
 		int numTexturesReimported = 0;
@@ -279,7 +279,7 @@ public class tk2dSpriteCollectionBuilder
 		return true;
 	}
 
-	static Texture2D ProcessTexture(blaze2dSpriteCollection settings, bool additive, blaze2dSpriteCollectionDefinition.Pad padMode, bool disableTrimming, bool isInjectedTexture, bool isDiced, Texture2D srcTex, int sx, int sy, int tw, int th, ref SpriteLut spriteLut, int padAmount)
+	static Texture2D ProcessTexture(tk2dSpriteCollection settings, bool additive, tk2dSpriteCollectionDefinition.Pad padMode, bool disableTrimming, bool isInjectedTexture, bool isDiced, Texture2D srcTex, int sx, int sy, int tw, int th, ref SpriteLut spriteLut, int padAmount)
 	{
 		// Can't have additive without premultiplied alpha
 		if (!settings.premultipliedAlpha) additive = false;
@@ -415,9 +415,9 @@ public class tk2dSpriteCollectionBuilder
 
 			switch (textureCompression)
 			{
-			case blaze2dSpriteCollection.TextureCompression.Dithered16Bit_NoAlpha:
+			case tk2dSpriteCollection.TextureCompression.Dithered16Bit_NoAlpha:
 				tk2dEditor.TextureProcessing.FloydSteinbergDithering.DitherTexture(dtex, TextureFormat.ARGB4444, 0, 0, dtex.width, dtex.height); break;
-			case blaze2dSpriteCollection.TextureCompression.Dithered16Bit_Alpha:
+			case tk2dSpriteCollection.TextureCompression.Dithered16Bit_Alpha:
 				tk2dEditor.TextureProcessing.FloydSteinbergDithering.DitherTexture(dtex, TextureFormat.RGB565, 0, 0, dtex.width, dtex.height); break;
 			}
 			dtex.Apply();
@@ -436,7 +436,7 @@ public class tk2dSpriteCollectionBuilder
 		}
 	}
 
-	static blaze2dSpriteCollection currentBuild = null;
+	static tk2dSpriteCollection currentBuild = null;
 	static Texture2D[] sourceTextures;
 	
 	// path is local (Assets/a/b/c.def)
@@ -452,7 +452,7 @@ public class tk2dSpriteCollectionBuilder
 
 	// Create the sprite collection data object
 	// Its a prefab for historic reasons
-	static void CreateDataObject(blaze2dSpriteCollection gen, string prefabObjectPath)
+	static void CreateDataObject(tk2dSpriteCollection gen, string prefabObjectPath)
 	{
         // Create prefab
 		if (gen.spriteCollection == null)
@@ -460,18 +460,18 @@ public class tk2dSpriteCollectionBuilder
 			prefabObjectPath = AssetDatabase.GenerateUniqueAssetPath(prefabObjectPath);
 			
 			GameObject go = new GameObject();
-			go.AddComponent<blaze2dSpriteCollectionData>();
+			go.AddComponent<tk2dSpriteCollectionData>();
 			Object p = PrefabUtility.CreateEmptyPrefab(prefabObjectPath);
 			PrefabUtility.ReplacePrefab(go, p);
 			GameObject.DestroyImmediate(go);
 			AssetDatabase.SaveAssets();
 
-			gen.spriteCollection = AssetDatabase.LoadAssetAtPath(prefabObjectPath, typeof(blaze2dSpriteCollectionData)) as blaze2dSpriteCollectionData;
+			gen.spriteCollection = AssetDatabase.LoadAssetAtPath(prefabObjectPath, typeof(tk2dSpriteCollectionData)) as tk2dSpriteCollectionData;
 		}
 
 	}
 
-	public static string GetOrCreateDataPath(blaze2dSpriteCollection gen)
+	public static string GetOrCreateDataPath(tk2dSpriteCollection gen)
 	{
 		if (gen.spriteCollection != null)
 		{
@@ -486,7 +486,7 @@ public class tk2dSpriteCollectionBuilder
 		}	
 	}
 
-	static bool CheckSourceAssets(blaze2dSpriteCollection gen)
+	static bool CheckSourceAssets(tk2dSpriteCollection gen)
 	{
 		string missingTextures = "";
 
@@ -533,7 +533,7 @@ public class tk2dSpriteCollectionBuilder
 		lut.hash = sBuilder.ToString();
 	}
 
-    public static bool Rebuild(blaze2dSpriteCollection gen)
+    public static bool Rebuild(tk2dSpriteCollection gen)
     {
 		// avoid "recursive" build being triggered by texture watcher
 		if (currentBuild != null)
@@ -578,7 +578,7 @@ public class tk2dSpriteCollectionBuilder
 			tk2dEditor.SpriteCollectionBuilder.PlatformBuilder.InitializeSpriteCollectionPlatforms(gen, System.IO.Path.GetDirectoryName(prefabObjectPath));
 
 			// The first sprite collection is always THIS
-			blaze2dAssetPlatform baseAssetPlatform = blaze2dSystem.GetAssetPlatform(gen.platforms[0].name);
+			tk2dAssetPlatform baseAssetPlatform = tk2dSystem.GetAssetPlatform(gen.platforms[0].name);
 			float baseScale = (baseAssetPlatform != null)?baseAssetPlatform.scale:1.0f;
 
 			// Building platform specific data, allow recursive builds temporarily
@@ -587,16 +587,16 @@ public class tk2dSpriteCollectionBuilder
 			// Transfer to platform sprite collections, and build those
 			for (int i = 0; i < gen.platforms.Count; ++i)
 			{
-				blaze2dSpriteCollectionPlatform platform = gen.platforms[i];
+				tk2dSpriteCollectionPlatform platform = gen.platforms[i];
 				
-				blaze2dAssetPlatform thisAssetPlatform = blaze2dSystem.GetAssetPlatform(gen.platforms[i].name);
+				tk2dAssetPlatform thisAssetPlatform = tk2dSystem.GetAssetPlatform(gen.platforms[i].name);
 				float thisScale = (thisAssetPlatform != null)?thisAssetPlatform.scale:1.0f;
 
 				bool validPlatform = platform.name.Length > 0 && platform.spriteCollection != null;
 				bool isRootSpriteCollection = (i == 0);
 				if (validPlatform) 
 				{
-					blaze2dSpriteCollection thisPlatformCollection = gen.platforms[i].spriteCollection;
+					tk2dSpriteCollection thisPlatformCollection = gen.platforms[i].spriteCollection;
 					
 					// Make sure data directory exists, material overrides will be created in here
 					string dataPath = GetOrCreateDataPath(thisPlatformCollection);
@@ -617,11 +617,11 @@ public class tk2dSpriteCollectionBuilder
 
 			for (int i = 0; i < gen.platforms.Count; ++i)
 			{
-				blaze2dSpriteCollectionPlatform platform = gen.platforms[i];
+				tk2dSpriteCollectionPlatform platform = gen.platforms[i];
 				if (!platform.Valid) continue;
 
 				platformNames.Add(platform.name);
-				blaze2dSpriteCollectionData data = platform.spriteCollection.spriteCollection;
+				tk2dSpriteCollectionData data = platform.spriteCollection.spriteCollection;
 				string guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(data));
 				platformGUIDs.Add(guid);
 
@@ -633,10 +633,10 @@ public class tk2dSpriteCollectionBuilder
 			// Set up fonts
 			for (int j = 0; j < gen.fonts.Length; ++j)
 			{
-				blaze2dSpriteCollectionFont font = gen.fonts[j];
+				tk2dSpriteCollectionFont font = gen.fonts[j];
 				if (font == null) continue;
 
-				blaze2dFontData data = font.data;
+				tk2dFontData data = font.data;
 				if (!data) continue;
 				data.hasPlatformData = true;
 				data.material = null;
@@ -646,7 +646,7 @@ public class tk2dSpriteCollectionBuilder
 				data.premultipliedAlpha = gen.premultipliedAlpha;
 				for (int i = 0; i < gen.platforms.Count; ++i)
 				{
-					blaze2dSpriteCollectionPlatform platform = gen.platforms[i];
+					tk2dSpriteCollectionPlatform platform = gen.platforms[i];
 					if (!platform.Valid) continue;
 					data.fontPlatformGUIDs[i] = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(gen.platforms[i].spriteCollection.fonts[j].data));
 				}
@@ -654,13 +654,13 @@ public class tk2dSpriteCollectionBuilder
 				EditorUtility.SetDirty(data);
 			}
 
-			gen.spriteCollection.version = blaze2dSpriteCollectionData.CURRENT_VERSION;
+			gen.spriteCollection.version = tk2dSpriteCollectionData.CURRENT_VERSION;
 			gen.spriteCollection.spriteCollectionName = gen.name;
 			gen.spriteCollection.spriteCollectionGUID = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(gen));
 			gen.spriteCollection.dataGuid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(gen.spriteCollection));
 
 			// Clear out data
-			gen.spriteCollection.spriteDefinitions = new blaze2dSpriteDefinition[0];
+			gen.spriteCollection.spriteDefinitions = new tk2dSpriteDefinition[0];
 			gen.spriteCollection.materials = new Material[0];
 			gen.spriteCollection.textures = new Texture2D[0];
 			gen.spriteCollection.pngTextures = new TextAsset[0];
@@ -696,7 +696,7 @@ public class tk2dSpriteCollectionBuilder
 			// Set up fonts
 			for (int j = 0; j < gen.fonts.Length; ++j)
 			{
-				blaze2dFontData f = gen.fonts[j].data;
+				tk2dFontData f = gen.fonts[j].data;
 				if (f != null)
 				{
 					f.ResetPlatformData();
@@ -812,7 +812,7 @@ public class tk2dSpriteCollectionBuilder
 			if (sourceTextures[i] == null)
 			{
 				gen.textureParams[i].dice = false;
-				gen.textureParams[i].anchor = blaze2dSpriteCollectionDefinition.Anchor.MiddleCenter;
+				gen.textureParams[i].anchor = tk2dSpriteCollectionDefinition.Anchor.MiddleCenter;
 				gen.textureParams[i].name = "";
 				gen.textureParams[i].extractRegion = false;
 				gen.textureParams[i].fromSpriteSheet = false;
@@ -846,12 +846,12 @@ public class tk2dSpriteCollectionBuilder
 						int tw = Mathf.Min(diceUnitX, srcTex.width - sx);
 						int th = Mathf.Min(diceUnitY, srcTex.height - sy);
 
-						if (gen.textureParams[i].diceFilter == blaze2dSpriteCollectionDefinition.DiceFilter.SolidOnly &&
+						if (gen.textureParams[i].diceFilter == tk2dSpriteCollectionDefinition.DiceFilter.SolidOnly &&
 							!TextureRectFullySolid( srcTex, sx, sy, tw, th )) {
 							continue;
 						}
 
-						if (gen.textureParams[i].diceFilter == blaze2dSpriteCollectionDefinition.DiceFilter.TransparentOnly &&
+						if (gen.textureParams[i].diceFilter == tk2dSpriteCollectionDefinition.DiceFilter.TransparentOnly &&
 							TextureRectFullySolid( srcTex, sx, sy, tw, th )) {
 							continue;
 						}
@@ -862,7 +862,7 @@ public class tk2dSpriteCollectionBuilder
 						diceLut.sourceTex = srcTex;
 						diceLut.isDuplicate = false; // duplicate diced textures can be chopped up differently, so don't detect dupes here
 
-						Texture2D dest = ProcessTexture(gen, gen.textureParams[i].additive, blaze2dSpriteCollectionDefinition.Pad.Extend, gen.textureParams[i].disableTrimming, false, true, srcTex, sx, sy, tw, th, ref diceLut, GetPadAmount(gen, i));
+						Texture2D dest = ProcessTexture(gen, gen.textureParams[i].additive, tk2dSpriteCollectionDefinition.Pad.Extend, gen.textureParams[i].disableTrimming, false, true, srcTex, sx, sy, tw, th, ref diceLut, GetPadAmount(gen, i));
 						if (dest)
 						{
 							diceLut.atlasIndex = numTexturesToAtlas++;
@@ -917,7 +917,7 @@ public class tk2dSpriteCollectionBuilder
 		}
 		
 		// Font
-		Dictionary<blaze2dSpriteCollectionFont, tk2dEditor.Font.Info> fontInfoDict = new Dictionary<blaze2dSpriteCollectionFont, tk2dEditor.Font.Info>();
+		Dictionary<tk2dSpriteCollectionFont, tk2dEditor.Font.Info> fontInfoDict = new Dictionary<tk2dSpriteCollectionFont, tk2dEditor.Font.Info>();
 		if (gen.fonts != null)
 		{
 			for (int i = 0; i < gen.fonts.Length; ++i)
@@ -945,7 +945,7 @@ public class tk2dSpriteCollectionBuilder
 					SpriteLut lut = new SpriteLut();
 
 					int cy = (int)( (font.flipTextureY ? c.y : (fontInfo.scaleH - c.y - c.height)) * texScale );
-					Texture2D dest = ProcessTexture(gen, false, blaze2dSpriteCollectionDefinition.Pad.Default, false, true, false,
+					Texture2D dest = ProcessTexture(gen, false, tk2dSpriteCollectionDefinition.Pad.Default, false, true, false,
 						(rescaledTexture != null) ? rescaledTexture : font.texture, 
 						(int)(c.x * texScale), cy, 
 						(int)(c.width * texScale), (int)(c.height * texScale), 
@@ -1087,7 +1087,7 @@ public class tk2dSpriteCollectionBuilder
 		List<TextAsset> oldAtlasTextureFiles = new List<TextAsset>(gen.atlasTextureFiles);
 
 		tk2dEditor.Atlas.Data[] atlasData = atlasBuilder.GetAtlasData();
-		if (gen.atlasFormat == blaze2dSpriteCollection.AtlasFormat.UnityTexture) {
+		if (gen.atlasFormat == tk2dSpriteCollection.AtlasFormat.UnityTexture) {
 			System.Array.Resize(ref gen.atlasTextures, atlasData.Length);
 			System.Array.Resize(ref gen.atlasTextureFiles, 0);
 		}
@@ -1148,7 +1148,7 @@ public class tk2dSpriteCollectionBuilder
 			tex.Apply();
 
 			string texturePath;
-			if (gen.atlasFormat == blaze2dSpriteCollection.AtlasFormat.UnityTexture) {
+			if (gen.atlasFormat == tk2dSpriteCollection.AtlasFormat.UnityTexture) {
 				texturePath = gen.atlasTextures[atlasIndex]?AssetDatabase.GetAssetPath(gen.atlasTextures[atlasIndex]):(dataDirName + "atlas" + atlasIndex + ".png");
 			}
 			else {
@@ -1167,7 +1167,7 @@ public class tk2dSpriteCollectionBuilder
 			AssetDatabase.Refresh();
 
 			// Get a reference to the texture asset
-			if (gen.atlasFormat == blaze2dSpriteCollection.AtlasFormat.UnityTexture) {
+			if (gen.atlasFormat == tk2dSpriteCollection.AtlasFormat.UnityTexture) {
 				tex = AssetDatabase.LoadAssetAtPath(texturePath, typeof(Texture2D)) as Texture2D;
 				gen.atlasTextures[atlasIndex] = tex;
 
@@ -1209,7 +1209,7 @@ public class tk2dSpriteCollectionBuilder
 				gen.altMaterials = new Material[1] { gen.atlasMaterials[0] };
 		}
 
-		blaze2dSpriteCollectionData coll = gen.spriteCollection;
+		tk2dSpriteCollectionData coll = gen.spriteCollection;
 		coll.textures = new Texture[gen.atlasTextures.Length];
 		for (int i = 0; i < gen.atlasTextures.Length; ++i) {
 			coll.textures[i] = gen.atlasTextures[i];
@@ -1248,8 +1248,8 @@ public class tk2dSpriteCollectionBuilder
 		coll.material = null;
 		
         coll.premultipliedAlpha = gen.premultipliedAlpha;
-        coll.spriteDefinitions = new blaze2dSpriteDefinition[gen.textureParams.Length];
-		coll.version = blaze2dSpriteCollectionData.CURRENT_VERSION;
+        coll.spriteDefinitions = new tk2dSpriteDefinition[gen.textureParams.Length];
+		coll.version = tk2dSpriteCollectionData.CURRENT_VERSION;
 		coll.materialIdsValid = true;
 		coll.spriteCollectionGUID = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(gen));
 		coll.spriteCollectionName = gen.name;
@@ -1263,7 +1263,7 @@ public class tk2dSpriteCollectionBuilder
 		
 		for (int i = 0; i < coll.spriteDefinitions.Length; ++i)
 		{
-			coll.spriteDefinitions[i] = new blaze2dSpriteDefinition();
+			coll.spriteDefinitions[i] = new tk2dSpriteDefinition();
 			if (gen.textureParams[i].texture)
 			{
 				string assetPath = AssetDatabase.GetAssetPath(gen.textureParams[i].texture);
@@ -1345,7 +1345,7 @@ public class tk2dSpriteCollectionBuilder
 
 			// Managed?
 			font.data.managedFont = gen.managedSpriteCollection;
-			font.data.needMaterialInstance = (gen.managedSpriteCollection || gen.atlasFormat != blaze2dSpriteCollection.AtlasFormat.UnityTexture);
+			font.data.needMaterialInstance = (gen.managedSpriteCollection || gen.atlasFormat != tk2dSpriteCollection.AtlasFormat.UnityTexture);
 
 			// Mark to save
 			EditorUtility.SetDirty(font.editorData);
@@ -1377,7 +1377,7 @@ public class tk2dSpriteCollectionBuilder
 		gen.spriteCollection.loadable = gen.loadable;
 		gen.spriteCollection.assetName = gen.assetName;
 		gen.spriteCollection.managedSpriteCollection = gen.managedSpriteCollection;
-		gen.spriteCollection.needMaterialInstance = (gen.managedSpriteCollection || gen.atlasFormat != blaze2dSpriteCollection.AtlasFormat.UnityTexture);
+		gen.spriteCollection.needMaterialInstance = (gen.managedSpriteCollection || gen.atlasFormat != tk2dSpriteCollection.AtlasFormat.UnityTexture);
 		gen.spriteCollection.textureFilterMode = gen.filterMode;
 		gen.spriteCollection.textureMipMaps = gen.mipmapEnabled;
 
@@ -1407,7 +1407,7 @@ public class tk2dSpriteCollectionBuilder
     }
 	
 	// pass null to rebuild everything
-	static void RefreshExistingAssets(blaze2dSpriteCollectionData spriteCollectionData)
+	static void RefreshExistingAssets(tk2dSpriteCollectionData spriteCollectionData)
 	{
 		foreach (var assembly in System.AppDomain.CurrentDomain.GetAssemblies())
 		{
@@ -1416,7 +1416,7 @@ public class tk2dSpriteCollectionBuilder
 				System.Type[] types = assembly.GetTypes();
 				foreach (var type in types)
 				{
-					if (type.GetInterface("blaze2dRuntime.ISpriteCollectionForceBuild") != null)
+					if (type.GetInterface("tk2dRuntime.ISpriteCollectionForceBuild") != null)
 					{
 						Object[] objects = Resources.FindObjectsOfTypeAll(type);
 						foreach (var o in objects)
@@ -1424,7 +1424,7 @@ public class tk2dSpriteCollectionBuilder
 							if (tk2dEditorUtility.IsPrefab(o))
 								continue;
 							
-							blaze2dRuntime.ISpriteCollectionForceBuild isc = o as blaze2dRuntime.ISpriteCollectionForceBuild;
+							tk2dRuntime.ISpriteCollectionForceBuild isc = o as tk2dRuntime.ISpriteCollectionForceBuild;
 							if (spriteCollectionData == null || isc.UsesSpriteCollection(spriteCollectionData))
 								isc.ForceBuild();
 						}
@@ -1435,7 +1435,7 @@ public class tk2dSpriteCollectionBuilder
 		}
 	}
 
-	static void SetUpTargetTexture(blaze2dSpriteCollection gen, Texture2D tex)
+	static void SetUpTargetTexture(tk2dSpriteCollection gen, Texture2D tex)
 	{
 		bool textureDirty = false;
 
@@ -1449,11 +1449,11 @@ public class tk2dSpriteCollectionBuilder
 		TextureImporterFormat targetFormat;
 		switch (gen.textureCompression)
 		{
-		case blaze2dSpriteCollection.TextureCompression.Uncompressed: targetFormat = TextureImporterFormat.AutomaticTruecolor; break;
-		case blaze2dSpriteCollection.TextureCompression.Reduced16Bit: targetFormat = TextureImporterFormat.Automatic16bit; break;
-		case blaze2dSpriteCollection.TextureCompression.Dithered16Bit_Alpha: targetFormat = TextureImporterFormat.Automatic16bit; break;
-		case blaze2dSpriteCollection.TextureCompression.Dithered16Bit_NoAlpha: targetFormat = TextureImporterFormat.Automatic16bit; break;
-		case blaze2dSpriteCollection.TextureCompression.Compressed: targetFormat = TextureImporterFormat.AutomaticCompressed; break;
+		case tk2dSpriteCollection.TextureCompression.Uncompressed: targetFormat = TextureImporterFormat.AutomaticTruecolor; break;
+		case tk2dSpriteCollection.TextureCompression.Reduced16Bit: targetFormat = TextureImporterFormat.Automatic16bit; break;
+		case tk2dSpriteCollection.TextureCompression.Dithered16Bit_Alpha: targetFormat = TextureImporterFormat.Automatic16bit; break;
+		case tk2dSpriteCollection.TextureCompression.Dithered16Bit_NoAlpha: targetFormat = TextureImporterFormat.Automatic16bit; break;
+		case tk2dSpriteCollection.TextureCompression.Compressed: targetFormat = TextureImporterFormat.AutomaticCompressed; break;
 
 		default: targetFormat = TextureImporterFormat.AutomaticTruecolor; break;
 		}
@@ -1483,7 +1483,7 @@ public class tk2dSpriteCollectionBuilder
 		}
 	}
 	
-	static void UpdateFontData(blaze2dSpriteCollection gen, float scale, tk2dEditor.Atlas.Data[] packers, List<SpriteLut> spriteLuts, blaze2dSpriteCollectionFont font, tk2dEditor.Font.Info fontInfo)
+	static void UpdateFontData(tk2dSpriteCollection gen, float scale, tk2dEditor.Atlas.Data[] packers, List<SpriteLut> spriteLuts, tk2dSpriteCollectionFont font, tk2dEditor.Font.Info fontInfo)
 	{
 		Dictionary<int, SpriteLut> glyphLut = new Dictionary<int, SpriteLut>();
 		List<SpriteLut> values = new List<SpriteLut>();
@@ -1540,7 +1540,7 @@ public class tk2dSpriteCollectionBuilder
 		tk2dEditor.Font.Builder.BuildFont(fontInfo, font.data, scale, font.charPadX, font.dupeCaps, font.flipTextureY, font.gradientTexture, font.gradientCount);
 	}
 	
-    static void UpdateVertexCache(blaze2dSpriteCollection gen, float scale, tk2dEditor.Atlas.Data[] packers, blaze2dSpriteCollectionData coll, List<SpriteLut> spriteLuts)
+    static void UpdateVertexCache(tk2dSpriteCollection gen, float scale, tk2dEditor.Atlas.Data[] packers, tk2dSpriteCollectionData coll, List<SpriteLut> spriteLuts)
     {
         for (int i = 0; i < sourceTextures.Length; ++i)
         {
@@ -1556,7 +1556,7 @@ public class tk2dSpriteCollectionBuilder
 
 			int padAmount = GetPadAmount(gen, i);
 
-            blaze2dSpriteCollectionDefinition thisTexParam = gen.textureParams[i];
+            tk2dSpriteCollectionDefinition thisTexParam = gen.textureParams[i];
 			tk2dEditor.Atlas.Data packer = packers[0];
 			tk2dEditor.Atlas.Entry atlasEntry = null;
 			int atlasIndex = 0;
@@ -1650,19 +1650,19 @@ public class tk2dSpriteCollectionBuilder
 				// anchor coordinate system is (0, 0) = top left, to keep it the same as photoshop, etc.
                 switch (thisTexParam.anchor)
                 {
-                    case blaze2dSpriteCollectionDefinition.Anchor.LowerLeft: anchorX = 0; anchorY = texHeightI; break;
-                    case blaze2dSpriteCollectionDefinition.Anchor.LowerCenter: anchorX = texWidthI / 2; anchorY = texHeightI; break;
-                    case blaze2dSpriteCollectionDefinition.Anchor.LowerRight: anchorX = texWidthI; anchorY = texHeightI; break;
+                    case tk2dSpriteCollectionDefinition.Anchor.LowerLeft: anchorX = 0; anchorY = texHeightI; break;
+                    case tk2dSpriteCollectionDefinition.Anchor.LowerCenter: anchorX = texWidthI / 2; anchorY = texHeightI; break;
+                    case tk2dSpriteCollectionDefinition.Anchor.LowerRight: anchorX = texWidthI; anchorY = texHeightI; break;
 
-                    case blaze2dSpriteCollectionDefinition.Anchor.MiddleLeft: anchorX = 0; anchorY = texHeightI / 2; break;
-                    case blaze2dSpriteCollectionDefinition.Anchor.MiddleCenter: anchorX = texWidthI / 2; anchorY = texHeightI / 2; break;
-                    case blaze2dSpriteCollectionDefinition.Anchor.MiddleRight: anchorX = texWidthI; anchorY = texHeightI / 2; break;
+                    case tk2dSpriteCollectionDefinition.Anchor.MiddleLeft: anchorX = 0; anchorY = texHeightI / 2; break;
+                    case tk2dSpriteCollectionDefinition.Anchor.MiddleCenter: anchorX = texWidthI / 2; anchorY = texHeightI / 2; break;
+                    case tk2dSpriteCollectionDefinition.Anchor.MiddleRight: anchorX = texWidthI; anchorY = texHeightI / 2; break;
 
-                    case blaze2dSpriteCollectionDefinition.Anchor.UpperLeft: anchorX = 0; anchorY = 0; break;
-                    case blaze2dSpriteCollectionDefinition.Anchor.UpperCenter: anchorX = texWidthI / 2; anchorY = 0; break;
-                    case blaze2dSpriteCollectionDefinition.Anchor.UpperRight: anchorX = texWidthI; anchorY = 0; break;
+                    case tk2dSpriteCollectionDefinition.Anchor.UpperLeft: anchorX = 0; anchorY = 0; break;
+                    case tk2dSpriteCollectionDefinition.Anchor.UpperCenter: anchorX = texWidthI / 2; anchorY = 0; break;
+                    case tk2dSpriteCollectionDefinition.Anchor.UpperRight: anchorX = texWidthI; anchorY = 0; break;
 
-                    case blaze2dSpriteCollectionDefinition.Anchor.Custom: anchorX = thisTexParam.anchorX * gen.globalTextureRescale; anchorY = thisTexParam.anchorY * gen.globalTextureRescale; break;
+                    case tk2dSpriteCollectionDefinition.Anchor.Custom: anchorX = thisTexParam.anchorX * gen.globalTextureRescale; anchorY = thisTexParam.anchorY * gen.globalTextureRescale; break;
                 }
                 Vector3 pos0 = new Vector3(-anchorX * thisTexParam.scale.x * scale, 0, -(h - anchorY * thisTexParam.scale.y) * scale);
 				
@@ -1678,7 +1678,7 @@ public class tk2dSpriteCollectionBuilder
 				// build mesh
 				if (_lut != null && _lut.isSplit)
 				{
-					coll.spriteDefinitions[i].flipped = blaze2dSpriteDefinition.FlipMode.None; // each split could be rotated, but not consistently
+					coll.spriteDefinitions[i].flipped = tk2dSpriteDefinition.FlipMode.None; // each split could be rotated, but not consistently
 					
 					for (int j = 0; j < spriteLuts.Count; ++j)
 					{
@@ -1747,7 +1747,7 @@ public class tk2dSpriteCollectionBuilder
 				}
 				else if (thisTexParam.customSpriteGeometry)
 				{
-					coll.spriteDefinitions[i].flipped = atlasEntry.flipped ? blaze2dSpriteDefinition.FlipMode.Tk2d : blaze2dSpriteDefinition.FlipMode.None;
+					coll.spriteDefinitions[i].flipped = atlasEntry.flipped ? tk2dSpriteDefinition.FlipMode.Tk2d : tk2dSpriteDefinition.FlipMode.None;
 					
 					List<int> indices = new List<int>();
 					foreach (var island in thisTexParam.geometryIslands)
@@ -1798,7 +1798,7 @@ public class tk2dSpriteCollectionBuilder
 				else
 				{
 					bool flipped = (atlasEntry != null && atlasEntry.flipped);
-					coll.spriteDefinitions[i].flipped = flipped ? blaze2dSpriteDefinition.FlipMode.Tk2d : blaze2dSpriteDefinition.FlipMode.None;
+					coll.spriteDefinitions[i].flipped = flipped ? tk2dSpriteDefinition.FlipMode.Tk2d : tk2dSpriteDefinition.FlipMode.None;
 					
 					float x0 = 0, y0 = 0;
 					float x1 = 0, y1 = 0;
@@ -1886,7 +1886,7 @@ public class tk2dSpriteCollectionBuilder
 				coll.spriteDefinitions[i].tangents = new Vector4[0];
 				
 				// fill out tangents and normals
-				if (gen.normalGenerationMode != blaze2dSpriteCollection.NormalGenerationMode.None)
+				if (gen.normalGenerationMode != tk2dSpriteCollection.NormalGenerationMode.None)
 				{
 					Mesh tmpMesh = new Mesh();
 					tmpMesh.vertices = coll.spriteDefinitions[i].positions;
@@ -1897,7 +1897,7 @@ public class tk2dSpriteCollectionBuilder
 					
 					coll.spriteDefinitions[i].normals = tmpMesh.normals;
 
-					if (gen.normalGenerationMode == blaze2dSpriteCollection.NormalGenerationMode.NormalsAndTangents)
+					if (gen.normalGenerationMode == tk2dSpriteCollection.NormalGenerationMode.NormalsAndTangents)
 					{
 						Vector4[] tangents = new Vector4[tmpMesh.normals.Length];
 						for (int t = 0; t < tangents.Length; ++t)
@@ -1968,9 +1968,9 @@ public class tk2dSpriteCollectionBuilder
         }
     }
 	
-    static void UpdateAttachPointData(blaze2dSpriteCollection gen, float scale, blaze2dSpriteCollectionData target, int spriteId, Vector3 origin) {
-		blaze2dSpriteCollectionDefinition src = gen.textureParams[spriteId];
-		blaze2dSpriteDefinition def = target.spriteDefinitions[spriteId];
+    static void UpdateAttachPointData(tk2dSpriteCollection gen, float scale, tk2dSpriteCollectionData target, int spriteId, Vector3 origin) {
+		tk2dSpriteCollectionDefinition src = gen.textureParams[spriteId];
+		tk2dSpriteDefinition def = target.spriteDefinitions[spriteId];
 		float texHeight = 0;
 		if (src.extractRegion) {
 			texHeight = src.regionH;
@@ -1980,10 +1980,10 @@ public class tk2dSpriteCollectionBuilder
 		}
 
 
-		def.attachPoints = new blaze2dSpriteDefinition.AttachPoint[ src.attachPoints.Count ];
+		def.attachPoints = new tk2dSpriteDefinition.AttachPoint[ src.attachPoints.Count ];
 		for (int i = 0; i < src.attachPoints.Count; ++i) {
-			blaze2dSpriteDefinition.AttachPoint srcP = src.attachPoints[i];
-			blaze2dSpriteDefinition.AttachPoint p = new blaze2dSpriteDefinition.AttachPoint();
+			tk2dSpriteDefinition.AttachPoint srcP = src.attachPoints[i];
+			tk2dSpriteDefinition.AttachPoint p = new tk2dSpriteDefinition.AttachPoint();
 			p.CopyFrom( src.attachPoints[i] );
 			// Rescale position to be in sprite local space
 			p.position = new Vector2(srcP.position.x * src.scale.x, (texHeight - srcP.position.y) * src.scale.y) * scale + new Vector2(origin.x, origin.y);
@@ -1991,7 +1991,7 @@ public class tk2dSpriteCollectionBuilder
 		}
     }
 
-	static void UpdateColliderData(blaze2dSpriteCollection gen, float scale, blaze2dSpriteCollectionData coll, int spriteIndex, Vector3 origin)
+	static void UpdateColliderData(tk2dSpriteCollection gen, float scale, tk2dSpriteCollectionData coll, int spriteIndex, Vector3 origin)
 	{
 		var colliderType = gen.textureParams[spriteIndex].colliderType;
 		var def = coll.spriteDefinitions[spriteIndex];
@@ -2012,15 +2012,15 @@ public class tk2dSpriteCollectionBuilder
 			texHeight = gen.textureParams[spriteIndex].texture?gen.textureParams[spriteIndex].texture.height:2.0f;
 		}
 		
-		if (colliderType == blaze2dSpriteCollectionDefinition.ColliderType.BoxTrimmed)
+		if (colliderType == tk2dSpriteCollectionDefinition.ColliderType.BoxTrimmed)
 		{
 			def.colliderVertices = new Vector3[2];
 			def.colliderVertices[0] = def.boundsData[0];
 			def.colliderVertices[1] = def.boundsData[1] * 0.5f; // extents is 1/2x size
 			def.colliderVertices[1].z = gen.physicsDepth;
-			def.colliderType = blaze2dSpriteDefinition.ColliderType.Box;
+			def.colliderType = tk2dSpriteDefinition.ColliderType.Box;
 		}
-		else if (colliderType == blaze2dSpriteCollectionDefinition.ColliderType.BoxCustom)
+		else if (colliderType == tk2dSpriteCollectionDefinition.ColliderType.BoxCustom)
 		{
 			Vector2 v0 = new Vector3(src.boxColliderMin.x * src.scale.x, (texHeight - src.boxColliderMax.y) * src.scale.y) * scale + origin;
 			Vector2 v1 = new Vector3(src.boxColliderMax.x * src.scale.x, (texHeight - src.boxColliderMin.y) * src.scale.y) * scale + origin;
@@ -2029,9 +2029,9 @@ public class tk2dSpriteCollectionBuilder
 			def.colliderVertices[0] = (v0 + v1) * 0.5f;
 			def.colliderVertices[1] = (v1 - v0) * 0.5f;
 			def.colliderVertices[1].z = gen.physicsDepth;
-			def.colliderType = blaze2dSpriteDefinition.ColliderType.Box;
+			def.colliderType = tk2dSpriteDefinition.ColliderType.Box;
 		}
-		else if (colliderType == blaze2dSpriteCollectionDefinition.ColliderType.Polygon)
+		else if (colliderType == tk2dSpriteCollectionDefinition.ColliderType.Polygon)
 		{
 			List<Vector3> meshVertices = new List<Vector3>();
 			List<int> meshIndicesFwd = new List<int>();
@@ -2110,18 +2110,18 @@ public class tk2dSpriteCollectionBuilder
 
 				// cap if allowed and necessary
 				var cap = src.polyColliderCap;
-				if (island.connected && cap != blaze2dSpriteCollectionDefinition.PolygonColliderCap.None)
+				if (island.connected && cap != tk2dSpriteCollectionDefinition.PolygonColliderCap.None)
 				{
 					tk2dEditor.Triangulator triangulator = new tk2dEditor.Triangulator(points2D.ToArray());
 					int[] indices = triangulator.Triangulate();
 					
-					if (cap == blaze2dSpriteCollectionDefinition.PolygonColliderCap.Front || cap == blaze2dSpriteCollectionDefinition.PolygonColliderCap.FrontAndBack)
+					if (cap == tk2dSpriteCollectionDefinition.PolygonColliderCap.Front || cap == tk2dSpriteCollectionDefinition.PolygonColliderCap.FrontAndBack)
 					{
 						for (int i = 0; i < indices.Length; ++i)
 							meshIndicesFwd.Add(baseIndex + indices[i] * 2);
 					}
 					
-					if (cap == blaze2dSpriteCollectionDefinition.PolygonColliderCap.Back || cap == blaze2dSpriteCollectionDefinition.PolygonColliderCap.FrontAndBack)
+					if (cap == tk2dSpriteCollectionDefinition.PolygonColliderCap.Back || cap == tk2dSpriteCollectionDefinition.PolygonColliderCap.FrontAndBack)
 					{
 						for (int i = 0; i < indices.Length; i += 3)
 						{
@@ -2145,18 +2145,18 @@ public class tk2dSpriteCollectionBuilder
 			def.colliderIndicesFwd = meshIndicesFwd.ToArray();
 			def.colliderIndicesBack = meshIndicesBack;
 			def.colliderConvex = src.colliderConvex;
-			def.colliderType = blaze2dSpriteDefinition.ColliderType.Mesh;
+			def.colliderType = tk2dSpriteDefinition.ColliderType.Mesh;
 			def.colliderSmoothSphereCollisions = src.colliderSmoothSphereCollisions;
 			def.edgeCollider2D = edgeCollider2D.ToArray();
 			def.polygonCollider2D = polygonCollider2D.ToArray();
 		}
-		else if (colliderType == blaze2dSpriteCollectionDefinition.ColliderType.ForceNone)
+		else if (colliderType == tk2dSpriteCollectionDefinition.ColliderType.ForceNone)
 		{
-			def.colliderType = blaze2dSpriteDefinition.ColliderType.None;
+			def.colliderType = tk2dSpriteDefinition.ColliderType.None;
 		}
-		else if (colliderType == blaze2dSpriteCollectionDefinition.ColliderType.UserDefined)
+		else if (colliderType == tk2dSpriteCollectionDefinition.ColliderType.UserDefined)
 		{
-			def.colliderType = blaze2dSpriteDefinition.ColliderType.Unset;
+			def.colliderType = tk2dSpriteDefinition.ColliderType.Unset;
 		}
 	}
 }

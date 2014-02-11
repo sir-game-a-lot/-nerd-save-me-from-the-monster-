@@ -62,7 +62,7 @@ public static class tk2dUIItemBoundsHelper {
         return GetRendererBoundsInChildren(root, new HashSet<Transform>(), transform, true);
     }
 
-    public static void FixColliderBounds( blaze2dUIItem item ) {
+    public static void FixColliderBounds( tk2dUIItem item ) {
         HashSet<Transform> ignoreItems = new HashSet<Transform>( item.editorIgnoreBounds );
         Transform root = item.transform;
         Collider collider = item.collider;
@@ -114,15 +114,15 @@ public static class tk2dUIItemBoundsHelper {
         int undoGroup = Undo.GetCurrentGroup();
 #endif
 
-    	HashSet<blaze2dUIItem> items = new HashSet<blaze2dUIItem>();
+    	HashSet<tk2dUIItem> items = new HashSet<tk2dUIItem>();
     	foreach (GameObject go in Selection.gameObjects) {
-    		blaze2dUIItem[] itemsToAdd = go.GetComponentsInChildren<blaze2dUIItem>();
-    		foreach (blaze2dUIItem itemToAdd in itemsToAdd) {
+    		tk2dUIItem[] itemsToAdd = go.GetComponentsInChildren<tk2dUIItem>();
+    		foreach (tk2dUIItem itemToAdd in itemsToAdd) {
     			items.Add( itemToAdd );
     		}
     	}
 
-    	foreach (blaze2dUIItem item in items) {
+    	foreach (tk2dUIItem item in items) {
             FixColliderBounds(item);
     	}
 

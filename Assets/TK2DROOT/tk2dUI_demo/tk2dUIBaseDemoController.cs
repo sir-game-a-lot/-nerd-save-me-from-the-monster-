@@ -58,10 +58,10 @@ public class tk2dUIBaseDemoController : MonoBehaviour {
 
 #region Simple Tweens
 
-	protected IEnumerator coResizeLayout( blaze2dUILayout layout, Vector3 min, Vector3 max, float time ) {
+	protected IEnumerator coResizeLayout( tk2dUILayout layout, Vector3 min, Vector3 max, float time ) {
 		Vector3 minFrom = layout.GetMinBounds();
 		Vector3 maxFrom = layout.GetMaxBounds();
-		for (float t = 0; t < time; t += blaze2dUITime.deltaTime) {
+		for (float t = 0; t < time; t += tk2dUITime.deltaTime) {
 			float nt = Mathf.SmoothStep(0, 1, Mathf.Clamp01( t / time ));
 			Vector3 currMin = Vector3.Lerp( minFrom, min, nt );
 			Vector3 currMax = Vector3.Lerp( maxFrom, max, nt );
@@ -117,7 +117,7 @@ public class tk2dUIBaseDemoController : MonoBehaviour {
         Vector3 euler = transform.localEulerAngles;
         float fromRotation = euler.z;
 
-        for (float t = 0; t < time; t += blaze2dUITime.deltaTime) {
+        for (float t = 0; t < time; t += tk2dUITime.deltaTime) {
             float nt = Mathf.Clamp01( t / time );
             nt = Mathf.Sin(nt * Mathf.PI * 0.5f);
 

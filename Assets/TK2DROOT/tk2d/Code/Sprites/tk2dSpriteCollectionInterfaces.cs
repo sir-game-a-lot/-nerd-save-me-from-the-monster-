@@ -1,8 +1,8 @@
-namespace blaze2dRuntime
+namespace tk2dRuntime
 {
 	public interface ISpriteCollectionForceBuild
 	{
-		bool UsesSpriteCollection(blaze2dSpriteCollectionData spriteCollection);
+		bool UsesSpriteCollection(tk2dSpriteCollectionData spriteCollection);
 		void ForceBuild();
 	}
 }

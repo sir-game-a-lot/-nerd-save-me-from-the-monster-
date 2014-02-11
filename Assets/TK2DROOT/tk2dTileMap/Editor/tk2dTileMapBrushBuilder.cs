@@ -65,14 +65,14 @@ namespace tk2dEditor
 			}
 		}
 		
-		bool IsValidSprite(blaze2dSpriteCollectionData spriteCollection, int spriteId)
+		bool IsValidSprite(tk2dSpriteCollectionData spriteCollection, int spriteId)
 		{
 			return (spriteId >= 0 && spriteId < spriteCollection.Count 
 				&& spriteCollection.spriteDefinitions[spriteId] != null
 				&& spriteCollection.spriteDefinitions[spriteId].Valid);
 		}
 		
-		void BuildBrush(blaze2dSpriteCollectionData spriteCollection, tk2dTileMapEditorBrush brush, int tilesPerRow)
+		void BuildBrush(tk2dSpriteCollectionData spriteCollection, tk2dTileMapEditorBrush brush, int tilesPerRow)
 		{
 			brush.name = "";
 			brush.multiLayer = false;
@@ -153,7 +153,7 @@ namespace tk2dEditor
 			}
 		}
 		
-		public void HandleGUI(Rect rect, Rect tileSize, int tilesPerRow, blaze2dSpriteCollectionData spriteCollection, tk2dTileMapEditorBrush brush)
+		public void HandleGUI(Rect rect, Rect tileSize, int tilesPerRow, tk2dSpriteCollectionData spriteCollection, tk2dTileMapEditorBrush brush)
 		{
 			DrawSelectedTiles(rect, tileSize, tilesPerRow);
 			

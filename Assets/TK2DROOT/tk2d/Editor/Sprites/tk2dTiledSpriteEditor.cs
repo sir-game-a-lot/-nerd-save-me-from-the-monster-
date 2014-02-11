@@ -3,19 +3,19 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dTiledSprite))]
+[CustomEditor(typeof(tk2dTiledSprite))]
 class tk2dTiledSpriteEditor : tk2dSpriteEditor
 {
-	blaze2dTiledSprite[] targetTiledSprites = new blaze2dTiledSprite[0];
+	tk2dTiledSprite[] targetTiledSprites = new tk2dTiledSprite[0];
 
 	new void OnEnable() {
 		base.OnEnable();
-		targetTiledSprites = GetTargetsOfType<blaze2dTiledSprite>( targets );
+		targetTiledSprites = GetTargetsOfType<tk2dTiledSprite>( targets );
 	}
 
 	public override void OnInspectorGUI()
     {
-        blaze2dTiledSprite sprite = (blaze2dTiledSprite)target;
+        tk2dTiledSprite sprite = (tk2dTiledSprite)target;
 		base.OnInspectorGUI();
 		
 		if (sprite.Collection == null)
@@ -50,15 +50,15 @@ class tk2dTiledSpriteEditor : tk2dSpriteEditor
 			Vector2 newDimensions = EditorGUILayout.Vector2Field("Dimensions (Pixel Units)", sprite.dimensions);
 			if (newDimensions != sprite.dimensions) {
 				tk2dUndo.RecordObjects(targetTiledSprites, "Tiled Sprite Dimensions");
-				foreach (blaze2dTiledSprite spr in targetTiledSprites) {
+				foreach (tk2dTiledSprite spr in targetTiledSprites) {
 					spr.dimensions = newDimensions;
 				}
 			}
 			
-			blaze2dTiledSprite.Anchor newAnchor = (blaze2dTiledSprite.Anchor)EditorGUILayout.EnumPopup("Anchor", sprite.anchor);
+			tk2dTiledSprite.Anchor newAnchor = (tk2dTiledSprite.Anchor)EditorGUILayout.EnumPopup("Anchor", sprite.anchor);
 			if (newAnchor != sprite.anchor) {
 				tk2dUndo.RecordObjects(targetTiledSprites, "Tiled Sprite Anchor");
-				foreach (blaze2dTiledSprite spr in targetTiledSprites) {
+				foreach (tk2dTiledSprite spr in targetTiledSprites) {
 					spr.anchor = newAnchor;
 				}
 			}
@@ -76,7 +76,7 @@ class tk2dTiledSpriteEditor : tk2dSpriteEditor
 		// One of the border valus has changed, so simply rebuild mesh data here		
 		if (GUI.changed)
 		{
-			foreach (blaze2dTiledSprite spr in targetTiledSprites) {
+			foreach (tk2dTiledSprite spr in targetTiledSprites) {
 				spr.Build();
 				EditorUtility.SetDirty(spr);
 			}
@@ -88,7 +88,7 @@ class tk2dTiledSpriteEditor : tk2dSpriteEditor
 	public new void OnSceneGUI() {
 		if (tk2dPreferences.inst.enableSpriteHandles == false) return;
 
-		blaze2dTiledSprite spr = (blaze2dTiledSprite)target;
+		tk2dTiledSprite spr = (tk2dTiledSprite)target;
 
 		Transform t = spr.transform;
 		var sprite = spr.CurrentSprite;
@@ -153,7 +153,7 @@ class tk2dTiledSpriteEditor : tk2dSpriteEditor
     {
 		tk2dSpriteGuiUtility.GetSpriteCollectionAndCreate( (sprColl) => {
 			GameObject go = tk2dEditorUtility.CreateGameObjectInScene("Tiled Sprite");
-			blaze2dTiledSprite sprite = go.AddComponent<blaze2dTiledSprite>();
+			tk2dTiledSprite sprite = go.AddComponent<tk2dTiledSprite>();
 			sprite.SetSprite(sprColl, sprColl.FirstValidDefinitionIndex);
 			sprite.Build();
 			Selection.activeGameObject = go;

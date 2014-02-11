@@ -3,19 +3,19 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dSlicedSprite))]
+[CustomEditor(typeof(tk2dSlicedSprite))]
 class tk2dSlicedSpriteEditor : tk2dSpriteEditor
 {
-	blaze2dSlicedSprite[] targetSlicedSprites = new blaze2dSlicedSprite[0];
+	tk2dSlicedSprite[] targetSlicedSprites = new tk2dSlicedSprite[0];
 
 	new void OnEnable() {
 		base.OnEnable();
-		targetSlicedSprites = GetTargetsOfType<blaze2dSlicedSprite>( targets );
+		targetSlicedSprites = GetTargetsOfType<tk2dSlicedSprite>( targets );
 	}
 
 	public override void OnInspectorGUI()
 	{
-		blaze2dSlicedSprite sprite = (blaze2dSlicedSprite)target;
+		tk2dSlicedSprite sprite = (tk2dSlicedSprite)target;
 		base.OnInspectorGUI();
 		
 		if (sprite.Collection == null)
@@ -57,15 +57,15 @@ class tk2dSlicedSpriteEditor : tk2dSpriteEditor
 			Vector2 newDimensions = EditorGUILayout.Vector2Field("Dimensions (Pixel Units)", sprite.dimensions);
 			if (newDimensions != sprite.dimensions) {
 				tk2dUndo.RecordObjects(targetSlicedSprites, "Sliced Sprite Dimensions");
-				foreach (blaze2dSlicedSprite spr in targetSlicedSprites) {
+				foreach (tk2dSlicedSprite spr in targetSlicedSprites) {
 					spr.dimensions = newDimensions;
 				}
 			}
 			
-			blaze2dSlicedSprite.Anchor newAnchor = (blaze2dSlicedSprite.Anchor)EditorGUILayout.EnumPopup("Anchor", sprite.anchor);
+			tk2dSlicedSprite.Anchor newAnchor = (tk2dSlicedSprite.Anchor)EditorGUILayout.EnumPopup("Anchor", sprite.anchor);
 			if (newAnchor != sprite.anchor) {
 				tk2dUndo.RecordObjects(targetSlicedSprites, "Sliced Sprite Anchor");
-				foreach (blaze2dSlicedSprite spr in targetSlicedSprites) {
+				foreach (tk2dSlicedSprite spr in targetSlicedSprites) {
 					spr.anchor = newAnchor;
 				}
 			}
@@ -76,28 +76,28 @@ class tk2dSlicedSpriteEditor : tk2dSpriteEditor
 			float newBorderLeft = EditorGUILayout.FloatField("Left", sprite.borderLeft * spritePixelMultiplier.x) / spritePixelMultiplier.x;
 			if (newBorderLeft != sprite.borderLeft) {
 				tk2dUndo.RecordObjects(targetSlicedSprites, "Sliced Sprite BorderLeft");
-				foreach (blaze2dSlicedSprite spr in targetSlicedSprites) spr.borderLeft = newBorderLeft;
+				foreach (tk2dSlicedSprite spr in targetSlicedSprites) spr.borderLeft = newBorderLeft;
 			}
 			float newBorderRight = EditorGUILayout.FloatField("Right", sprite.borderRight * spritePixelMultiplier.x) / spritePixelMultiplier.x;
 			if (newBorderRight != sprite.borderRight) {
 				tk2dUndo.RecordObjects(targetSlicedSprites, "Sliced Sprite BorderRight");
-				foreach (blaze2dSlicedSprite spr in targetSlicedSprites) spr.borderRight = newBorderRight;
+				foreach (tk2dSlicedSprite spr in targetSlicedSprites) spr.borderRight = newBorderRight;
 			}
 			float newBorderTop = EditorGUILayout.FloatField("Top", sprite.borderTop * spritePixelMultiplier.y) / spritePixelMultiplier.y;
 			if (newBorderTop != sprite.borderTop) {
 				tk2dUndo.RecordObjects(targetSlicedSprites, "Sliced Sprite BorderTop");
-				foreach (blaze2dSlicedSprite spr in targetSlicedSprites) spr.borderTop = newBorderTop;
+				foreach (tk2dSlicedSprite spr in targetSlicedSprites) spr.borderTop = newBorderTop;
 			}
 			float newBorderBottom = EditorGUILayout.FloatField("Bottom", sprite.borderBottom * spritePixelMultiplier.y) / spritePixelMultiplier.y;
 			if (newBorderBottom != sprite.borderBottom) {
 				tk2dUndo.RecordObjects(targetSlicedSprites, "Sliced Sprite BorderBottom");
-				foreach (blaze2dSlicedSprite spr in targetSlicedSprites) spr.borderBottom = newBorderBottom;
+				foreach (tk2dSlicedSprite spr in targetSlicedSprites) spr.borderBottom = newBorderBottom;
 			}
 
 			bool newBorderOnly = EditorGUILayout.Toggle("Draw Border Only", sprite.BorderOnly);
 			if (newBorderOnly != sprite.BorderOnly) {
 				tk2dUndo.RecordObjects(targetSlicedSprites, "Sliced Sprite Border Only");
-				foreach (blaze2dSlicedSprite spr in targetSlicedSprites) spr.BorderOnly = newBorderOnly;
+				foreach (tk2dSlicedSprite spr in targetSlicedSprites) spr.BorderOnly = newBorderOnly;
 			}
 
 			EditorGUI.indentLevel--;
@@ -110,22 +110,22 @@ class tk2dSlicedSpriteEditor : tk2dSpriteEditor
 			float newBorderLeft = EditorGUILayout.FloatField("Left", sprite.borderLeft);
 			if (newBorderLeft != sprite.borderLeft) {
 				tk2dUndo.RecordObjects(targetSlicedSprites, "Sliced Sprite BorderLeft");
-				foreach (blaze2dSlicedSprite spr in targetSlicedSprites) spr.borderLeft = newBorderLeft;
+				foreach (tk2dSlicedSprite spr in targetSlicedSprites) spr.borderLeft = newBorderLeft;
 			}
 			float newBorderRight = EditorGUILayout.FloatField("Right", sprite.borderRight);
 			if (newBorderRight != sprite.borderRight) {
 				tk2dUndo.RecordObjects(targetSlicedSprites, "Sliced Sprite BorderRight");
-				foreach (blaze2dSlicedSprite spr in targetSlicedSprites) spr.borderRight = newBorderRight;
+				foreach (tk2dSlicedSprite spr in targetSlicedSprites) spr.borderRight = newBorderRight;
 			}
 			float newBorderTop = EditorGUILayout.FloatField("Top", sprite.borderTop);
 			if (newBorderTop != sprite.borderTop) {
 				tk2dUndo.RecordObjects(targetSlicedSprites, "Sliced Sprite BorderTop");
-				foreach (blaze2dSlicedSprite spr in targetSlicedSprites) spr.borderTop = newBorderTop;
+				foreach (tk2dSlicedSprite spr in targetSlicedSprites) spr.borderTop = newBorderTop;
 			}
 			float newBorderBottom = EditorGUILayout.FloatField("Bottom", sprite.borderBottom);
 			if (newBorderBottom != sprite.borderBottom) {
 				tk2dUndo.RecordObjects(targetSlicedSprites, "Sliced Sprite BorderBottom");
-				foreach (blaze2dSlicedSprite spr in targetSlicedSprites) spr.borderBottom = newBorderBottom;
+				foreach (tk2dSlicedSprite spr in targetSlicedSprites) spr.borderBottom = newBorderBottom;
 			}
 
 			EditorGUI.indentLevel--;
@@ -134,7 +134,7 @@ class tk2dSlicedSpriteEditor : tk2dSpriteEditor
 		// One of the border valus has changed, so simply rebuild mesh data here		
 		if (GUI.changed)
 		{
-			foreach (blaze2dSlicedSprite spr in targetSlicedSprites) {
+			foreach (tk2dSlicedSprite spr in targetSlicedSprites) {
 				spr.Build();
 				EditorUtility.SetDirty(spr);
 			}
@@ -146,7 +146,7 @@ class tk2dSlicedSpriteEditor : tk2dSpriteEditor
 	public new void OnSceneGUI() {
 		if (tk2dPreferences.inst.enableSpriteHandles == false) return;
 
-		blaze2dSlicedSprite spr = (blaze2dSlicedSprite)target;
+		tk2dSlicedSprite spr = (tk2dSlicedSprite)target;
 		var sprite = spr.CurrentSprite;
 		if (sprite == null) {
 			return;
@@ -205,7 +205,7 @@ class tk2dSlicedSpriteEditor : tk2dSpriteEditor
 	{
 		tk2dSpriteGuiUtility.GetSpriteCollectionAndCreate( (sprColl) => {
 			GameObject go = tk2dEditorUtility.CreateGameObjectInScene("Sliced Sprite");
-			blaze2dSlicedSprite sprite = go.AddComponent<blaze2dSlicedSprite>();
+			tk2dSlicedSprite sprite = go.AddComponent<tk2dSlicedSprite>();
 			sprite.SetSprite(sprColl, sprColl.FirstValidDefinitionIndex);
 			sprite.Build();
 			Selection.activeGameObject = go;

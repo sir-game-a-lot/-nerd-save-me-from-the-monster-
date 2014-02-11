@@ -3,7 +3,7 @@ using UnityEditor;
 using System.Collections;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dUIScrollableArea))]
+[CustomEditor(typeof(tk2dUIScrollableArea))]
 public class tk2dUIScrollableAreaEditor : Editor
 {
     public override void OnInspectorGUI()
@@ -11,24 +11,24 @@ public class tk2dUIScrollableAreaEditor : Editor
         tk2dGuiUtility.LookLikeInspector();
         base.OnInspectorGUI();
 
-		blaze2dUIScrollableArea scrollableArea = (blaze2dUIScrollableArea)target;
+		tk2dUIScrollableArea scrollableArea = (tk2dUIScrollableArea)target;
 
-		scrollableArea.BackgroundLayoutItem = EditorGUILayout.ObjectField("Background LayoutItem", scrollableArea.BackgroundLayoutItem, typeof(blaze2dUILayout), true) as blaze2dUILayout;
-		scrollableArea.ContentLayoutContainer = EditorGUILayout.ObjectField("Content LayoutContainer", scrollableArea.ContentLayoutContainer, typeof(blaze2dUILayoutContainer), true) as blaze2dUILayoutContainer;
+		scrollableArea.BackgroundLayoutItem = EditorGUILayout.ObjectField("Background LayoutItem", scrollableArea.BackgroundLayoutItem, typeof(tk2dUILayout), true) as tk2dUILayout;
+		scrollableArea.ContentLayoutContainer = EditorGUILayout.ObjectField("Content LayoutContainer", scrollableArea.ContentLayoutContainer, typeof(tk2dUILayoutContainer), true) as tk2dUILayoutContainer;
 
         GUILayout.Label("Tools", EditorStyles.boldLabel);
         if (GUILayout.Button("Calculate content length")) {
             tk2dUndo.RecordObject(scrollableArea, "Content length changed");
             Bounds b = tk2dUIItemBoundsHelper.GetRendererBoundsInChildren( scrollableArea.contentContainer.transform, scrollableArea.contentContainer.transform );
             b.Encapsulate(Vector3.zero);
-            float contentSize = (scrollableArea.scrollAxes == blaze2dUIScrollableArea.Axes.XAxis) ? b.size.x : b.size.y;
+            float contentSize = (scrollableArea.scrollAxes == tk2dUIScrollableArea.Axes.XAxis) ? b.size.x : b.size.y;
             scrollableArea.ContentLength = contentSize * 1.02f; // 5% more
             EditorUtility.SetDirty(scrollableArea);
         }
 
         tk2dUIMethodBindingHelper methodBindingUtil = new tk2dUIMethodBindingHelper();
         scrollableArea.SendMessageTarget = methodBindingUtil.BeginMessageGUI(scrollableArea.SendMessageTarget);
-        methodBindingUtil.MethodBinding( "On Scroll", typeof(blaze2dUIScrollableArea), scrollableArea.SendMessageTarget, ref scrollableArea.SendMessageOnScrollMethodName );
+        methodBindingUtil.MethodBinding( "On Scroll", typeof(tk2dUIScrollableArea), scrollableArea.SendMessageTarget, ref scrollableArea.SendMessageOnScrollMethodName );
         methodBindingUtil.EndMessageGUI();
 
         if (GUI.changed)
@@ -40,8 +40,8 @@ public class tk2dUIScrollableAreaEditor : Editor
     public void OnSceneGUI()
     {
         bool wasChange=false;
-        blaze2dUIScrollableArea scrollableArea = (blaze2dUIScrollableArea)target;
-        bool isYAxis = scrollableArea.scrollAxes== blaze2dUIScrollableArea.Axes.YAxis;
+        tk2dUIScrollableArea scrollableArea = (tk2dUIScrollableArea)target;
+        bool isYAxis = scrollableArea.scrollAxes== tk2dUIScrollableArea.Axes.YAxis;
 
         // Get rescaled transforms
         Matrix4x4 m = scrollableArea.transform.localToWorldMatrix;

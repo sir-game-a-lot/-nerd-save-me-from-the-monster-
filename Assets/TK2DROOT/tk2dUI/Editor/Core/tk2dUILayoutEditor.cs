@@ -1,17 +1,17 @@
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 
-[CustomEditor(typeof(blaze2dUILayout))]
+[CustomEditor(typeof(tk2dUILayout))]
 public class tk2dUILayoutEditor : Editor {
-	blaze2dUILayout My {
-		get {return (blaze2dUILayout)target;}
+	tk2dUILayout My {
+		get {return (tk2dUILayout)target;}
 	}
 
 	bool updateChildren = true;
 
 	void DrawLayoutOutline(Transform t) {
-		var layout = t.GetComponent<blaze2dUILayout>();
+		var layout = t.GetComponent<tk2dUILayout>();
 		if (layout != null) {
 			Vector3[] p = new Vector3[] {
 				new Vector3(layout.bMin.x, layout.bMin.y, 0.0f),
@@ -24,7 +24,7 @@ public class tk2dUILayoutEditor : Editor {
 			Handles.color = Color.magenta;
 			Handles.DrawPolyLine(p);
 
-			var sizer = t.GetComponent<blaze2dUILayoutContainerSizer>();
+			var sizer = t.GetComponent<tk2dUILayoutContainerSizer>();
 			if (sizer != null) {
 				Handles.color = Color.cyan;
 				float arrowSize = 0.3f * HandleUtility.GetHandleSize(p[0]);
@@ -43,7 +43,7 @@ public class tk2dUILayoutEditor : Editor {
 	}
 
 	public void OnSceneGUI() {
-		if (My.GetComponent<blaze2dBaseSprite>() != null)
+		if (My.GetComponent<tk2dBaseSprite>() != null)
 			return;
 
 		Transform t = My.transform;
@@ -66,12 +66,12 @@ public class tk2dUILayoutEditor : Editor {
 
 		Event ev = Event.current;
 		if (ev.type == EventType.ValidateCommand && ev.commandName == "UndoRedoPerformed") {
-			blaze2dBaseSprite[] sprites = My.GetComponentsInChildren<blaze2dBaseSprite>() as blaze2dBaseSprite[];
-			foreach (blaze2dBaseSprite sprite in sprites) {
+			tk2dBaseSprite[] sprites = My.GetComponentsInChildren<tk2dBaseSprite>() as tk2dBaseSprite[];
+			foreach (tk2dBaseSprite sprite in sprites) {
 				sprite.ForceBuild();
 			}
-			blaze2dTextMesh[] textMeshes = My.GetComponentsInChildren<blaze2dTextMesh>() as blaze2dTextMesh[];
-			foreach (blaze2dTextMesh textMesh in textMeshes) {
+			tk2dTextMesh[] textMeshes = My.GetComponentsInChildren<tk2dTextMesh>() as tk2dTextMesh[];
+			foreach (tk2dTextMesh textMesh in textMeshes) {
 				textMesh.ForceBuild();
 			}
 		}
@@ -104,15 +104,15 @@ public class tk2dUILayoutEditor : Editor {
 		}
 	}
 
-	protected List<blaze2dUILayoutItem> itemsList = null;
-	protected blaze2dUILayoutItem selItem = null;
+	protected List<tk2dUILayoutItem> itemsList = null;
+	protected tk2dUILayoutItem selItem = null;
 
 	protected virtual void GetItems(Transform t) {
-		blaze2dBaseSprite objSprite = t.GetComponent<blaze2dBaseSprite>();
-		blaze2dUIMask objMask = t.GetComponent<blaze2dUIMask>();
-		blaze2dUILayout objLayout = t.GetComponent<blaze2dUILayout>();
+		tk2dBaseSprite objSprite = t.GetComponent<tk2dBaseSprite>();
+		tk2dUIMask objMask = t.GetComponent<tk2dUIMask>();
+		tk2dUILayout objLayout = t.GetComponent<tk2dUILayout>();
 
-		blaze2dUILayoutItem curItem = null;
+		tk2dUILayoutItem curItem = null;
 		foreach (var item in My.layoutItems) {
 			if (t.gameObject == item.gameObj) {
 				curItem = item;
@@ -121,7 +121,7 @@ public class tk2dUILayoutEditor : Editor {
 			}
 		}
 		if (curItem == null)
-			curItem = new blaze2dUILayoutItem();
+			curItem = new tk2dUILayoutItem();
 		itemsList.Add(curItem);
 		curItem.sprite = objSprite;
 		curItem.UIMask = objMask;
@@ -138,14 +138,14 @@ public class tk2dUILayoutEditor : Editor {
 		foreach (var item in My.layoutItems)
 			item.inLayoutList = false;
 
-		itemsList = new List<blaze2dUILayoutItem>();
+		itemsList = new List<tk2dUILayoutItem>();
 		for (int i = 0; i < My.transform.childCount; ++i)
 			GetItems(My.transform.GetChild(i));
 
 		selItem = null;
 
 		// Remove my items that weren't found in children
-		List<blaze2dUILayoutItem> removeItems = new List<blaze2dUILayoutItem>();
+		List<tk2dUILayoutItem> removeItems = new List<tk2dUILayoutItem>();
 		foreach (var item in My.layoutItems)
 			if (!item.inLayoutList)
 				removeItems.Add(item);
@@ -159,7 +159,7 @@ public class tk2dUILayoutEditor : Editor {
 		GUILayout.Space(16);
 		GUILayout.BeginVertical();
 
-		if (My.GetComponent<blaze2dBaseSprite>() != null || My.GetComponent<blaze2dTextMesh>() != null || My.GetComponent<blaze2dUIMask>() != null) {
+		if (My.GetComponent<tk2dBaseSprite>() != null || My.GetComponent<tk2dTextMesh>() != null || My.GetComponent<tk2dUIMask>() != null) {
 			EditorGUILayout.HelpBox("Please remove Sprite/TextMesh/UIMask from this Object\nin order to use Layout!", MessageType.Error);
 			GUILayout.EndVertical();
 			return;
@@ -184,7 +184,7 @@ public class tk2dUILayoutEditor : Editor {
 		EditorGUILayout.PrefixLabel("Fit Layout");
 		if (GUILayout.Button("To Geometry", GUILayout.ExpandWidth(false), GUILayout.Width(width))) {
 			int numInList = 0;
-			foreach (blaze2dUILayoutItem v in itemsList) {
+			foreach (tk2dUILayoutItem v in itemsList) {
 				if (v.inLayoutList) {
 					numInList++;
 				}
@@ -239,7 +239,7 @@ public class tk2dUILayoutEditor : Editor {
 				if (item.layout) GUI.color = new Color(1.0f, 1.0f, 0.3f);
 				else GUI.color = Color.green;
 
-				if (item.layout != null && item.gameObj.GetComponent<blaze2dBaseSprite>() != null) {
+				if (item.layout != null && item.gameObj.GetComponent<tk2dBaseSprite>() != null) {
 					warnLayoutHasSprite = true;
 					warnLayoutName = item.gameObj.name;
 				}
@@ -273,7 +273,7 @@ public class tk2dUILayoutEditor : Editor {
 		}
 	}
 
-	void ItemInspector(blaze2dUILayoutItem item) {
+	void ItemInspector(tk2dUILayoutItem item) {
 		float snapControlSize = 86;
 		float snapButtonSize = 17;
 		float snapButtonBorder = 1;
@@ -364,13 +364,13 @@ public class tk2dUILayoutEditor : Editor {
 			SetItemsChildDepth(t.GetChild(i), depth + 1);
 	}
 
-	void OrderItemsList(List<blaze2dUILayoutItem> list) {
+	void OrderItemsList(List<tk2dUILayoutItem> list) {
 		for (int i = 0; i < list.Count; ++i) {
 			for (int j = i + 1; j < list.Count; ++j) {
 				var a = list[i];
-				bool aHasLayout = a.gameObj.GetComponent<blaze2dUILayout>() != null;
+				bool aHasLayout = a.gameObj.GetComponent<tk2dUILayout>() != null;
 				var b = list[j];
-				bool bHasLayout = b.gameObj.GetComponent<blaze2dUILayout>() != null;
+				bool bHasLayout = b.gameObj.GetComponent<tk2dUILayout>() != null;
 				bool swap = false;
 				if (aHasLayout != bHasLayout) {
 					swap = !aHasLayout;

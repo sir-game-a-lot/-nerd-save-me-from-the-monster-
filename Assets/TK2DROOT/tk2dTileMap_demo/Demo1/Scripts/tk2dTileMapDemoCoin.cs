@@ -3,7 +3,7 @@ using System.Collections;
 
 public class tk2dTileMapDemoCoin : MonoBehaviour {
 
-	public blaze2dSpriteAnimator animator = null;
+	public tk2dSpriteAnimator animator = null;
 
 	void Awake() {
 		if (animator == null) {

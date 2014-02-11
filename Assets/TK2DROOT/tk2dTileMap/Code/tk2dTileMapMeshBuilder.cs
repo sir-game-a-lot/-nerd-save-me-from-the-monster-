@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 #if UNITY_EDITOR || !UNITY_FLASH
 
-namespace blaze2dRuntime.TileMap
+namespace tk2dRuntime.TileMap
 {
 	public static class RenderMeshBuilder
 	{
-		public static void BuildForChunk(blaze2dTileMap tileMap, SpriteChunk chunk, ColorChunk colorChunk, bool useColor, bool skipPrefabs, int baseX, int baseY)
+		public static void BuildForChunk(tk2dTileMap tileMap, SpriteChunk chunk, ColorChunk colorChunk, bool useColor, bool skipPrefabs, int baseX, int baseY)
 		{
 			List<Vector3> meshVertices = new List<Vector3>();
 			List<Color> meshColors = new List<Color>();
@@ -18,7 +18,7 @@ namespace blaze2dRuntime.TileMap
 			Vector3 tileSize = tileMap.data.tileSize;
 			int spriteCount = tileMap.SpriteCollectionInst.spriteDefinitions.Length;
 			Object[] tilePrefabs = tileMap.data.tilePrefabs;
-			blaze2dSpriteDefinition firstSprite = tileMap.SpriteCollectionInst.FirstValidDefinition;
+			tk2dSpriteDefinition firstSprite = tileMap.SpriteCollectionInst.FirstValidDefinition;
 			bool buildNormals = (firstSprite != null && firstSprite.normals != null && firstSprite.normals.Length > 0);
 			
 			Color32 clearColor = (useColor && tileMap.ColorChannel != null)?tileMap.ColorChannel.clearColor:Color.white;
@@ -49,9 +49,9 @@ namespace blaze2dRuntime.TileMap
 				{
 					int spriteId = spriteIds[y * tileMap.partitionSizeX + x];
 					int tile = BuilderUtil.GetTileFromRawTile(spriteId);
-					bool flipH = BuilderUtil.IsRawTileFlagSet(spriteId, blaze2dTileFlags.FlipX);
-					bool flipV = BuilderUtil.IsRawTileFlagSet(spriteId, blaze2dTileFlags.FlipY);
-					bool rot90 = BuilderUtil.IsRawTileFlagSet(spriteId, blaze2dTileFlags.Rot90);
+					bool flipH = BuilderUtil.IsRawTileFlagSet(spriteId, tk2dTileFlags.FlipX);
+					bool flipV = BuilderUtil.IsRawTileFlagSet(spriteId, tk2dTileFlags.FlipY);
+					bool rot90 = BuilderUtil.IsRawTileFlagSet(spriteId, tk2dTileFlags.Rot90);
 
 					Vector3 currentPos = new Vector3(tileSize.x * (x + xOffset), tileSize.y * y, 0);
 	
@@ -109,7 +109,7 @@ namespace blaze2dRuntime.TileMap
 			}
 			
 			if (chunk.mesh == null)
-				chunk.mesh = blaze2dUtil.CreateMesh();
+				chunk.mesh = tk2dUtil.CreateMesh();
 
 			chunk.mesh.vertices = meshVertices.ToArray();
 			chunk.mesh.uv = meshUvs.ToArray();
@@ -151,7 +151,7 @@ namespace blaze2dRuntime.TileMap
 			meshFilter.sharedMesh = chunk.mesh;
 		}
 
-		public static void Build(blaze2dTileMap tileMap, bool editMode, bool forceBuild)
+		public static void Build(tk2dTileMap tileMap, bool editMode, bool forceBuild)
 		{
 			bool skipPrefabs = editMode?false:true;
 			bool incremental = !forceBuild;

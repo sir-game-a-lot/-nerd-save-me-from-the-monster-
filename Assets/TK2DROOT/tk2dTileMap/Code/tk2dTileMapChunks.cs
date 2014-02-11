@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace blaze2dRuntime.TileMap
+namespace tk2dRuntime.TileMap
 {
 	[System.Serializable]
 	public class LayerSprites
@@ -48,10 +48,10 @@ namespace blaze2dRuntime.TileMap
 #endif
 		}
 		
-		public void DestroyGameData(blaze2dTileMap tileMap)
+		public void DestroyGameData(tk2dTileMap tileMap)
 		{
 			if (mesh != null) tileMap.DestroyMesh(mesh);
-			if (gameObject != null) blaze2dUtil.DestroyImmediate(gameObject);
+			if (gameObject != null) tk2dUtil.DestroyImmediate(gameObject);
 
 			gameObject = null;
 			mesh = null;
@@ -59,19 +59,19 @@ namespace blaze2dRuntime.TileMap
 			DestroyColliderData(tileMap);
 		}
 		
-		public void DestroyColliderData(blaze2dTileMap tileMap)
+		public void DestroyColliderData(tk2dTileMap tileMap)
 		{
 			if (colliderMesh != null) 
 				tileMap.DestroyMesh(colliderMesh);
 			if (meshCollider != null && meshCollider.sharedMesh != null && meshCollider.sharedMesh != colliderMesh) 
 				tileMap.DestroyMesh(meshCollider.sharedMesh);
-			if (meshCollider != null) blaze2dUtil.DestroyImmediate(meshCollider);
+			if (meshCollider != null) tk2dUtil.DestroyImmediate(meshCollider);
 			meshCollider = null;
 			colliderMesh = null;
 #if !(UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
 			if (edgeColliders.Count > 0) {
 				for (int i = 0; i < edgeColliders.Count; ++i) {
-					blaze2dUtil.DestroyImmediate(edgeColliders[i]);
+					tk2dUtil.DestroyImmediate(edgeColliders[i]);
 				}
 				edgeColliders.Clear();
 			}
@@ -398,7 +398,7 @@ namespace blaze2dRuntime.TileMap
 			}
 		}
 
-		public void DestroyGameData(blaze2dTileMap tilemap) {
+		public void DestroyGameData(tk2dTileMap tilemap) {
 			foreach (SpriteChunk sc in spriteChannel.chunks) {
 				if (sc.HasGameData) {
 					sc.DestroyColliderData(tilemap);
@@ -423,14 +423,14 @@ namespace blaze2dRuntime.TileMap
 
 		/// <summary>Gets the tile flags at x, y</summary> 
 		/// <returns>The tile flags - a combination of tk2dTileFlags</returns>
-		public blaze2dTileFlags GetTileFlags(int x, int y) {
+		public tk2dTileFlags GetTileFlags(int x, int y) {
 			int rawTileValue = 0;
 			if (GetRawTileValue(x, y, ref rawTileValue)) {
 				if (rawTileValue != -1) {
-					return (blaze2dTileFlags)(rawTileValue & flagMask);
+					return (tk2dTileFlags)(rawTileValue & flagMask);
 				}
 			}
-			return blaze2dTileFlags.None;
+			return tk2dTileFlags.None;
 		}
 
 		/// <summary>Gets the raw tile value at x, y</summary> 
@@ -447,13 +447,13 @@ namespace blaze2dRuntime.TileMap
 
 		/// <summary>Sets the tile at x, y - either a sprite Id or -1 if the tile is empty.</summary> 
 		public void SetTile(int x, int y, int tile) {
-			blaze2dTileFlags currentFlags = GetTileFlags(x, y);
+			tk2dTileFlags currentFlags = GetTileFlags(x, y);
 			int rawTileValue = (tile == -1) ? -1 : (tile | (int)currentFlags);
 			SetRawTileValue(x, y, rawTileValue);
 		}
 
 		/// <summary>Sets the tile flags at x, y - a combination of tk2dTileFlags</summary> 
-		public void SetTileFlags(int x, int y, blaze2dTileFlags flags) {
+		public void SetTileFlags(int x, int y, tk2dTileFlags flags) {
 			int currentTile = GetTile(x, y);
 			if (currentTile != -1) {
 				int rawTileValue = currentTile | (int)flags;

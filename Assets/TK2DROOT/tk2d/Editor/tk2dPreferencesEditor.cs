@@ -211,14 +211,14 @@ public class tk2dPreferencesEditor : EditorWindow
 			GUI.changed = true;
 		}
 
-		if (blaze2dSystem.inst_NoCreate != null)
+		if (tk2dSystem.inst_NoCreate != null)
 		{
-			string newPlatform = tk2dGuiUtility.PlatformPopup(blaze2dSystem.inst_NoCreate, "Platform", prefs.platform);
+			string newPlatform = tk2dGuiUtility.PlatformPopup(tk2dSystem.inst_NoCreate, "Platform", prefs.platform);
 			if (newPlatform != prefs.platform)
 			{
 				prefs.platform = newPlatform;
 				UnityEditor.EditorPrefs.SetString("tk2d_platform", newPlatform);
-				blaze2dSystem.CurrentPlatform = prefs.platform; // mirror to where it matters
+				tk2dSystem.CurrentPlatform = prefs.platform; // mirror to where it matters
 				tk2dSystemUtility.PlatformChanged(); // tell the editor things have changed
 				tk2dEditorUtility.UnloadUnusedAssets();
 			}

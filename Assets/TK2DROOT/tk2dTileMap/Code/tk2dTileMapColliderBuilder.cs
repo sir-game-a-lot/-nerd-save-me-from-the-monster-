@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 #if UNITY_EDITOR || !UNITY_FLASH
 
-namespace blaze2dRuntime.TileMap
+namespace tk2dRuntime.TileMap
 {
 	public static class ColliderBuilder3D
 	{
-		public static void Build(blaze2dTileMap tileMap, bool forceBuild)
+		public static void Build(tk2dTileMap tileMap, bool forceBuild)
 		{
 			bool incremental = !forceBuild;
 			int numLayers = tileMap.Layers.Length;
@@ -42,7 +42,7 @@ namespace blaze2dRuntime.TileMap
 			}
 		}
 		
-		public static void BuildForChunk(blaze2dTileMap tileMap, SpriteChunk chunk, int baseX, int baseY)
+		public static void BuildForChunk(tk2dTileMap tileMap, SpriteChunk chunk, int baseX, int baseY)
 		{
 			// Build local mesh
 			Vector3[] localMeshVertices = new Vector3[0];
@@ -67,7 +67,7 @@ namespace blaze2dRuntime.TileMap
 #if !(UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
 			foreach (EdgeCollider2D c2d in chunk.edgeColliders) {
 				if (c2d != null) {
-					blaze2dUtil.DestroyImmediate(c2d);
+					tk2dUtil.DestroyImmediate(c2d);
 				}
 			}
 			chunk.edgeColliders.Clear();
@@ -77,7 +77,7 @@ namespace blaze2dRuntime.TileMap
 			{
 				if (chunk.colliderMesh != null)
 				{
-					blaze2dUtil.DestroyImmediate(chunk.colliderMesh);
+					tk2dUtil.DestroyImmediate(chunk.colliderMesh);
 					chunk.colliderMesh = null;
 				}
 				
@@ -85,10 +85,10 @@ namespace blaze2dRuntime.TileMap
 				{
 					chunk.meshCollider = chunk.gameObject.GetComponent<MeshCollider>();
 					if (chunk.meshCollider == null)
-						chunk.meshCollider = blaze2dUtil.AddComponent<MeshCollider>(chunk.gameObject);
+						chunk.meshCollider = tk2dUtil.AddComponent<MeshCollider>(chunk.gameObject);
 				}
 				
-				chunk.colliderMesh = blaze2dUtil.CreateMesh();
+				chunk.colliderMesh = tk2dUtil.CreateMesh();
 				chunk.colliderMesh.vertices = localMeshVertices;
 				chunk.colliderMesh.triangles = localMeshIndices;
 
@@ -103,7 +103,7 @@ namespace blaze2dRuntime.TileMap
 		}		
 		
 		// Builds an unoptimized mesh for this chunk
-		static void BuildLocalMeshForChunk(blaze2dTileMap tileMap, SpriteChunk chunk, int baseX, int baseY, ref Vector3[] vertices, ref int[] indices)
+		static void BuildLocalMeshForChunk(tk2dTileMap tileMap, SpriteChunk chunk, int baseX, int baseY, ref Vector3[] vertices, ref int[] indices)
 		{
 			List<Vector3> vertexList = new List<Vector3>();
 			List<int> indexList = new List<int>();
@@ -132,9 +132,9 @@ namespace blaze2dRuntime.TileMap
 					if (tilePrefabs[spriteIdx])
 						continue;
 
-					bool flipH = BuilderUtil.IsRawTileFlagSet(spriteId, blaze2dTileFlags.FlipX);
-					bool flipV = BuilderUtil.IsRawTileFlagSet(spriteId, blaze2dTileFlags.FlipY);
-					bool rot90 = BuilderUtil.IsRawTileFlagSet(spriteId, blaze2dTileFlags.Rot90);
+					bool flipH = BuilderUtil.IsRawTileFlagSet(spriteId, tk2dTileFlags.FlipX);
+					bool flipV = BuilderUtil.IsRawTileFlagSet(spriteId, tk2dTileFlags.FlipY);
+					bool rot90 = BuilderUtil.IsRawTileFlagSet(spriteId, tk2dTileFlags.Rot90);
 
 					bool reverseIndices = false;
 					if (flipH) reverseIndices = !reverseIndices;
@@ -143,7 +143,7 @@ namespace blaze2dRuntime.TileMap
 					var spriteData = tileMap.SpriteCollectionInst.spriteDefinitions[spriteIdx];
 					int baseVertexIndex = vertexList.Count;
 					
-					if (spriteData.colliderType == blaze2dSpriteDefinition.ColliderType.Box)
+					if (spriteData.colliderType == tk2dSpriteDefinition.ColliderType.Box)
 					{
 						Vector3 origin = spriteData.colliderVertices[0];
 						Vector3 extents = spriteData.colliderVertices[1];
@@ -174,7 +174,7 @@ namespace blaze2dRuntime.TileMap
 							indexList.Add(baseVertexIndex + srcIndices[j]);
 						}
 					}
-					else if (spriteData.colliderType == blaze2dSpriteDefinition.ColliderType.Mesh)
+					else if (spriteData.colliderType == tk2dSpriteDefinition.ColliderType.Mesh)
 					{
 						for (int i = 0; i < spriteData.colliderVertices.Length; ++i)
 						{

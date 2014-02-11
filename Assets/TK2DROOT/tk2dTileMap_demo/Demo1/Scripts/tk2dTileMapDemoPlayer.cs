@@ -3,22 +3,22 @@ using System.Collections;
 
 public class tk2dTileMapDemoPlayer : MonoBehaviour {
 
-	public blaze2dTextMesh textMesh;
-	public blaze2dTextMesh textMeshLabel;
+	public tk2dTextMesh textMesh;
+	public tk2dTextMesh textMeshLabel;
 	Vector3 textMeshOffset;
 	bool textInitialized = false;
 
 	public float addForceLimit = 1.0f;
 	public float amount = 500.0f;
 	public float torque = 50;
-	blaze2dSprite sprite;
+	tk2dSprite sprite;
 	int score = 0;
 	float forceWait = 0;
 	float moveX = 0.0f;
 	bool AllowAddForce { get { return forceWait < 0.0f; } }
 
 	void Awake() {
-		sprite = GetComponent<blaze2dSprite>();
+		sprite = GetComponent<tk2dSprite>();
 
 		if (textMesh == null || textMesh.transform.parent != transform) {
 			Debug.LogError("Text mesh must be assigned and parented to player.");

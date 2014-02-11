@@ -4,13 +4,13 @@ using System.Collections;
 [AddComponentMenu("2D Toolkit/Demo/tk2dDemoAnimController")]
 public class tk2dDemoAnimController : MonoBehaviour 
 {
-	blaze2dSpriteAnimator animator;
-	public blaze2dTextMesh popupTextMesh;
+	tk2dSpriteAnimator animator;
+	public tk2dTextMesh popupTextMesh;
 	
 	// Use this for initialization
 	void Start () 
 	{
-		animator = GetComponent<blaze2dSpriteAnimator>();
+		animator = GetComponent<tk2dSpriteAnimator>();
 		animator.AnimationEventTriggered += AnimationEventHandler;
 		
 #if UNITY_3_5
@@ -20,7 +20,7 @@ public class tk2dDemoAnimController : MonoBehaviour
 #endif
 	}
 	
-	void AnimationEventHandler(blaze2dSpriteAnimator animator, blaze2dSpriteAnimationClip clip, int frameNum)
+	void AnimationEventHandler(tk2dSpriteAnimator animator, tk2dSpriteAnimationClip clip, int frameNum)
 	{
 		string str = animator.name + "\n" + clip.name + "\n" + "INFO: " + clip.GetFrame(frameNum).eventInfo;
 		StartCoroutine( PopupText( str ) );
@@ -111,7 +111,7 @@ public class tk2dDemoAnimController : MonoBehaviour
 		if (GUILayout.Button("Delegate", GUILayout.MaxWidth(100)))
 		{
 			animator.Play("demo_once");
-			animator.AnimationCompleted = delegate(blaze2dSpriteAnimator sprite, blaze2dSpriteAnimationClip clip) 
+			animator.AnimationCompleted = delegate(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip) 
 				{ 
 					Debug.Log("Delegate");
 					animator.Play("demo_pingpong"); 

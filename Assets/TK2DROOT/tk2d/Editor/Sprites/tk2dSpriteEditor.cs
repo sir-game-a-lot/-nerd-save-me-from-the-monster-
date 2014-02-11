@@ -3,11 +3,11 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dSprite))]
+[CustomEditor(typeof(tk2dSprite))]
 class tk2dSpriteEditor : Editor
 {
 	// Serialized properties are going to be far too much hassle
-	private blaze2dBaseSprite[] targetSprites = new blaze2dBaseSprite[0];
+	private tk2dBaseSprite[] targetSprites = new tk2dBaseSprite[0];
 #if !(UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
 	private Renderer[] renderers = new Renderer[0];
 #endif
@@ -21,7 +21,7 @@ class tk2dSpriteEditor : Editor
     {
 		if (tk2dPreferences.inst.enableSpriteHandles == false) return;
 
-    	blaze2dSprite spr = (blaze2dSprite)target;
+    	tk2dSprite spr = (tk2dSprite)target;
 		var sprite = spr.CurrentSprite;
 
 		if (sprite == null) {
@@ -84,7 +84,7 @@ class tk2dSpriteEditor : Editor
 
     protected void OnEnable()
     {
-    	targetSprites = GetTargetsOfType<blaze2dBaseSprite>( targets );
+    	targetSprites = GetTargetsOfType<tk2dBaseSprite>( targets );
 
 #if !(UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
     	List<Renderer> rs = new List<Renderer>();
@@ -99,7 +99,7 @@ class tk2dSpriteEditor : Editor
 	
 	void OnDestroy()
 	{
-		targetSprites = new blaze2dBaseSprite[0];
+		targetSprites = new tk2dBaseSprite[0];
 
 		tk2dSpriteThumbnailCache.Done();
 		tk2dGrid.Done();
@@ -107,11 +107,11 @@ class tk2dSpriteEditor : Editor
 	}
 	
 	// Callback and delegate
-	void SpriteChangedCallbackImpl(blaze2dSpriteCollectionData spriteCollection, int spriteId, object data)
+	void SpriteChangedCallbackImpl(tk2dSpriteCollectionData spriteCollection, int spriteId, object data)
 	{
 		tk2dUndo.RecordObjects(targetSprites, "Sprite Change");
 		
-		foreach (blaze2dBaseSprite s in targetSprites) {
+		foreach (tk2dBaseSprite s in targetSprites) {
 			s.SetSprite(spriteCollection, spriteId);
 			s.EditMode__CreateCollider();
 			EditorUtility.SetDirty(s);
@@ -135,8 +135,8 @@ class tk2dSpriteEditor : Editor
         if (targetSprites[0].Collection != null)
         {
         	if (tk2dPreferences.inst.displayTextureThumbs) {
-        		blaze2dBaseSprite sprite = targetSprites[0];
-				blaze2dSpriteDefinition def = sprite.GetCurrentSpriteDef();
+        		tk2dBaseSprite sprite = targetSprites[0];
+				tk2dSpriteDefinition def = sprite.GetCurrentSpriteDef();
 				if (sprite.Collection.version < 1 || def.texelSize == Vector2.zero)
 				{
 					string message = "";
@@ -169,7 +169,7 @@ class tk2dSpriteEditor : Editor
             Color newColor = EditorGUILayout.ColorField("Color", targetSprites[0].color);
             if (newColor != targetSprites[0].color) {
             	tk2dUndo.RecordObjects(targetSprites, "Sprite Color");
-            	foreach (blaze2dBaseSprite s in targetSprites) {
+            	foreach (tk2dBaseSprite s in targetSprites) {
             		s.color = newColor;
             	}
             }
@@ -197,7 +197,7 @@ class tk2dSpriteEditor : Editor
 				if (sortingOrder != targetSprites[0].SortingOrder) {
 	            	tk2dUndo.RecordObjects(targetSprites, "Order In Layer");
 	            	tk2dUndo.RecordObjects(renderers, "Order In Layer");
-	            	foreach (blaze2dBaseSprite s in targetSprites) {
+	            	foreach (tk2dBaseSprite s in targetSprites) {
 	            		s.SortingOrder = sortingOrder;
 	            	}
 				}
@@ -210,7 +210,7 @@ class tk2dSpriteEditor : Editor
 			if (newScale != targetSprites[0].scale)
 			{
 				tk2dUndo.RecordObjects(targetSprites, "Sprite Scale");
-				foreach (blaze2dBaseSprite s in targetSprites) {
+				foreach (tk2dBaseSprite s in targetSprites) {
 					s.scale = newScale;
 					s.EditMode__CreateCollider();
 				}
@@ -221,7 +221,7 @@ class tk2dSpriteEditor : Editor
 			if (GUILayout.Button("HFlip", EditorStyles.miniButton))
 			{
 				tk2dUndo.RecordObjects(targetSprites, "Sprite HFlip");
-				foreach (blaze2dBaseSprite sprite in targetSprites) {
+				foreach (tk2dBaseSprite sprite in targetSprites) {
 					sprite.EditMode__CreateCollider();
 					Vector3 scale = sprite.scale;
 					scale.x *= -1.0f;
@@ -232,7 +232,7 @@ class tk2dSpriteEditor : Editor
 			if (GUILayout.Button("VFlip", EditorStyles.miniButton))
 			{
 				tk2dUndo.RecordObjects(targetSprites, "Sprite VFlip");
-				foreach (blaze2dBaseSprite sprite in targetSprites) {
+				foreach (tk2dBaseSprite sprite in targetSprites) {
 					Vector3 s = sprite.scale;
 					s.y *= -1.0f;
 					sprite.scale = s;
@@ -247,7 +247,7 @@ class tk2dSpriteEditor : Editor
 			if (GUILayout.Button(new GUIContent("Reset Scale", "Set scale to 1"), EditorStyles.miniButton))
 			{
 				tk2dUndo.RecordObjects(targetSprites, "Sprite Reset Scale");
-				foreach (blaze2dBaseSprite sprite in targetSprites) {
+				foreach (tk2dBaseSprite sprite in targetSprites) {
 					Vector3 s = sprite.scale;
 					s.x = Mathf.Sign(s.x);
 					s.y = Mathf.Sign(s.y);
@@ -259,7 +259,7 @@ class tk2dSpriteEditor : Editor
 			
 			if (GUILayout.Button(new GUIContent("Bake Scale", "Transfer scale from transform.scale -> sprite"), EditorStyles.miniButton))
 			{
-				foreach (blaze2dBaseSprite sprite in targetSprites) {
+				foreach (tk2dBaseSprite sprite in targetSprites) {
 					tk2dScaleUtility.Bake(sprite.transform);
 				}
 				GUI.changed = true;
@@ -268,9 +268,9 @@ class tk2dSpriteEditor : Editor
 			GUIContent pixelPerfectButton = new GUIContent("1:1", "Make Pixel Perfect for camera");
 			if ( GUILayout.Button(pixelPerfectButton, EditorStyles.miniButton ))
 			{
-				if (blaze2dPixelPerfectHelper.inst) blaze2dPixelPerfectHelper.inst.Setup();
+				if (tk2dPixelPerfectHelper.inst) tk2dPixelPerfectHelper.inst.Setup();
 				tk2dUndo.RecordObjects(targetSprites, "Sprite Pixel Perfect");
-				foreach (blaze2dBaseSprite sprite in targetSprites) {
+				foreach (tk2dBaseSprite sprite in targetSprites) {
 					sprite.MakePixelPerfect();
 				}
 				GUI.changed = true;
@@ -287,7 +287,7 @@ class tk2dSpriteEditor : Editor
 		bool needUpdatePrefabs = false;
 		if (GUI.changed)
 		{
-			foreach (blaze2dBaseSprite sprite in targetSprites) {
+			foreach (tk2dBaseSprite sprite in targetSprites) {
 			if (PrefabUtility.GetPrefabType(sprite) == PrefabType.Prefab)
 				needUpdatePrefabs = true;
 				EditorUtility.SetDirty(sprite);
@@ -298,14 +298,14 @@ class tk2dSpriteEditor : Editor
 		if (needUpdatePrefabs)
 		{
 			// Rebuild prefab instances
-			blaze2dBaseSprite[] allSprites = Resources.FindObjectsOfTypeAll(typeof(blaze2dBaseSprite)) as blaze2dBaseSprite[];
+			tk2dBaseSprite[] allSprites = Resources.FindObjectsOfTypeAll(typeof(tk2dBaseSprite)) as tk2dBaseSprite[];
 			foreach (var spr in allSprites)
 			{
 				if (PrefabUtility.GetPrefabType(spr) == PrefabType.PrefabInstance)
 				{
 					Object parent = PrefabUtility.GetPrefabParent(spr.gameObject);
 					bool found = false;
-					foreach (blaze2dBaseSprite sprite in targetSprites) {
+					foreach (tk2dBaseSprite sprite in targetSprites) {
 						if (sprite.gameObject == parent) {
 							found = true;
 							break;
@@ -325,7 +325,7 @@ class tk2dSpriteEditor : Editor
 		}
 	}
 
-	protected void WarnSpriteRenderType(blaze2dSpriteDefinition sprite) {
+	protected void WarnSpriteRenderType(tk2dSpriteDefinition sprite) {
 		if (sprite.positions.Length != 4 || sprite.complexGeometry) {
 			EditorGUILayout.HelpBox("Sprite type incompatible with Render Mesh setting.\nPlease use Default Render Mesh.", MessageType.Error);
 		}
@@ -338,7 +338,7 @@ class tk2dSpriteEditor : Editor
 		int undoGroup = Undo.GetCurrentGroup();
 #endif
 		foreach (GameObject go in Selection.gameObjects) {
-			if (go.GetComponent<blaze2dBaseSprite>() != null) {
+			if (go.GetComponent<tk2dBaseSprite>() != null) {
 				action(go);
 			}
 		}
@@ -349,16 +349,16 @@ class tk2dSpriteEditor : Editor
 	}
 
 	static void ConvertSpriteType(GameObject go, System.Type targetType) {
-		blaze2dBaseSprite spr = go.GetComponent<blaze2dBaseSprite>();
+		tk2dBaseSprite spr = go.GetComponent<tk2dBaseSprite>();
 		System.Type sourceType = spr.GetType();
 
 		if (sourceType != targetType) {
-			blaze2dBatchedSprite batchedSprite = new blaze2dBatchedSprite();
+			tk2dBatchedSprite batchedSprite = new tk2dBatchedSprite();
 			tk2dStaticSpriteBatcherEditor.FillBatchedSprite(batchedSprite, go);
-			if (targetType == typeof(blaze2dSprite)) batchedSprite.type = blaze2dBatchedSprite.Type.Sprite;
-			else if (targetType == typeof(blaze2dTiledSprite)) batchedSprite.type = blaze2dBatchedSprite.Type.TiledSprite;
-			else if (targetType == typeof(blaze2dSlicedSprite)) batchedSprite.type = blaze2dBatchedSprite.Type.SlicedSprite;
-			else if (targetType == typeof(blaze2dClippedSprite)) batchedSprite.type = blaze2dBatchedSprite.Type.ClippedSprite;
+			if (targetType == typeof(tk2dSprite)) batchedSprite.type = tk2dBatchedSprite.Type.Sprite;
+			else if (targetType == typeof(tk2dTiledSprite)) batchedSprite.type = tk2dBatchedSprite.Type.TiledSprite;
+			else if (targetType == typeof(tk2dSlicedSprite)) batchedSprite.type = tk2dBatchedSprite.Type.SlicedSprite;
+			else if (targetType == typeof(tk2dClippedSprite)) batchedSprite.type = tk2dBatchedSprite.Type.ClippedSprite;
 
 #if (UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
 			if (spr.collider != null) {
@@ -379,18 +379,18 @@ class tk2dSpriteEditor : Editor
 			Undo.DestroyObjectImmediate(spr);
 #endif
 
-			bool sourceHasDimensions = sourceType == typeof(blaze2dSlicedSprite) || sourceType == typeof(blaze2dTiledSprite);
-			bool targetHasDimensions = targetType == typeof(blaze2dSlicedSprite) || targetType == typeof(blaze2dTiledSprite);
+			bool sourceHasDimensions = sourceType == typeof(tk2dSlicedSprite) || sourceType == typeof(tk2dTiledSprite);
+			bool targetHasDimensions = targetType == typeof(tk2dSlicedSprite) || targetType == typeof(tk2dTiledSprite);
 
 			// Some minor fixups
 			if (!sourceHasDimensions && targetHasDimensions) {
 				batchedSprite.Dimensions = new Vector2(100, 100);
 			}
-			if (targetType == typeof(blaze2dClippedSprite)) {
+			if (targetType == typeof(tk2dClippedSprite)) {
 				batchedSprite.ClippedSpriteRegionBottomLeft = Vector2.zero;
 				batchedSprite.ClippedSpriteRegionTopRight = Vector2.one;
 			}
-			if (targetType == typeof(blaze2dSlicedSprite)) {
+			if (targetType == typeof(tk2dSlicedSprite)) {
 				batchedSprite.SlicedSpriteBorderBottomLeft = new Vector2(0.1f, 0.1f);
 				batchedSprite.SlicedSpriteBorderTopRight = new Vector2(0.1f, 0.1f);
 			}
@@ -398,7 +398,7 @@ class tk2dSpriteEditor : Editor
 			tk2dStaticSpriteBatcherEditor.RestoreBatchedSprite(go, batchedSprite);
 #if !(UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
 			{ 
-				blaze2dBaseSprite tmpSprite = go.GetComponent<blaze2dBaseSprite>();
+				tk2dBaseSprite tmpSprite = go.GetComponent<tk2dBaseSprite>();
 				if (tmpSprite != null) {
 					Undo.RegisterCreatedObjectUndo( tmpSprite, "Convert Sprite Type" );
 				}
@@ -409,7 +409,7 @@ class tk2dSpriteEditor : Editor
 
 	// This is used by derived classes only
 	protected bool DrawCreateBoxColliderCheckbox(bool value) {
-		blaze2dBaseSprite sprite = target as blaze2dBaseSprite;
+		tk2dBaseSprite sprite = target as tk2dBaseSprite;
 		bool newCreateBoxCollider = EditorGUILayout.Toggle("Create Box Collider", value);
 		if (newCreateBoxCollider != value) {
 			tk2dUndo.RecordObjects(targetSprites, "Create Box Collider");
@@ -432,23 +432,23 @@ class tk2dSpriteEditor : Editor
 	}
 
 	[MenuItem("CONTEXT/tk2dBaseSprite/Convert to Sprite")]
-	static void DoConvertSprite() { PerformActionOnGlobalSelection( "Convert to Sprite", (go) => ConvertSpriteType(go, typeof(blaze2dSprite)) ); }
+	static void DoConvertSprite() { PerformActionOnGlobalSelection( "Convert to Sprite", (go) => ConvertSpriteType(go, typeof(tk2dSprite)) ); }
 	[MenuItem("CONTEXT/tk2dBaseSprite/Convert to Sliced Sprite")]
-	static void DoConvertSlicedSprite() { PerformActionOnGlobalSelection( "Convert to Sliced Sprite", (go) => ConvertSpriteType(go, typeof(blaze2dSlicedSprite)) ); }
+	static void DoConvertSlicedSprite() { PerformActionOnGlobalSelection( "Convert to Sliced Sprite", (go) => ConvertSpriteType(go, typeof(tk2dSlicedSprite)) ); }
 	[MenuItem("CONTEXT/tk2dBaseSprite/Convert to Tiled Sprite")]
-	static void DoConvertTiledSprite() { PerformActionOnGlobalSelection( "Convert to Tiled Sprite", (go) => ConvertSpriteType(go, typeof(blaze2dTiledSprite)) ); }
+	static void DoConvertTiledSprite() { PerformActionOnGlobalSelection( "Convert to Tiled Sprite", (go) => ConvertSpriteType(go, typeof(tk2dTiledSprite)) ); }
 	[MenuItem("CONTEXT/tk2dBaseSprite/Convert to Clipped Sprite")]
-	static void DoConvertClippedSprite() { PerformActionOnGlobalSelection( "Convert to Clipped Sprite", (go) => ConvertSpriteType(go, typeof(blaze2dClippedSprite)) ); }
+	static void DoConvertClippedSprite() { PerformActionOnGlobalSelection( "Convert to Clipped Sprite", (go) => ConvertSpriteType(go, typeof(tk2dClippedSprite)) ); }
 	
 
 	[MenuItem("CONTEXT/tk2dBaseSprite/Add animator", true, 10000)]
 	static bool ValidateAddAnimator() {
 		if (Selection.activeGameObject == null) return false;
-		return Selection.activeGameObject.GetComponent<blaze2dSpriteAnimator>() == null;
+		return Selection.activeGameObject.GetComponent<tk2dSpriteAnimator>() == null;
 	}
 	[MenuItem("CONTEXT/tk2dBaseSprite/Add animator", false, 10000)]
 	static void DoAddAnimator() {
-		blaze2dSpriteAnimation anim = null;
+		tk2dSpriteAnimation anim = null;
 		int clipId = -1;
 		if (!tk2dSpriteAnimatorEditor.GetDefaultSpriteAnimation(out anim, out clipId)) {
 			EditorUtility.DisplayDialog("Create Sprite Animation", "Unable to create animated sprite as no SpriteAnimations have been found.", "Ok");
@@ -456,12 +456,12 @@ class tk2dSpriteEditor : Editor
 		}
 		else {
 			PerformActionOnGlobalSelection("Add animator", delegate(GameObject go) {
-				blaze2dSpriteAnimator animator = go.GetComponent<blaze2dSpriteAnimator>();
+				tk2dSpriteAnimator animator = go.GetComponent<tk2dSpriteAnimator>();
 				if (animator == null) {
-					animator = go.AddComponent<blaze2dSpriteAnimator>();
+					animator = go.AddComponent<tk2dSpriteAnimator>();
 					animator.Library = anim;
 					animator.DefaultClipId = clipId;
-					blaze2dSpriteAnimationClip clip = anim.GetClipById(clipId);
+					tk2dSpriteAnimationClip clip = anim.GetClipById(clipId);
 					animator.SetSprite( clip.frames[0].spriteCollection, clip.frames[0].spriteId );
 				}
 			});
@@ -471,9 +471,9 @@ class tk2dSpriteEditor : Editor
 	[MenuItem("CONTEXT/tk2dBaseSprite/Add AttachPoint", false, 10002)]
 	static void DoRemoveAnimator() {
 		PerformActionOnGlobalSelection("Add AttachPoint", delegate(GameObject go) {
-			blaze2dSpriteAttachPoint ap = go.GetComponent<blaze2dSpriteAttachPoint>();
+			tk2dSpriteAttachPoint ap = go.GetComponent<tk2dSpriteAttachPoint>();
 			if (ap == null) {
-				go.AddComponent<blaze2dSpriteAttachPoint>();
+				go.AddComponent<tk2dSpriteAttachPoint>();
 			}
 		});	
 	}
@@ -483,7 +483,7 @@ class tk2dSpriteEditor : Editor
     {
     	tk2dSpriteGuiUtility.GetSpriteCollectionAndCreate( (sprColl) => {
 			GameObject go = tk2dEditorUtility.CreateGameObjectInScene("Sprite");
-			blaze2dSprite sprite = go.AddComponent<blaze2dSprite>();
+			tk2dSprite sprite = go.AddComponent<tk2dSprite>();
 			sprite.SetSprite(sprColl, sprColl.FirstValidDefinitionIndex);
 			sprite.renderer.material = sprColl.FirstValidDefinition.material;
 			sprite.Build();

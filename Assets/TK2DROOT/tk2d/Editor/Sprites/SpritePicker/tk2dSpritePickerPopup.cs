@@ -52,13 +52,13 @@ public class tk2dSpritePickerPopup  : EditorWindow
 	tk2dSpriteGuiUtility.SpriteChangedCallback callback = null;
 	object callbackData = null;
 
-	blaze2dSpriteCollectionData spriteCollection = null;
-	List<blaze2dSpriteDefinition> selectedDefinitions = new List<blaze2dSpriteDefinition>();
+	tk2dSpriteCollectionData spriteCollection = null;
+	List<tk2dSpriteDefinition> selectedDefinitions = new List<tk2dSpriteDefinition>();
 	string searchFilter = "";
 	int selectedIndex = -1;
 	bool makeSelectionVisible = false;
 	Vector2 scroll = Vector2.zero;
-	blaze2dSpriteDefinition SelectedDefinition 
+	tk2dSpriteDefinition SelectedDefinition 
 	{
 		get {
 			for (int i = 0; i < selectedDefinitions.Count; ++i)
@@ -81,7 +81,7 @@ public class tk2dSpritePickerPopup  : EditorWindow
 
 	void PerformSelection()
 	{
-		blaze2dSpriteDefinition def = SelectedDefinition;
+		tk2dSpriteDefinition def = SelectedDefinition;
 		if (def != null)
 		{
 			int spriteIndex = -1;
@@ -101,7 +101,7 @@ public class tk2dSpritePickerPopup  : EditorWindow
 		}
 		else
 		{
-			blaze2dSpriteDefinition selectedSprite = SelectedDefinition;
+			tk2dSpriteDefinition selectedSprite = SelectedDefinition;
 
 			string s = searchFilter.ToLower();
 			if (s != "") {
@@ -192,7 +192,7 @@ public class tk2dSpritePickerPopup  : EditorWindow
 		GUILayout.BeginHorizontal(EditorStyles.toolbar, GUILayout.ExpandWidth(true));
 
 		GUILayout.Label("Collection: ");
-		blaze2dSpriteCollectionData newSpriteCollection = tk2dSpriteGuiUtility.SpriteCollectionList(spriteCollection);
+		tk2dSpriteCollectionData newSpriteCollection = tk2dSpriteGuiUtility.SpriteCollectionList(spriteCollection);
 		if (newSpriteCollection != spriteCollection)
 		{
 			spriteCollection = newSpriteCollection;
@@ -242,7 +242,7 @@ public class tk2dSpritePickerPopup  : EditorWindow
 		GUILayout.EndArea();
 	}
 
-	void DrawSpriteCollection(blaze2dSpriteCollectionData spriteCollection)
+	void DrawSpriteCollection(tk2dSpriteCollectionData spriteCollection)
 	{
 		Event ev = Event.current;
 		int tileSize = presentParams.TileSize;
@@ -276,7 +276,7 @@ public class tk2dSpritePickerPopup  : EditorWindow
 		float x = r.x;
 		float y = r.y;
 		int index = 0;
-		foreach (blaze2dSpriteDefinition def in selectedDefinitions)
+		foreach (tk2dSpriteDefinition def in selectedDefinitions)
 		{
 			Rect spriteRect = new Rect(x, y, tileSize, tileSize);
 			tk2dGrid.Draw(spriteRect, Vector2.zero);
@@ -305,13 +305,13 @@ public class tk2dSpritePickerPopup  : EditorWindow
 		GUILayout.EndScrollView();
 	}
 
-	void InitForSpriteInCollection(blaze2dSpriteCollectionData sc, int spriteId)
+	void InitForSpriteInCollection(tk2dSpriteCollectionData sc, int spriteId)
 	{
 		spriteCollection = sc;
 		searchFilter = "";
 		UpdateFilter();
 		
-		blaze2dSpriteDefinition def = (spriteId >= 0 && spriteId < sc.Count) ? sc.inst.spriteDefinitions[spriteId] : null;
+		tk2dSpriteDefinition def = (spriteId >= 0 && spriteId < sc.Count) ? sc.inst.spriteDefinitions[spriteId] : null;
 		selectedIndex = -1;
 		for (int i = 0; i < selectedDefinitions.Count; ++i) {
 			if (selectedDefinitions[i] == def) {
@@ -324,7 +324,7 @@ public class tk2dSpritePickerPopup  : EditorWindow
 		}
 	}
 
-	public static void DoPickSprite(blaze2dSpriteCollectionData spriteCollection, int spriteId, string title, tk2dSpriteGuiUtility.SpriteChangedCallback callback, object callbackData)
+	public static void DoPickSprite(tk2dSpriteCollectionData spriteCollection, int spriteId, string title, tk2dSpriteGuiUtility.SpriteChangedCallback callback, object callbackData)
 	{
 		tk2dSpritePickerPopup popup = EditorWindow.GetWindow(typeof(tk2dSpritePickerPopup), true, title, true) as tk2dSpritePickerPopup;
 		popup.InitForSpriteInCollection(spriteCollection, spriteId);

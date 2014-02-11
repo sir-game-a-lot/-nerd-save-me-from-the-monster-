@@ -3,7 +3,7 @@ using UnityEditor;
 using System.Collections;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dUIToggleButtonGroup))]
+[CustomEditor(typeof(tk2dUIToggleButtonGroup))]
 public class tk2dUIToggleButtonGroupEditor : Editor
 {
     private bool listVisibility = true;
@@ -17,7 +17,7 @@ public class tk2dUIToggleButtonGroupEditor : Editor
     public override void  OnInspectorGUI()
     {
         tk2dGuiUtility.LookLikeInspector();
-        blaze2dUIToggleButtonGroup toggleBtnGroup = (blaze2dUIToggleButtonGroup)target;
+        tk2dUIToggleButtonGroup toggleBtnGroup = (tk2dUIToggleButtonGroup)target;
 
         serializedObj.Update();
         ListIterator("toggleBtns", ref listVisibility);
@@ -27,7 +27,7 @@ public class tk2dUIToggleButtonGroupEditor : Editor
 
         tk2dUIMethodBindingHelper methodBindingUtil = new tk2dUIMethodBindingHelper();
         toggleBtnGroup.sendMessageTarget = methodBindingUtil.BeginMessageGUI(toggleBtnGroup.sendMessageTarget);
-        methodBindingUtil.MethodBinding( "On Change", typeof(blaze2dUIToggleButtonGroup), toggleBtnGroup.sendMessageTarget, ref toggleBtnGroup.SendMessageOnChangeMethodName );
+        methodBindingUtil.MethodBinding( "On Change", typeof(tk2dUIToggleButtonGroup), toggleBtnGroup.sendMessageTarget, ref toggleBtnGroup.SendMessageOnChangeMethodName );
         methodBindingUtil.EndMessageGUI();
 
         if (GUI.changed)

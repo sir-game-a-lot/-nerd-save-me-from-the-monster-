@@ -140,19 +140,19 @@ namespace tk2dEditor.SpriteCollectionEditor
 						// Create data object
 						{
 							GameObject go = new GameObject();
-							go.AddComponent<blaze2dFontData>();
+							go.AddComponent<tk2dFontData>();
 					        tk2dEditorUtility.SetGameObjectActive(go, false);
 							Object p = PrefabUtility.CreateEmptyPrefab(dataObjectPath);
 							PrefabUtility.ReplacePrefab(go, p);
 							GameObject.DestroyImmediate(go);
 							AssetDatabase.SaveAssets();
-							font.data = AssetDatabase.LoadAssetAtPath(dataObjectPath, typeof(blaze2dFontData)) as blaze2dFontData;
+							font.data = AssetDatabase.LoadAssetAtPath(dataObjectPath, typeof(tk2dFontData)) as tk2dFontData;
 						}
 						
 						// Create editor object
 						{
 							GameObject go = new GameObject();
-							blaze2dFont f = go.AddComponent<blaze2dFont>();
+							tk2dFont f = go.AddComponent<tk2dFont>();
 							f.proxyFont = true;
 							f.data = font.data;
 					        tk2dEditorUtility.SetGameObjectActive(go, false);
@@ -161,11 +161,11 @@ namespace tk2dEditor.SpriteCollectionEditor
 							PrefabUtility.ReplacePrefab(go, p, ReplacePrefabOptions.ConnectToPrefab);
 							GameObject.DestroyImmediate(go);
 							
-							blaze2dFont loadedFont = AssetDatabase.LoadAssetAtPath(editorDataPath, typeof(blaze2dFont)) as blaze2dFont;
+							tk2dFont loadedFont = AssetDatabase.LoadAssetAtPath(editorDataPath, typeof(tk2dFont)) as tk2dFont;
 							tk2dEditorUtility.GetOrCreateIndex().AddOrUpdateFont(loadedFont);
 							tk2dEditorUtility.CommitIndex();
 							
-							font.editorData = AssetDatabase.LoadAssetAtPath(editorDataPath, typeof(blaze2dFont)) as blaze2dFont;
+							font.editorData = AssetDatabase.LoadAssetAtPath(editorDataPath, typeof(tk2dFont)) as tk2dFont;
 						}
 						
 						entry.name = font.Name;
@@ -175,8 +175,8 @@ namespace tk2dEditor.SpriteCollectionEditor
 			}
 			else
 			{
-				font.editorData = EditorGUILayout.ObjectField("Editor Data", font.editorData, typeof(blaze2dFont), false) as blaze2dFont;
-				font.data = EditorGUILayout.ObjectField("Font Data", font.data, typeof(blaze2dFontData), false) as blaze2dFontData;
+				font.editorData = EditorGUILayout.ObjectField("Editor Data", font.editorData, typeof(tk2dFont), false) as tk2dFont;
+				font.data = EditorGUILayout.ObjectField("Font Data", font.data, typeof(tk2dFontData), false) as tk2dFontData;
 			}
 
 			if (font.data && font.editorData)
@@ -196,7 +196,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 						for (int j = 0; j < SpriteCollection.platforms.Count; ++j)
 						{
 							if (!SpriteCollection.platforms[j].Valid) continue;
-							blaze2dSpriteCollection data = SpriteCollection.platforms[j].spriteCollection;
+							tk2dSpriteCollection data = SpriteCollection.platforms[j].spriteCollection;
 							materials.Add( data.altMaterials[font.materialId] );
 						}
 

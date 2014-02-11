@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class tk2dTileMapSceneGUI
 {
 	ITileMapEditorHost host;
-	blaze2dTileMap tileMap;
-	blaze2dTileMapData tileMapData;
+	tk2dTileMap tileMap;
+	tk2dTileMapData tileMapData;
 	tk2dTileMapEditorData editorData;
 	tk2dScratchpadGUI scratchpadGUI;
 
@@ -37,7 +37,7 @@ public class tk2dTileMapSceneGUI
 	// Data from one sprite in the collection
 	Vector2 curSpriteDefTexelSize = Vector2.one;
 	
-	public tk2dTileMapSceneGUI(ITileMapEditorHost host, blaze2dTileMap tileMap, tk2dTileMapEditorData editorData)
+	public tk2dTileMapSceneGUI(ITileMapEditorHost host, tk2dTileMap tileMap, tk2dTileMapEditorData editorData)
 	{
 		this.host = host;
 		this.tileMap = tileMap;
@@ -69,7 +69,7 @@ public class tk2dTileMapSceneGUI
 	{
 		switch (tileMap.data.tileType)
 		{
-		case blaze2dTileMapData.TileType.Rectangular:
+		case tk2dTileMapData.TileType.Rectangular:
 			{
 				float xOffsetMult, yOffsetMult;
 				tileMap.data.GetTileOffset(out xOffsetMult, out yOffsetMult);
@@ -88,7 +88,7 @@ public class tk2dTileMapSceneGUI
 				Handles.DrawSolidRectangleWithOutline(v, tileSelectionFillColor, tileSelectionOutlineColor);
 			}	
 			break;
-		case blaze2dTileMapData.TileType.Isometric:
+		case tk2dTileMapData.TileType.Isometric:
 			{
 				float xOffsetMult, yOffsetMult;
 				tileMap.data.GetTileOffset(out xOffsetMult, out yOffsetMult);
@@ -211,7 +211,7 @@ public class tk2dTileMapSceneGUI
 			return;
 
 		// Draw cursor
-		if (tileMap.data.tileType == blaze2dTileMapData.TileType.Rectangular) {
+		if (tileMap.data.tileType == tk2dTileMapData.TileType.Rectangular) {
 			if (scratchpadGUI.workingHere) {
 				DrawScratchpadRectCursor(x1, y1, x2, y2);
 			} else {
@@ -461,8 +461,8 @@ public class tk2dTileMapSceneGUI
 		UpdateScratchpadTileSizes();
 
 		// Scratchpad tilesort
-		scratchpadGUI.SetTileSort(tileMapData.sortMethod == blaze2dTileMapData.SortMethod.BottomLeft || tileMapData.sortMethod == blaze2dTileMapData.SortMethod.TopLeft,
-			tileMapData.sortMethod == blaze2dTileMapData.SortMethod.BottomLeft || tileMapData.sortMethod == blaze2dTileMapData.SortMethod.BottomRight);
+		scratchpadGUI.SetTileSort(tileMapData.sortMethod == tk2dTileMapData.SortMethod.BottomLeft || tileMapData.sortMethod == tk2dTileMapData.SortMethod.TopLeft,
+			tileMapData.sortMethod == tk2dTileMapData.SortMethod.BottomLeft || tileMapData.sortMethod == tk2dTileMapData.SortMethod.BottomRight);
 
 		// Spritedef vars
 		if (tileMap != null) {
@@ -899,7 +899,7 @@ public class tk2dTileMapSceneGUI
 		int rectY2 = Mathf.Max(cursorY, cursorY0);
 
 		int xoffset = 0;
-		if (tileMap.data.tileType == blaze2dTileMapData.TileType.Isometric && (cursorY & 1) == 1) 
+		if (tileMap.data.tileType == tk2dTileMapData.TileType.Isometric && (cursorY & 1) == 1) 
 			xoffset = 1;
 
 		workBrush.tiles = new tk2dSparseTile[0]; 
@@ -938,15 +938,15 @@ public class tk2dTileMapSceneGUI
 						int tmp = tx;
 						tx = ty;
 						ty = -tmp;
-						blaze2dRuntime.TileMap.BuilderUtil.SetRawTileFlag(ref spriteId, blaze2dTileFlags.Rot90, true);
+						tk2dRuntime.TileMap.BuilderUtil.SetRawTileFlag(ref spriteId, tk2dTileFlags.Rot90, true);
 					}
 					if (flipH) {
 						tx = -tx;
-						blaze2dRuntime.TileMap.BuilderUtil.InvertRawTileFlag(ref spriteId, blaze2dTileFlags.FlipX);
+						tk2dRuntime.TileMap.BuilderUtil.InvertRawTileFlag(ref spriteId, tk2dTileFlags.FlipX);
 					}
 					if (flipV) {
 						ty = -ty;
-						blaze2dRuntime.TileMap.BuilderUtil.InvertRawTileFlag(ref spriteId, blaze2dTileFlags.FlipY);
+						tk2dRuntime.TileMap.BuilderUtil.InvertRawTileFlag(ref spriteId, tk2dTileFlags.FlipY);
 					}
 					
 					int thisRowXOffset = ((ty & 1) == 1) ? xoffset : 0;
@@ -990,11 +990,11 @@ public class tk2dTileMapSceneGUI
 							}
 						}
 						if (rot90)
-							blaze2dRuntime.TileMap.BuilderUtil.SetRawTileFlag(ref spriteId, blaze2dTileFlags.Rot90, true);
+							tk2dRuntime.TileMap.BuilderUtil.SetRawTileFlag(ref spriteId, tk2dTileFlags.Rot90, true);
 						if (flipH)
-							blaze2dRuntime.TileMap.BuilderUtil.InvertRawTileFlag(ref spriteId, blaze2dTileFlags.FlipX);
+							tk2dRuntime.TileMap.BuilderUtil.InvertRawTileFlag(ref spriteId, tk2dTileFlags.FlipX);
 						if (flipV)
-							blaze2dRuntime.TileMap.BuilderUtil.InvertRawTileFlag(ref spriteId, blaze2dTileFlags.FlipY);
+							tk2dRuntime.TileMap.BuilderUtil.InvertRawTileFlag(ref spriteId, tk2dTileFlags.FlipY);
 						workBrush.tiles[idx++] = new tk2dSparseTile(
 							rectX1 + x + thisRowXOffset, rectY1 + y, editorData.layer, spriteId);
 					}
@@ -1015,11 +1015,11 @@ public class tk2dTileMapSceneGUI
 					int spriteId = srcTiles[rng.Next(srcTiles.Length)].spriteId;
 
 					if (rot90)
-						blaze2dRuntime.TileMap.BuilderUtil.SetRawTileFlag(ref spriteId, blaze2dTileFlags.Rot90, true);
+						tk2dRuntime.TileMap.BuilderUtil.SetRawTileFlag(ref spriteId, tk2dTileFlags.Rot90, true);
 					if (flipH)
-						blaze2dRuntime.TileMap.BuilderUtil.InvertRawTileFlag(ref spriteId, blaze2dTileFlags.FlipX);
+						tk2dRuntime.TileMap.BuilderUtil.InvertRawTileFlag(ref spriteId, tk2dTileFlags.FlipX);
 					if (flipV)
-						blaze2dRuntime.TileMap.BuilderUtil.InvertRawTileFlag(ref spriteId, blaze2dTileFlags.FlipY);
+						tk2dRuntime.TileMap.BuilderUtil.InvertRawTileFlag(ref spriteId, tk2dTileFlags.FlipY);
 
 					workBrush.tiles[idx++] = new tk2dSparseTile(
 						rectX1 + x + thisRowXOffset, rectY1 + y, editorData.layer, spriteId);
@@ -1035,8 +1035,8 @@ public class tk2dTileMapSceneGUI
 			workBrush.ClipTiles(0, 0, tileMap.width - 1, tileMap.height - 1);
 		}
 
-		workBrush.SortTiles(tileMapData.sortMethod == blaze2dTileMapData.SortMethod.BottomLeft || tileMapData.sortMethod == blaze2dTileMapData.SortMethod.TopLeft,
-			tileMapData.sortMethod == blaze2dTileMapData.SortMethod.BottomLeft || tileMapData.sortMethod == blaze2dTileMapData.SortMethod.BottomRight);
+		workBrush.SortTiles(tileMapData.sortMethod == tk2dTileMapData.SortMethod.BottomLeft || tileMapData.sortMethod == tk2dTileMapData.SortMethod.TopLeft,
+			tileMapData.sortMethod == tk2dTileMapData.SortMethod.BottomLeft || tileMapData.sortMethod == tk2dTileMapData.SortMethod.BottomRight);
 
 		workBrush.UpdateBrushHash();
 	}
@@ -1091,7 +1091,7 @@ public class tk2dTileMapSceneGUI
 			endLayer = 1;
 		}
 		
-		if (tileMap.data.tileType == blaze2dTileMapData.TileType.Rectangular)
+		if (tileMap.data.tileType == tk2dTileMapData.TileType.Rectangular)
 		{
 			for (int layer = startLayer; layer < endLayer; ++layer)
 			{
@@ -1111,7 +1111,7 @@ public class tk2dTileMapSceneGUI
 				}
 			}
 		}
-		else if (tileMap.data.tileType == blaze2dTileMapData.TileType.Isometric)
+		else if (tileMap.data.tileType == tk2dTileMapData.TileType.Isometric)
 		{
 			int xOffset = 0;
 			int yOffset = 0;

@@ -5,7 +5,7 @@ using System.Linq;
 
 public class tk2dSpriteAnimationEditorPopup : EditorWindow 
 {
-	blaze2dSpriteAnimation anim;
+	tk2dSpriteAnimation anim;
 	tk2dEditor.SpriteAnimationEditor.ClipEditor clipEditor = null;
 
 	tk2dEditor.SpriteAnimationEditor.AnimOperator[] animOps = new tk2dEditor.SpriteAnimationEditor.AnimOperator[0];
@@ -90,13 +90,13 @@ public class tk2dSpriteAnimationEditorPopup : EditorWindow
 		tk2dEditorSkin.Done();
 	}
 
-	public void ClipNameChanged(blaze2dSpriteAnimationClip clip, int param)
+	public void ClipNameChanged(tk2dSpriteAnimationClip clip, int param)
 	{
 		FilterClips();
 		Repaint();
 	}
 
-	public void ClipDeleted(blaze2dSpriteAnimationClip clip, int param)
+	public void ClipDeleted(tk2dSpriteAnimationClip clip, int param)
 	{
 		clip.Clear();
 		selectedClip = null;
@@ -104,7 +104,7 @@ public class tk2dSpriteAnimationEditorPopup : EditorWindow
 		Repaint();
 	}
 
-	public void ClipSelectionChanged(blaze2dSpriteAnimationClip clip, int direction)
+	public void ClipSelectionChanged(tk2dSpriteAnimationClip clip, int direction)
 	{
 		int selectedId = -1;
 		for (int i = 0; i < filteredClips.Count; ++i)
@@ -126,7 +126,7 @@ public class tk2dSpriteAnimationEditorPopup : EditorWindow
 		Repaint();
 	}
 
-	public void SetSpriteAnimation(blaze2dSpriteAnimation anim)
+	public void SetSpriteAnimation(tk2dSpriteAnimation anim)
 	{
 		if (anim != this.anim)
 		{
@@ -149,9 +149,9 @@ public class tk2dSpriteAnimationEditorPopup : EditorWindow
 		allClips.Clear();
 		if (anim.clips != null)
 		{
-			foreach (blaze2dSpriteAnimationClip clip in anim.clips)
+			foreach (tk2dSpriteAnimationClip clip in anim.clips)
 			{
-				blaze2dSpriteAnimationClip c = new blaze2dSpriteAnimationClip();
+				tk2dSpriteAnimationClip c = new tk2dSpriteAnimationClip();
 				c.CopyFrom(clip);
 				allClips.Add(c);
 			}
@@ -162,12 +162,12 @@ public class tk2dSpriteAnimationEditorPopup : EditorWindow
 	int leftBarWidth { get { return tk2dPreferences.inst.animListWidth; } set { tk2dPreferences.inst.animListWidth = Mathf.Max(value, minLeftBarWidth); } }
 
 	string searchFilter = "";
-	List<blaze2dSpriteAnimationClip> allClips = new List<blaze2dSpriteAnimationClip>();
-	List<blaze2dSpriteAnimationClip> filteredClips = new List<blaze2dSpriteAnimationClip>();
-	blaze2dSpriteAnimationClip _selectedClip;
+	List<tk2dSpriteAnimationClip> allClips = new List<tk2dSpriteAnimationClip>();
+	List<tk2dSpriteAnimationClip> filteredClips = new List<tk2dSpriteAnimationClip>();
+	tk2dSpriteAnimationClip _selectedClip;
 	int selectedClipId = -1;
 
-	blaze2dSpriteAnimationClip selectedClip
+	tk2dSpriteAnimationClip selectedClip
 	{
 		get { return _selectedClip; }
 		set 
@@ -197,7 +197,7 @@ public class tk2dSpriteAnimationEditorPopup : EditorWindow
 	
 	void FilterClips()
 	{
-		filteredClips = new List<blaze2dSpriteAnimationClip>(allClips.Count);
+		filteredClips = new List<tk2dSpriteAnimationClip>(allClips.Count);
 		if (searchFilter.Length == 0) {
 			filteredClips = (from clip in allClips where !clip.Empty select clip)
 							.OrderBy( a => a.name, new tk2dEditor.Shared.NaturalComparer() )
@@ -218,7 +218,7 @@ public class tk2dSpriteAnimationEditorPopup : EditorWindow
 		string dupNameString = "";
 		HashSet<string> duplicateNames = new HashSet<string>();
 		HashSet<string> names = new HashSet<string>();
-		foreach (blaze2dSpriteAnimationClip clip in allClips)
+		foreach (tk2dSpriteAnimationClip clip in allClips)
 		{
 			if (clip.Empty) continue;
 			if (names.Contains(clip.name)) { duplicateNames.Add(clip.name); dupNameString += clip.name + " "; continue; }
@@ -238,7 +238,7 @@ public class tk2dSpriteAnimationEditorPopup : EditorWindow
 			{
 				// auto rename
 				HashSet<string> firstOccurances = new HashSet<string>();
-				foreach (blaze2dSpriteAnimationClip clip in allClips)
+				foreach (tk2dSpriteAnimationClip clip in allClips)
 				{
 					if (clip.Empty) continue;
 					string name = clip.name;
@@ -269,10 +269,10 @@ public class tk2dSpriteAnimationEditorPopup : EditorWindow
 			}
 		}
 
-		anim.clips = new blaze2dSpriteAnimationClip[allClips.Count];
+		anim.clips = new tk2dSpriteAnimationClip[allClips.Count];
 		for (int i = 0; i < allClips.Count; ++i)
 		{
-			anim.clips[i] = new blaze2dSpriteAnimationClip();
+			anim.clips[i] = new tk2dSpriteAnimationClip();
 			anim.clips[i].CopyFrom(allClips[i]);
 		}
 		EditorUtility.SetDirty(anim);
@@ -294,7 +294,7 @@ public class tk2dSpriteAnimationEditorPopup : EditorWindow
 		listScroll = GUILayout.BeginScrollView(listScroll, GUILayout.Width(leftBarWidth));
 		GUILayout.BeginVertical(tk2dEditorSkin.SC_ListBoxBG, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
 
-		foreach (blaze2dSpriteAnimationClip clip in filteredClips)
+		foreach (tk2dSpriteAnimationClip clip in filteredClips)
 		{
 			// 0 length name signifies inactive clip
 			if (clip.name.Length == 0) continue;
@@ -335,26 +335,26 @@ public class tk2dSpriteAnimationEditorPopup : EditorWindow
 		}
 	}
 
-	blaze2dSpriteAnimationClip FindValidClip()
+	tk2dSpriteAnimationClip FindValidClip()
 	{
 		if (selectedClip != null && !selectedClip.Empty)
 			return selectedClip;
-		foreach (blaze2dSpriteAnimationClip c in allClips)
+		foreach (tk2dSpriteAnimationClip c in allClips)
 			if (!c.Empty) return c;
 		return null;
 	}
 
-	blaze2dSpriteAnimationClip CreateNewClip()
+	tk2dSpriteAnimationClip CreateNewClip()
 	{
 		// Find a unique name
 		string uniqueName = tk2dEditor.SpriteAnimationEditor.AnimOperatorUtil.UniqueClipName(allClips, "New Clip");
 		
-		blaze2dSpriteAnimationClip clip = new blaze2dSpriteAnimationClip();
+		tk2dSpriteAnimationClip clip = new tk2dSpriteAnimationClip();
 		clip.name = uniqueName;
 
-		blaze2dSpriteAnimationClip source = FindValidClip();
-		clip.frames = new blaze2dSpriteAnimationFrame[1];
-		clip.frames[0] = new blaze2dSpriteAnimationFrame();
+		tk2dSpriteAnimationClip source = FindValidClip();
+		clip.frames = new tk2dSpriteAnimationFrame[1];
+		clip.frames[0] = new tk2dSpriteAnimationFrame();
 		if (source != null)
 		{
 			clip.frames[0].CopyFrom(source.frames[0]);
@@ -408,7 +408,7 @@ public class tk2dSpriteAnimationEditorPopup : EditorWindow
 					else if (menuTargets[selected] != null)
 					{
 						tk2dEditor.SpriteAnimationEditor.AnimOperator animOp = menuTargets[selected];
-						blaze2dSpriteAnimationClip newSelectedClip = animOp.OnAnimMenu(options[selected], allClips, selectedClip);
+						tk2dSpriteAnimationClip newSelectedClip = animOp.OnAnimMenu(options[selected], allClips, selectedClip);
 						if (selectedClip != newSelectedClip)
 						{
 							selectedClip = newSelectedClip;

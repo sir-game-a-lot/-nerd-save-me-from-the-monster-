@@ -3,7 +3,7 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.IO;
 
-[CustomEditor(typeof(blaze2dSpriteCollection))]
+[CustomEditor(typeof(tk2dSpriteCollection))]
 public class tk2dSpriteCollectionEditor : Editor
 {
 	const string defaultSpriteCollectionName = "SpriteCollection";
@@ -16,7 +16,7 @@ public class tk2dSpriteCollectionEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        blaze2dSpriteCollection gen = (blaze2dSpriteCollection)target;
+        tk2dSpriteCollection gen = (tk2dSpriteCollection)target;
 		GUILayout.BeginVertical();
 		GUILayout.Space(8);
 
@@ -76,12 +76,12 @@ public class tk2dSpriteCollectionEditor : Editor
     	}
     }
 
-    public static blaze2dSpriteCollection CreateSpriteCollection(string basePath, string name)
+    public static tk2dSpriteCollection CreateSpriteCollection(string basePath, string name)
     {
     	string path = AssetDatabase.GenerateUniqueAssetPath( basePath + "/" + name + ".prefab" );
         GameObject go = new GameObject();
-        blaze2dSpriteCollection spriteCollection = go.AddComponent<blaze2dSpriteCollection>();
-        spriteCollection.version = blaze2dSpriteCollection.CURRENT_VERSION;
+        tk2dSpriteCollection spriteCollection = go.AddComponent<tk2dSpriteCollection>();
+        spriteCollection.version = tk2dSpriteCollection.CURRENT_VERSION;
         tk2dEditorUtility.SetGameObjectActive(go, false);
 
 		Object p = PrefabUtility.CreateEmptyPrefab(path);
@@ -89,7 +89,7 @@ public class tk2dSpriteCollectionEditor : Editor
 		
         GameObject.DestroyImmediate(go);
 
-        return AssetDatabase.LoadAssetAtPath(path, typeof(blaze2dSpriteCollection)) as blaze2dSpriteCollection;
+        return AssetDatabase.LoadAssetAtPath(path, typeof(tk2dSpriteCollection)) as tk2dSpriteCollection;
 	}
 
     [MenuItem("CONTEXT/tk2dSpriteCollection/View data")]
@@ -105,10 +105,10 @@ public class tk2dSpriteCollectionEditor : Editor
         if (path.Length != 0)
         {
             GameObject go = new GameObject();
-            blaze2dSpriteCollection spriteCollection = go.AddComponent<blaze2dSpriteCollection>();
-            spriteCollection.version = blaze2dSpriteCollection.CURRENT_VERSION;
-            if (blaze2dCamera.Editor__Inst != null) {
-            	spriteCollection.sizeDef.CopyFrom( blaze2dSpriteCollectionSize.ForTk2dCamera( blaze2dCamera.Editor__Inst ) );
+            tk2dSpriteCollection spriteCollection = go.AddComponent<tk2dSpriteCollection>();
+            spriteCollection.version = tk2dSpriteCollection.CURRENT_VERSION;
+            if (tk2dCamera.Editor__Inst != null) {
+            	spriteCollection.sizeDef.CopyFrom( tk2dSpriteCollectionSize.ForTk2dCamera( tk2dCamera.Editor__Inst ) );
             }
 	        tk2dEditorUtility.SetGameObjectActive(go, false);
 

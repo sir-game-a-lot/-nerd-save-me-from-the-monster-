@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 
-[CustomEditor(typeof(blaze2dSpriteAnimation))]
+[CustomEditor(typeof(tk2dSpriteAnimation))]
 class tk2dSpriteAnimationEditor : Editor
 {
     public static bool viewData = false;
@@ -13,7 +13,7 @@ class tk2dSpriteAnimationEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        blaze2dSpriteAnimation anim = (blaze2dSpriteAnimation)target;
+        tk2dSpriteAnimation anim = (tk2dSpriteAnimation)target;
         
         GUILayout.Space(8);
         if (anim != null)
@@ -50,14 +50,14 @@ class tk2dSpriteAnimationEditor : Editor
         if (path.Length != 0)
         {
             GameObject go = new GameObject();
-            go.AddComponent<blaze2dSpriteAnimation>();
+            go.AddComponent<tk2dSpriteAnimation>();
 	        tk2dEditorUtility.SetGameObjectActive(go, false);
 
 			Object p = PrefabUtility.CreateEmptyPrefab(path);
             PrefabUtility.ReplacePrefab(go, p, ReplacePrefabOptions.ConnectToPrefab);
             GameObject.DestroyImmediate(go);
 			
-			tk2dEditorUtility.GetOrCreateIndex().AddSpriteAnimation(AssetDatabase.LoadAssetAtPath(path, typeof(blaze2dSpriteAnimation)) as blaze2dSpriteAnimation);
+			tk2dEditorUtility.GetOrCreateIndex().AddSpriteAnimation(AssetDatabase.LoadAssetAtPath(path, typeof(tk2dSpriteAnimation)) as tk2dSpriteAnimation);
 			tk2dEditorUtility.CommitIndex();
 
 			// Select object

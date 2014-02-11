@@ -225,14 +225,14 @@ namespace tk2dEditor.Font
 			return fontInfo;
 		}
 		
-		public static bool BuildFont(Info fontInfo, blaze2dFontData target, float scale, int charPadX, bool dupeCaps, bool flipTextureY, Texture2D gradientTexture, int gradientCount)
+		public static bool BuildFont(Info fontInfo, tk2dFontData target, float scale, int charPadX, bool dupeCaps, bool flipTextureY, Texture2D gradientTexture, int gradientCount)
 		{
 			float texWidth = fontInfo.scaleW;
 	        float texHeight = fontInfo.scaleH;
 	        float lineHeight = fontInfo.lineHeight;
 	        float texScale = fontInfo.textureScale;
 	
-	        target.version = blaze2dFontData.CURRENT_VERSION; 
+	        target.version = tk2dFontData.CURRENT_VERSION; 
 	        target.lineHeight = lineHeight * scale;
 	        target.texelSize = new Vector2(scale, scale);
 			target.isPacked = fontInfo.isPacked;
@@ -256,15 +256,15 @@ namespace tk2dEditor.Font
 			// 2048 is a conservative lower floor
 			bool useDictionary = maxCharId > 2048;
 			
-			Dictionary<int, blaze2dFontChar> charDict = (useDictionary)?new Dictionary<int, blaze2dFontChar>():null;
-			blaze2dFontChar[] chars = (useDictionary)?null:new blaze2dFontChar[maxCharId + 1];
+			Dictionary<int, tk2dFontChar> charDict = (useDictionary)?new Dictionary<int, tk2dFontChar>():null;
+			tk2dFontChar[] chars = (useDictionary)?null:new tk2dFontChar[maxCharId + 1];
 			int minChar = 0x7fffffff;
 			int maxCharWithinBounds = 0;
 			int numLocalChars = 0;
 			float largestWidth = 0.0f;
 			foreach (var theChar in fontInfo.chars)
 			{
-				blaze2dFontChar thisChar = new blaze2dFontChar();
+				tk2dFontChar thisChar = new tk2dFontChar();
 				int id = theChar.id;
 	            int x = theChar.x;
 	            int y = theChar.y;
@@ -400,7 +400,7 @@ namespace tk2dEditor.Font
 	        }
 			
 			// share null char, same pointer
-			var nullChar = new blaze2dFontChar();
+			var nullChar = new tk2dFontChar();
 			nullChar.gradientUv = new Vector2[4]; // this would be null otherwise
 			nullChar.channel = 0;
 			
@@ -420,7 +420,7 @@ namespace tk2dEditor.Font
 			}
 			else
 			{
-				target.chars = new blaze2dFontChar[maxCharId + 1];
+				target.chars = new tk2dFontChar[maxCharId + 1];
 				for (int i = 0; i <= maxCharId; ++i)
 				{
 					target.chars[i] = chars[i];

@@ -25,9 +25,9 @@ public static class tk2dEditorUtility
 
 	static void OnUndoRedo() {
 		foreach (GameObject go in Selection.gameObjects) {
-			blaze2dSpriteFromTexture sft = go.GetComponent<blaze2dSpriteFromTexture>();
-			blaze2dBaseSprite spr = go.GetComponent<blaze2dBaseSprite>();
-			blaze2dTextMesh tm = go.GetComponent<blaze2dTextMesh>();
+			tk2dSpriteFromTexture sft = go.GetComponent<tk2dSpriteFromTexture>();
+			tk2dBaseSprite spr = go.GetComponent<tk2dBaseSprite>();
+			tk2dTextMesh tm = go.GetComponent<tk2dTextMesh>();
 			if (sft != null) {
 				sft.ForceBuild();
 			}
@@ -199,14 +199,14 @@ public static class tk2dEditorUtility
 			GameObject iterGo = AssetDatabase.LoadAssetAtPath( prefabPath, typeof(GameObject) ) as GameObject;
 			if (!iterGo) continue;
 
-			blaze2dSpriteCollection spriteCollection = iterGo.GetComponent<blaze2dSpriteCollection>();
-			blaze2dSpriteCollectionData spriteCollectionData = iterGo.GetComponent<blaze2dSpriteCollectionData>();
-			blaze2dFont font = iterGo.GetComponent<blaze2dFont>();
-			blaze2dSpriteAnimation anim = iterGo.GetComponent<blaze2dSpriteAnimation>();
+			tk2dSpriteCollection spriteCollection = iterGo.GetComponent<tk2dSpriteCollection>();
+			tk2dSpriteCollectionData spriteCollectionData = iterGo.GetComponent<tk2dSpriteCollectionData>();
+			tk2dFont font = iterGo.GetComponent<tk2dFont>();
+			tk2dSpriteAnimation anim = iterGo.GetComponent<tk2dSpriteAnimation>();
 			
 			if (spriteCollection) 
 			{
-				blaze2dSpriteCollectionData thisSpriteCollectionData = spriteCollection.spriteCollection;
+				tk2dSpriteCollectionData thisSpriteCollectionData = spriteCollection.spriteCollection;
 				if (thisSpriteCollectionData)
 				{
 					if (thisSpriteCollectionData.version < 1)
@@ -268,7 +268,7 @@ public static class tk2dEditorUtility
 			int count = 1;
 			foreach (var scPath in rebuildSpriteCollectionPaths)
 			{
-				blaze2dSpriteCollection sc = AssetDatabase.LoadAssetAtPath(scPath, typeof(blaze2dSpriteCollection)) as blaze2dSpriteCollection;
+				tk2dSpriteCollection sc = AssetDatabase.LoadAssetAtPath(scPath, typeof(tk2dSpriteCollection)) as tk2dSpriteCollection;
 				EditorUtility.DisplayProgressBar("Rebuilding Sprite Collections", "Rebuilding Sprite Collection: " + sc.name, (float)count / (float)(rebuildSpriteCollectionPaths.Count));
 
 				tk2dSpriteCollectionBuilder.Rebuild(sc);

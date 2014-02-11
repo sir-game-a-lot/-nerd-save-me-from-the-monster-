@@ -3,20 +3,20 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dClippedSprite))]
+[CustomEditor(typeof(tk2dClippedSprite))]
 class tk2dClippedSpriteEditor : tk2dSpriteEditor
 {
-	blaze2dClippedSprite[] targetClippedSprites = new blaze2dClippedSprite[0];
+	tk2dClippedSprite[] targetClippedSprites = new tk2dClippedSprite[0];
 
 	new void OnEnable() {
 		base.OnEnable();
-		targetClippedSprites = GetTargetsOfType<blaze2dClippedSprite>( targets );
+		targetClippedSprites = GetTargetsOfType<tk2dClippedSprite>( targets );
 	}
 
 	private static bool showSceneClipControl = false;
 	public override void OnInspectorGUI()
     {
-        blaze2dClippedSprite sprite = (blaze2dClippedSprite)target;
+        tk2dClippedSprite sprite = (tk2dClippedSprite)target;
 		base.OnInspectorGUI();
 
 		if (sprite.CurrentSprite == null) {
@@ -36,7 +36,7 @@ class tk2dClippedSpriteEditor : tk2dSpriteEditor
 		Rect newClipRect = EditorGUILayout.RectField("Clip Region", sprite.ClipRect);
 		if (newClipRect != sprite.ClipRect) {
 			tk2dUndo.RecordObjects(targetClippedSprites, "Clipped Sprite Rect");
-			foreach (blaze2dClippedSprite spr in targetClippedSprites) {
+			foreach (tk2dClippedSprite spr in targetClippedSprites) {
 				spr.ClipRect = newClipRect;
 			}
 		}
@@ -46,7 +46,7 @@ class tk2dClippedSpriteEditor : tk2dSpriteEditor
 		EditorGUI.indentLevel--;
 
 		if (GUI.changed) {
-			foreach (blaze2dClippedSprite spr in targetClippedSprites) {
+			foreach (tk2dClippedSprite spr in targetClippedSprites) {
 				EditorUtility.SetDirty(spr);
 			}
 		}
@@ -55,7 +55,7 @@ class tk2dClippedSpriteEditor : tk2dSpriteEditor
 	public new void OnSceneGUI() {
 		if (tk2dPreferences.inst.enableSpriteHandles == false) return;
 
-		blaze2dClippedSprite spr = (blaze2dClippedSprite)target;
+		tk2dClippedSprite spr = (tk2dClippedSprite)target;
 		var sprite = spr.CurrentSprite;
 		if (sprite == null) {
 			return;
@@ -134,7 +134,7 @@ class tk2dClippedSpriteEditor : tk2dSpriteEditor
     {
 		tk2dSpriteGuiUtility.GetSpriteCollectionAndCreate( (sprColl) => {
 			GameObject go = tk2dEditorUtility.CreateGameObjectInScene("Clipped Sprite");
-			blaze2dClippedSprite sprite = go.AddComponent<blaze2dClippedSprite>();
+			tk2dClippedSprite sprite = go.AddComponent<tk2dClippedSprite>();
 			sprite.SetSprite(sprColl, sprColl.FirstValidDefinitionIndex);
 			sprite.Build();
 

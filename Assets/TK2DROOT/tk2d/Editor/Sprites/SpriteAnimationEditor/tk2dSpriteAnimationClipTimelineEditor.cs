@@ -26,7 +26,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 			public Type type = Type.None;
 			public int activeFrame = -1;
 			public int insertMarker = -1;
-			public List<blaze2dSpriteAnimationFrame> backupFrames = new List<blaze2dSpriteAnimationFrame>();
+			public List<tk2dSpriteAnimationFrame> backupFrames = new List<tk2dSpriteAnimationFrame>();
 
 			public int selectedTrigger { get { return _selectedTrigger; } set { ResetSelection(); _selectedTrigger = value; } }
 			public int movingTrigger = -1;
@@ -117,7 +117,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 			state.Reset();
 		}
 
-		public void Draw(int windowWidth, blaze2dSpriteAnimationClip clip, List<ClipEditor.FrameGroup> frameGroups, float clipTimeMarker)
+		public void Draw(int windowWidth, tk2dSpriteAnimationClip clip, List<ClipEditor.FrameGroup> frameGroups, float clipTimeMarker)
 		{
 			int space = clipLeftHeaderSpace;
 
@@ -173,7 +173,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 		}
 
 		// Internal draw
-		void DrawAxis(blaze2dSpriteAnimationClip clip, Rect r, int widthPerTick)
+		void DrawAxis(tk2dSpriteAnimationClip clip, Rect r, int widthPerTick)
 		{
 			if (Event.current.type == EventType.Repaint)
 			{
@@ -191,9 +191,9 @@ namespace tk2dEditor.SpriteAnimationEditor
 			}
 		}		
 
-		void DrawFrameGroups(int controlId, Rect frameGroupRect, blaze2dSpriteAnimationClip clip, List<ClipEditor.FrameGroup> frameGroups, float clipTimeMarker)
+		void DrawFrameGroups(int controlId, Rect frameGroupRect, tk2dSpriteAnimationClip clip, List<ClipEditor.FrameGroup> frameGroups, float clipTimeMarker)
 		{
-			bool singleFrameMode = clip.wrapMode == blaze2dSpriteAnimationClip.WrapMode.Single;
+			bool singleFrameMode = clip.wrapMode == tk2dSpriteAnimationClip.WrapMode.Single;
 
 			// Initialize startframe in framegroups
 			int numFrames = 0;
@@ -309,7 +309,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 									}
 									else
 									{
-										state.backupFrames = new List<blaze2dSpriteAnimationFrame>(frameGroups[frameGroup].frames); // make a backup of frames for triggers
+										state.backupFrames = new List<tk2dSpriteAnimationFrame>(frameGroups[frameGroup].frames); // make a backup of frames for triggers
 										state.activeFrame = frameGroup; 
 										state.insertMarker = state.activeFrame;
 									}
@@ -343,7 +343,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 										bool changed = frameCount != fg.frames.Count;
 										if (changed)
 										{
-											fg.frames = new List<blaze2dSpriteAnimationFrame>(state.backupFrames);
+											fg.frames = new List<tk2dSpriteAnimationFrame>(state.backupFrames);
 											fg.SetFrameCount(frameCount);
 											Repaint();
 											ClipEditor.RecalculateFrames(clip, frameGroups);
@@ -388,7 +388,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 			}
 		}
 
-		void DrawFrameGroupsOverlay(int controlId, Rect frameGroupRect, blaze2dSpriteAnimationClip clip, List<ClipEditor.FrameGroup> frameGroups, float clipTimeMarker)
+		void DrawFrameGroupsOverlay(int controlId, Rect frameGroupRect, tk2dSpriteAnimationClip clip, List<ClipEditor.FrameGroup> frameGroups, float clipTimeMarker)
 		{
 			// Draw moving frame if active
 			if (GUIUtility.hotControl == controlId && state.type == State.Type.Move && state.activeFrame != -1)
@@ -401,7 +401,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 			}
 		}
 
-		void DrawTriggers(int controlId, Rect triggerRect, blaze2dSpriteAnimationClip clip)
+		void DrawTriggers(int controlId, Rect triggerRect, tk2dSpriteAnimationClip clip)
 		{
 			// Draw triggers
 			GUI.color = (state.movingTrigger != -1) ? new Color(1,1,1,0.25f) : Color.white;
@@ -495,8 +495,8 @@ namespace tk2dEditor.SpriteAnimationEditor
 					case EventType.MouseUp:
 						if (state.movingTrigger != -1 && state.movingTrigger != state.selectedTrigger)
 						{
-							blaze2dSpriteAnimationFrame source = clip.frames[state.selectedTrigger];
-							blaze2dSpriteAnimationFrame dest = clip.frames[state.movingTrigger];
+							tk2dSpriteAnimationFrame source = clip.frames[state.selectedTrigger];
+							tk2dSpriteAnimationFrame dest = clip.frames[state.movingTrigger];
 							dest.CopyTriggerFrom(source);
 							source.ClearTrigger();
 							state.selectedTrigger = state.movingTrigger;
@@ -509,18 +509,18 @@ namespace tk2dEditor.SpriteAnimationEditor
 			}			
 		}
 
-		void DrawFrameGroup(Rect r, blaze2dSpriteAnimationClip clip, ClipEditor.FrameGroup fg)
+		void DrawFrameGroup(Rect r, tk2dSpriteAnimationClip clip, ClipEditor.FrameGroup fg)
 		{
 			DrawFrameGroupEx(r, clip, fg, false, false, false);
 		}
 
-		void DrawFrameGroupEx(Rect r, blaze2dSpriteAnimationClip clip, ClipEditor.FrameGroup fg, bool highlighted, bool showTime, bool playHighlight)
+		void DrawFrameGroupEx(Rect r, tk2dSpriteAnimationClip clip, ClipEditor.FrameGroup fg, bool highlighted, bool showTime, bool playHighlight)
 		{
 			if (highlighted && playHighlight) GUI.color = new Color(1.0f, 0.8f, 1.0f, 1.0f);
 			else if (playHighlight) GUI.color = new Color(1.0f, 0.8f, 0.8f, 1.0f);
 			else if (highlighted) GUI.color = new Color(0.8f, 0.8f, 1.0f, 1.0f);
 
-			blaze2dSpriteCollectionData sc = fg.spriteCollection;
+			tk2dSpriteCollectionData sc = fg.spriteCollection;
 			int spriteId = fg.spriteId;
 			string name = sc.inst.spriteDefinitions[spriteId].name;
 			string label = name;

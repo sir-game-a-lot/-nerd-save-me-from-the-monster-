@@ -41,7 +41,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 			new Color32(96, 0, 0, 255),
 		};
 		
-		blaze2dSpriteCollectionDefinition.ColliderColor currentColliderColor = blaze2dSpriteCollectionDefinition.ColliderColor.Default;
+		tk2dSpriteCollectionDefinition.ColliderColor currentColliderColor = tk2dSpriteCollectionDefinition.ColliderColor.Default;
 		Color handleInactiveColor { get { return _handleInactiveColors[(int)currentColliderColor]; } }
 		Color handleActiveColor { get { return _handleActiveColors[(int)currentColliderColor]; } }
 
@@ -74,7 +74,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 			return p1 + (p2 - p1) * u;
 		}
 		
-		void DrawPolygonColliderEditor(Rect r, ref blaze2dSpriteColliderIsland[] islands, Texture2D tex, bool forceClosed)
+		void DrawPolygonColliderEditor(Rect r, ref tk2dSpriteColliderIsland[] islands, Texture2D tex, bool forceClosed)
 		{
 			Vector2 origin = new Vector2(r.x, r.y);
 			Vector3 origin3 = new Vector3(r.x, r.y, 0);
@@ -83,8 +83,8 @@ namespace tk2dEditor.SpriteCollectionEditor
 			if (islands == null || islands.Length == 0 ||
 				!islands[0].IsValid())
 			{
-				islands = new blaze2dSpriteColliderIsland[1];
-				islands[0] = new blaze2dSpriteColliderIsland();
+				islands = new tk2dSpriteColliderIsland[1];
+				islands[0] = new tk2dSpriteColliderIsland();
 				islands[0].connected = true;
 				int w = tex.width;
 				int h = tex.height;
@@ -116,7 +116,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 				max.x = Mathf.Clamp(max.x, 0, tex.width * editorDisplayScale);
 				max.y = Mathf.Clamp(max.y, 0, tex.height * editorDisplayScale);
 				
-				blaze2dSpriteColliderIsland island = new blaze2dSpriteColliderIsland();
+				tk2dSpriteColliderIsland island = new tk2dSpriteColliderIsland();
 				island.connected = true;
 				
 				Vector2[] p = new Vector2[4];
@@ -295,13 +295,13 @@ namespace tk2dEditor.SpriteCollectionEditor
 			// Can't delete the last island
 			if (deletedIsland != -1 && islands.Length > 1)
 			{
-				var tmpIslands = new List<blaze2dSpriteColliderIsland>(islands);
+				var tmpIslands = new List<tk2dSpriteColliderIsland>(islands);
 				tmpIslands.RemoveAt(deletedIsland);
 				islands = tmpIslands.ToArray();
 			}
 		}		
 		
-		void DrawCustomBoxColliderEditor(Rect r, blaze2dSpriteCollectionDefinition param, Texture2D tex)
+		void DrawCustomBoxColliderEditor(Rect r, tk2dSpriteCollectionDefinition param, Texture2D tex)
 		{
 			Vector2 origin = new Vector2(r.x, r.y);
 			
@@ -398,7 +398,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 			return new Vector2( v.x * cosa - v.y * sina, v.x * sina + v.y * cosa );
 		}
 
-		public void DrawTextureView(blaze2dSpriteCollectionDefinition param, Texture2D texture)
+		public void DrawTextureView(tk2dSpriteCollectionDefinition param, Texture2D texture)
 		{
 			HandleKeys();
 
@@ -420,9 +420,9 @@ namespace tk2dEditor.SpriteCollectionEditor
 			}
 			else
 			{
-				bool allowAnchor = param.anchor == blaze2dSpriteCollectionDefinition.Anchor.Custom;
-				bool allowCollider = (param.colliderType == blaze2dSpriteCollectionDefinition.ColliderType.Polygon ||
-					param.colliderType == blaze2dSpriteCollectionDefinition.ColliderType.BoxCustom);
+				bool allowAnchor = param.anchor == tk2dSpriteCollectionDefinition.Anchor.Custom;
+				bool allowCollider = (param.colliderType == tk2dSpriteCollectionDefinition.ColliderType.Polygon ||
+					param.colliderType == tk2dSpriteCollectionDefinition.ColliderType.BoxCustom);
 				if (mode == Mode.Anchor && !allowAnchor) mode = Mode.Texture;
 				if (mode == Mode.Collider && !allowCollider) mode = Mode.Texture;
 
@@ -455,9 +455,9 @@ namespace tk2dEditor.SpriteCollectionEditor
 
 				if (mode == Mode.Collider)
 				{
-					if (param.colliderType == blaze2dSpriteCollectionDefinition.ColliderType.BoxCustom)
+					if (param.colliderType == tk2dSpriteCollectionDefinition.ColliderType.BoxCustom)
 						DrawCustomBoxColliderEditor(textureRect, param, texture);
-					if (param.colliderType == blaze2dSpriteCollectionDefinition.ColliderType.Polygon)
+					if (param.colliderType == tk2dSpriteCollectionDefinition.ColliderType.Polygon)
 						DrawPolygonColliderEditor(textureRect, ref param.polyColliderIslands, texture, false);
 				}
 				
@@ -497,14 +497,14 @@ namespace tk2dEditor.SpriteCollectionEditor
 				if (mode == Mode.AttachPoint) {
 					Vector2 origin = new Vector2(textureRect.x, textureRect.y);
 					int id = "Mode.AttachPoint".GetHashCode();
-					foreach (blaze2dSpriteDefinition.AttachPoint ap in param.attachPoints) {
+					foreach (tk2dSpriteDefinition.AttachPoint ap in param.attachPoints) {
 						Vector2 apPosition = new Vector2(ap.position.x, ap.position.y);
 
 						if (showAttachPointSprites) {
-							blaze2dSpriteCollection.AttachPointTestSprite spriteProxy = null;
+							tk2dSpriteCollection.AttachPointTestSprite spriteProxy = null;
 							if (SpriteCollection.attachPointTestSprites.TryGetValue(ap.name, out spriteProxy) && spriteProxy.spriteCollection != null &&
 								spriteProxy.spriteCollection.IsValidSpriteId(spriteProxy.spriteId)) {
-								blaze2dSpriteDefinition def = spriteProxy.spriteCollection.inst.spriteDefinitions[ spriteProxy.spriteId ];
+								tk2dSpriteDefinition def = spriteProxy.spriteCollection.inst.spriteDefinitions[ spriteProxy.spriteId ];
 								tk2dSpriteThumbnailCache.DrawSpriteTextureInRect( textureRect, def, Color.white, ap.position, ap.angle, new Vector2(editorDisplayScale, editorDisplayScale) );
 							}
 						}
@@ -602,11 +602,11 @@ namespace tk2dEditor.SpriteCollectionEditor
 			GUILayout.EndVertical();
 		}
 
-		public void DrawToolbar(blaze2dSpriteCollectionDefinition param, Texture2D texture)
+		public void DrawToolbar(tk2dSpriteCollectionDefinition param, Texture2D texture)
 		{
-			bool allowAnchor = param.anchor == blaze2dSpriteCollectionDefinition.Anchor.Custom;
-			bool allowCollider = (param.colliderType == blaze2dSpriteCollectionDefinition.ColliderType.Polygon ||
-				param.colliderType == blaze2dSpriteCollectionDefinition.ColliderType.BoxCustom);
+			bool allowAnchor = param.anchor == tk2dSpriteCollectionDefinition.Anchor.Custom;
+			bool allowCollider = (param.colliderType == tk2dSpriteCollectionDefinition.ColliderType.Polygon ||
+				param.colliderType == tk2dSpriteCollectionDefinition.ColliderType.BoxCustom);
 			bool allowAttachPoint = true;
 
 			GUILayout.BeginHorizontal(EditorStyles.toolbar, GUILayout.ExpandWidth(true));
@@ -625,7 +625,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 				GUILayout.Label(str, EditorStyles.toolbarTextField);
 			}
 			
-			if ((mode == Mode.Collider && param.colliderType == blaze2dSpriteCollectionDefinition.ColliderType.Polygon) ||
+			if ((mode == Mode.Collider && param.colliderType == tk2dSpriteCollectionDefinition.ColliderType.Polygon) ||
 				(mode == Mode.Texture && param.customSpriteGeometry))
 			{
 				drawColliderNormals = GUILayout.Toggle(drawColliderNormals, new GUIContent("Show Normals", "Shift+N"), EditorStyles.toolbarButton);
@@ -642,11 +642,11 @@ namespace tk2dEditor.SpriteCollectionEditor
 			GUILayout.FlexibleSpace();
 		}
 		
-		blaze2dSpriteDefinition.AttachPoint editingAttachPointName = null;
+		tk2dSpriteDefinition.AttachPoint editingAttachPointName = null;
 		bool showAttachPointSprites = false;
-		void AttachPointSpriteHandler(blaze2dSpriteCollectionData newSpriteCollection, int newSpriteId, object callbackData) {
+		void AttachPointSpriteHandler(tk2dSpriteCollectionData newSpriteCollection, int newSpriteId, object callbackData) {
 			string attachPointName = (string)callbackData;
-			blaze2dSpriteCollection.AttachPointTestSprite proxy = null;
+			tk2dSpriteCollection.AttachPointTestSprite proxy = null;
 			if (SpriteCollection.attachPointTestSprites.TryGetValue(attachPointName, out proxy)) {
 				proxy.spriteCollection = newSpriteCollection;
 				proxy.spriteId = newSpriteId;
@@ -654,11 +654,11 @@ namespace tk2dEditor.SpriteCollectionEditor
 			}
 		}
 
-		public void DrawAttachPointInspector(blaze2dSpriteCollectionDefinition param, Texture2D texture) {
+		public void DrawAttachPointInspector(tk2dSpriteCollectionDefinition param, Texture2D texture) {
 			// catalog all names
 			HashSet<string> apHashSet = new HashSet<string>();
-			foreach (blaze2dSpriteCollectionDefinition def in SpriteCollection.textureParams) {
-				foreach (blaze2dSpriteDefinition.AttachPoint currAp in def.attachPoints) {
+			foreach (tk2dSpriteCollectionDefinition def in SpriteCollection.textureParams) {
+				foreach (tk2dSpriteDefinition.AttachPoint currAp in def.attachPoints) {
 					apHashSet.Add( currAp.name );
 				}
 			}
@@ -671,7 +671,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 
 			int toDelete = -1;
 			tk2dSpriteGuiUtility.showOpenEditShortcuts = false;
-			blaze2dSpriteDefinition.AttachPoint newEditingAttachPointName = editingAttachPointName;
+			tk2dSpriteDefinition.AttachPoint newEditingAttachPointName = editingAttachPointName;
 			int apIdx = 0;
 			foreach (var ap in param.attachPoints) {
 				GUILayout.BeginHorizontal();
@@ -713,9 +713,9 @@ namespace tk2dEditor.SpriteCollectionEditor
 						GUI.enabled = false;
 					}
 
-					blaze2dSpriteCollection.AttachPointTestSprite spriteProxy = null;
+					tk2dSpriteCollection.AttachPointTestSprite spriteProxy = null;
 					if (!SpriteCollection.attachPointTestSprites.TryGetValue(tmpName, out spriteProxy)) {
-						spriteProxy = new blaze2dSpriteCollection.AttachPointTestSprite();
+						spriteProxy = new tk2dSpriteCollection.AttachPointTestSprite();
 						SpriteCollection.attachPointTestSprites.Add( tmpName, spriteProxy );
 					}
 
@@ -744,7 +744,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 						break;
 					}
 				}
-				blaze2dSpriteDefinition.AttachPoint ap = new blaze2dSpriteDefinition.AttachPoint();
+				tk2dSpriteDefinition.AttachPoint ap = new tk2dSpriteDefinition.AttachPoint();
 				ap.name = unused;
 				ap.position = Vector3.zero;
 				param.attachPoints.Add(ap);
@@ -763,11 +763,11 @@ namespace tk2dEditor.SpriteCollectionEditor
 			tk2dSpriteGuiUtility.showOpenEditShortcuts = true;
 		}
 
-		public void DrawTextureInspector(blaze2dSpriteCollectionDefinition param, Texture2D texture)
+		public void DrawTextureInspector(tk2dSpriteCollectionDefinition param, Texture2D texture)
 		{
-			if (mode == Mode.Collider && param.colliderType == blaze2dSpriteCollectionDefinition.ColliderType.Polygon)
+			if (mode == Mode.Collider && param.colliderType == tk2dSpriteCollectionDefinition.ColliderType.Polygon)
 			{
-				param.colliderColor = (blaze2dSpriteCollectionDefinition.ColliderColor)EditorGUILayout.EnumPopup("Display Color", param.colliderColor);
+				param.colliderColor = (tk2dSpriteCollectionDefinition.ColliderColor)EditorGUILayout.EnumPopup("Display Color", param.colliderColor);
 				
 				tk2dGuiUtility.InfoBox("Points" +
 										  "\nClick drag - move point" +
@@ -782,7 +782,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 			}
 			if (mode == Mode.Texture && param.customSpriteGeometry)
 			{
-				param.colliderColor = (blaze2dSpriteCollectionDefinition.ColliderColor)EditorGUILayout.EnumPopup("Display Color", param.colliderColor);
+				param.colliderColor = (tk2dSpriteCollectionDefinition.ColliderColor)EditorGUILayout.EnumPopup("Display Color", param.colliderColor);
 
 				tk2dGuiUtility.InfoBox("Points" +
 										  "\nClick drag - move point" +

@@ -20,7 +20,7 @@ public class tk2dUIDemo3Controller : tk2dUIBaseDemoController {
 		StartCoroutine( coMove( instructions, instructionsRestPos - instructions.up * 10, 1 ) );
 	}
 
-	public void ToggleCase(blaze2dUIToggleButton button) {
+	public void ToggleCase(tk2dUIToggleButton button) {
 		float targetAngle = ( button.IsOn ) ? -66 : 0;
 		StartCoroutine( coTweenAngle(button.transform, targetAngle, 0.5f) );
 	}

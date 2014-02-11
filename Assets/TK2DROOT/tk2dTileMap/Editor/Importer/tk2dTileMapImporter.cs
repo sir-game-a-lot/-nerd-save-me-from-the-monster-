@@ -158,14 +158,14 @@ namespace tk2dEditor.TileMap
 			return ints;
 		}
 		
-		void PopulateTilemap(blaze2dTileMap tileMap)
+		void PopulateTilemap(tk2dTileMap tileMap)
 		{
 			int extraWidth = staggered ? 1 : 0;
 			tk2dEditor.TileMap.TileMapUtility.ResizeTileMap(tileMap, width + extraWidth, height, tileMap.partitionSizeX, tileMap.partitionSizeY);
 
 			if (staggered) {
-				tileMap.data.sortMethod = blaze2dTileMapData.SortMethod.TopLeft;
-				tileMap.data.tileType = blaze2dTileMapData.TileType.Isometric;
+				tileMap.data.sortMethod = tk2dTileMapData.SortMethod.TopLeft;
+				tileMap.data.tileType = tk2dTileMapData.TileType.Isometric;
 			}
 
 			foreach (var layer in layers)
@@ -194,10 +194,10 @@ namespace tk2dEditor.TileMap
 						bool flipHorizontal = (rawTmxTile & 0x80000000) != 0;
 						bool flipVertical = (rawTmxTile & 0x40000000) != 0;
 						bool flipDiagonal = (rawTmxTile & 0x20000000) != 0;
-						blaze2dTileFlags tileFlags = 0;
-						if (flipDiagonal) tileFlags |= (blaze2dTileFlags.Rot90 | blaze2dTileFlags.FlipX);
-						if (flipHorizontal) tileFlags ^= blaze2dTileFlags.FlipX;
-						if (flipVertical) tileFlags ^= blaze2dTileFlags.FlipY;
+						tk2dTileFlags tileFlags = 0;
+						if (flipDiagonal) tileFlags |= (tk2dTileFlags.Rot90 | tk2dTileFlags.FlipX);
+						if (flipHorizontal) tileFlags ^= tk2dTileFlags.FlipX;
+						if (flipVertical) tileFlags ^= tk2dTileFlags.FlipY;
 						target.SetTileFlags(x + offset, height - 1 - y, tileFlags);
 					}
 				}
@@ -210,7 +210,7 @@ namespace tk2dEditor.TileMap
 		/// Static and helper functions
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public static bool Import(blaze2dTileMap tileMap, Format format)
+		public static bool Import(tk2dTileMap tileMap, Format format)
 		{
 			var importer = new Importer();
 			

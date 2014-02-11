@@ -3,7 +3,7 @@ using System.Collections;
 
 public class tk2dTileMapDemoFollowCam : MonoBehaviour {
 
-	blaze2dCamera cam;
+	tk2dCamera cam;
 	public Transform target;
 	public float followSpeed = 1.0f;
 
@@ -13,7 +13,7 @@ public class tk2dTileMapDemoFollowCam : MonoBehaviour {
 	public float maxZoomFactor = 0.6f;
 
 	void Awake() {
-		cam = GetComponent<blaze2dCamera>();
+		cam = GetComponent<tk2dCamera>();
 	}
 
 	void FixedUpdate() {

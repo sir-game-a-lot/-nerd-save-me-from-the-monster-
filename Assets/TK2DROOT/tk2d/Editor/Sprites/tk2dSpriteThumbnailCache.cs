@@ -27,19 +27,19 @@ public static class tk2dSpriteThumbnailCache
 		}
 	}
 
-	public static Vector2 GetSpriteSizePixels(blaze2dSpriteDefinition def)
+	public static Vector2 GetSpriteSizePixels(tk2dSpriteDefinition def)
 	{
 		return new Vector2(def.untrimmedBoundsData[1].x / def.texelSize.x, def.untrimmedBoundsData[1].y / def.texelSize.y);
 	}
 
-	public static void DrawSpriteTexture(Rect rect, blaze2dSpriteDefinition def)
+	public static void DrawSpriteTexture(Rect rect, tk2dSpriteDefinition def)
 	{
 		DrawSpriteTexture(rect, def, Color.white);		
 	}
 
 	// Draws the sprite texture in the rect given
 	// Will center the sprite in the rect, regardless of anchor set-up
-	public static void DrawSpriteTextureInRect(Rect rect, blaze2dSpriteDefinition def, Color tint) {
+	public static void DrawSpriteTextureInRect(Rect rect, tk2dSpriteDefinition def, Color tint) {
 		Init();
 		if (Event.current.type == EventType.Repaint) {
 			float sw = def.untrimmedBoundsData[1].x;
@@ -63,7 +63,7 @@ public static class tk2dSpriteThumbnailCache
 	}
 
 	// Draw a sprite within the rect - i.e. starting at the rect 
-	public static void DrawSpriteTextureInRect( Rect rect, blaze2dSpriteDefinition def, Color tint, Vector2 position, float angle, Vector2 scale ) {
+	public static void DrawSpriteTextureInRect( Rect rect, tk2dSpriteDefinition def, Color tint, Vector2 position, float angle, Vector2 scale ) {
 		Init();
 		Vector2 pixelSize = new Vector3( 1.0f / (def.texelSize.x), 1.0f / (def.texelSize.y) );
 
@@ -97,7 +97,7 @@ public static class tk2dSpriteThumbnailCache
 		}
 	}
 
-	public static void DrawSpriteTexture(Rect rect, blaze2dSpriteDefinition def, Color tint)
+	public static void DrawSpriteTexture(Rect rect, tk2dSpriteDefinition def, Color tint)
 	{
 		Init();
 		Vector2 pixelSize = new Vector3( rect.width / def.untrimmedBoundsData[1].x, rect.height / def.untrimmedBoundsData[1].y);
@@ -140,7 +140,7 @@ public static class tk2dSpriteThumbnailCache
 		}
 	}
 
-	public static void DrawSpriteTextureCentered(Rect rect, blaze2dSpriteDefinition def, Vector2 translate, float scale, Color tint)
+	public static void DrawSpriteTextureCentered(Rect rect, tk2dSpriteDefinition def, Vector2 translate, float scale, Color tint)
 	{
 		Init();
 		Vector2 pixelSize = new Vector3( 1.0f / def.texelSize.x, 1.0f / def.texelSize.y);

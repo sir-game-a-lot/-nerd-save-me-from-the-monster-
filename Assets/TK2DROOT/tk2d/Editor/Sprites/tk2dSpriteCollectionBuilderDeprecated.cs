@@ -7,11 +7,11 @@ namespace tk2dEditor.SpriteCollectionBuilder
 {
 	public static class Deprecated
 	{
-		public static bool CheckAndFixUpParams(blaze2dSpriteCollection gen)
+		public static bool CheckAndFixUpParams(tk2dSpriteCollection gen)
 		{
 			if (gen.DoNotUse__TextureRefs != null && gen.textureParams != null && gen.DoNotUse__TextureRefs.Length != gen.textureParams.Length)
 	        {
-				blaze2dSpriteCollectionDefinition[] newDefs = new blaze2dSpriteCollectionDefinition[gen.DoNotUse__TextureRefs.Length];
+				tk2dSpriteCollectionDefinition[] newDefs = new tk2dSpriteCollectionDefinition[gen.DoNotUse__TextureRefs.Length];
 				int c = Mathf.Min( newDefs.Length, gen.textureParams.Length );
 
 				if (gen.DoNotUse__TextureRefs.Length > gen.textureParams.Length)
@@ -24,12 +24,12 @@ namespace tk2dEditor.SpriteCollectionBuilder
 
 				for (int i = 0; i < c; ++i)
 				{
-					newDefs[i] = new blaze2dSpriteCollectionDefinition();
+					newDefs[i] = new tk2dSpriteCollectionDefinition();
 					newDefs[i].CopyFrom( gen.textureParams[i] );
 				}
 				for (int i = c; i < newDefs.Length; ++i)
 				{
-					newDefs[i] = new blaze2dSpriteCollectionDefinition();
+					newDefs[i] = new tk2dSpriteCollectionDefinition();
 					newDefs[i].pad = gen.defaults.pad;
 					newDefs[i].additive = gen.defaults.additive;
 					newDefs[i].anchor = gen.defaults.anchor;
@@ -62,7 +62,7 @@ namespace tk2dEditor.SpriteCollectionBuilder
 			return true;
 		}
 
-		public static void TrimTextureList(blaze2dSpriteCollection gen)
+		public static void TrimTextureList(tk2dSpriteCollection gen)
 		{
 			// trim textureRefs & textureParams
 			int lastNonEmpty = -1;
@@ -76,7 +76,7 @@ namespace tk2dEditor.SpriteCollectionBuilder
 			gen.DoNotUse__TextureRefs = textureRefs;
 		}
 		
-		public static bool SetUpSpriteSheets(blaze2dSpriteCollection gen)
+		public static bool SetUpSpriteSheets(tk2dSpriteCollection gen)
 		{
 			// delete textures which aren't in sprite sheets any more
 			// and delete textures which are out of range of the spritesheet
@@ -97,7 +97,7 @@ namespace tk2dEditor.SpriteCollectionBuilder
 								gen.DoNotUse__TextureRefs[i] = null;
 								gen.textureParams[i].fromSpriteSheet = false;
 								gen.textureParams[i].extractRegion = false;
-								gen.textureParams[i].colliderType = blaze2dSpriteCollectionDefinition.ColliderType.UserDefined;
+								gen.textureParams[i].colliderType = tk2dSpriteCollectionDefinition.ColliderType.UserDefined;
 								gen.textureParams[i].boxColliderMin = Vector3.zero;
 								gen.textureParams[i].boxColliderMax = Vector3.zero;
 							}
@@ -109,7 +109,7 @@ namespace tk2dEditor.SpriteCollectionBuilder
 						gen.DoNotUse__TextureRefs[i] = null;
 						gen.textureParams[i].fromSpriteSheet = false;
 						gen.textureParams[i].extractRegion = false;
-						gen.textureParams[i].colliderType = blaze2dSpriteCollectionDefinition.ColliderType.UserDefined;
+						gen.textureParams[i].colliderType = tk2dSpriteCollectionDefinition.ColliderType.UserDefined;
 						gen.textureParams[i].boxColliderMin = Vector3.zero;
 						gen.textureParams[i].boxColliderMax = Vector3.zero;
 					}
@@ -118,7 +118,7 @@ namespace tk2dEditor.SpriteCollectionBuilder
 
 			if (gen.spriteSheets == null)
 			{
-				gen.spriteSheets = new blaze2dSpriteSheetSource[0];
+				gen.spriteSheets = new tk2dSpriteSheetSource[0];
 			}
 			
 			int spriteSheetId = 0;
@@ -201,7 +201,7 @@ namespace tk2dEditor.SpriteCollectionBuilder
 						}
 						
 						gen.DoNotUse__TextureRefs[textureIdx] = spriteSheet.texture;
-						var param = new blaze2dSpriteCollectionDefinition();
+						var param = new tk2dSpriteCollectionDefinition();
 						param.fromSpriteSheet = true;
 						param.name = spriteSheet.texture.name + "/" + tileIdx;
 						param.regionId = tileIdx;
@@ -213,7 +213,7 @@ namespace tk2dEditor.SpriteCollectionBuilder
 						param.additive = spriteSheet.additive;
 
 						param.pad = spriteSheet.pad;
-						param.anchor = (blaze2dSpriteCollectionDefinition.Anchor)spriteSheet.anchor;
+						param.anchor = (tk2dSpriteCollectionDefinition.Anchor)spriteSheet.anchor;
 						param.scale = (spriteSheet.scale.sqrMagnitude == 0.0f)?Vector3.one:spriteSheet.scale;
 						
 						// Let the user tweak individually

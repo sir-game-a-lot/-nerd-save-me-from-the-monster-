@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dTextMesh))]
+[CustomEditor(typeof(tk2dTextMesh))]
 class tk2dTextMeshEditor : Editor
 {
 	tk2dGenericIndexItem[] allFonts = null;	// all generators
@@ -24,15 +24,15 @@ class tk2dTextMeshEditor : Editor
 		}
 	}
 
-	blaze2dTextMesh[] targetTextMeshes = new blaze2dTextMesh[0];
+	tk2dTextMesh[] targetTextMeshes = new tk2dTextMesh[0];
 #if !(UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
 	Renderer[] renderers = new Renderer[0];
 #endif
 
 	void OnEnable() {
-		targetTextMeshes = new blaze2dTextMesh[targets.Length];
+		targetTextMeshes = new tk2dTextMesh[targets.Length];
 		for (int i = 0; i < targets.Length; ++i) {
-			targetTextMeshes[i] = targets[i] as blaze2dTextMesh;
+			targetTextMeshes[i] = targets[i] as tk2dTextMesh;
 		}
 
 #if !(UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
@@ -51,9 +51,9 @@ class tk2dTextMeshEditor : Editor
 	}
 
 	// Draws the word wrap GUI
-	void DrawWordWrapSceneGUI(blaze2dTextMesh textMesh)
+	void DrawWordWrapSceneGUI(tk2dTextMesh textMesh)
 	{
-		blaze2dFontData font = textMesh.font;
+		tk2dFontData font = textMesh.font;
 		Transform transform = textMesh.transform;
 
 		int px = textMesh.wordWrapWidth;
@@ -117,7 +117,7 @@ class tk2dTextMeshEditor : Editor
 
 	public void OnSceneGUI()
 	{
-		blaze2dTextMesh textMesh = (blaze2dTextMesh)target;
+		tk2dTextMesh textMesh = (tk2dTextMesh)target;
 		if (textMesh.formatting && textMesh.wordWrapWidth > 0)
 		{
 			DrawWordWrapSceneGUI(textMesh);
@@ -191,9 +191,9 @@ class tk2dTextMeshEditor : Editor
     	}
 	}
 
-	void UndoableAction( System.Action<blaze2dTextMesh> action ) {
+	void UndoableAction( System.Action<tk2dTextMesh> action ) {
 		tk2dUndo.RecordObjects (targetTextMeshes, "Inspector");
-		foreach (blaze2dTextMesh tm in targetTextMeshes) {
+		foreach (tk2dTextMesh tm in targetTextMeshes) {
 			action(tm);
 		}
 	}
@@ -202,7 +202,7 @@ class tk2dTextMeshEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        blaze2dTextMesh textMesh = (blaze2dTextMesh)target;
+        tk2dTextMesh textMesh = (tk2dTextMesh)target;
         tk2dGuiUtility.LookLikeControls(80, 50);
 		
 		// maybe cache this if its too slow later
@@ -223,7 +223,7 @@ class tk2dTextMeshEditor : Editor
         {
 			if (textMesh.font == null)
 			{
-				textMesh.font = allFonts[0].GetAsset<blaze2dFont>().data;
+				textMesh.font = allFonts[0].GetAsset<tk2dFont>().data;
 			}
 			
 			int currId = -1;
@@ -239,7 +239,7 @@ class tk2dTextMeshEditor : Editor
 			int newId = EditorGUILayout.Popup("Font", currId, allFontNames);
 			if (newId != currId)
 			{
-				UndoableAction( tm => tm.font = allFonts[newId].GetAsset<blaze2dFont>().data );
+				UndoableAction( tm => tm.font = allFonts[newId].GetAsset<tk2dFont>().data );
 				GUI.changed = true;
 			}
 			
@@ -367,7 +367,7 @@ class tk2dTextMeshEditor : Editor
 				if (sortingOrder != targetTextMeshes[0].SortingOrder) {
 	            	tk2dUndo.RecordObjects(targetTextMeshes, "Order In Layer");
 	            	tk2dUndo.RecordObjects(renderers, "Order In Layer");
-	            	foreach (blaze2dTextMesh s in targetTextMeshes) {
+	            	foreach (tk2dTextMesh s in targetTextMeshes) {
 	            		s.SortingOrder = sortingOrder;
 	            	}
 				}
@@ -404,7 +404,7 @@ class tk2dTextMeshEditor : Editor
 					{
 						int newTextureGradient = (int)(Event.current.mousePosition.x / (textMesh.font.gradientTexture.width / textMesh.font.gradientCount));
 						if (newTextureGradient != textMesh.textureGradient) {
-							UndoableAction( delegate(blaze2dTextMesh tm) {
+							UndoableAction( delegate(tk2dTextMesh tm) {
 									if (tm.useGUILayout && tm.font != null && newTextureGradient < tm.font.gradientCount) {
 										tm.textureGradient = newTextureGradient;
 									}
@@ -424,7 +424,7 @@ class tk2dTextMeshEditor : Editor
 			
 			if (GUILayout.Button("HFlip"))
 			{
-				UndoableAction( delegate(blaze2dTextMesh tm) {
+				UndoableAction( delegate(tk2dTextMesh tm) {
 						Vector3 s = tm.scale;
 						s.x *= -1.0f;
 						tm.scale = s;
@@ -433,7 +433,7 @@ class tk2dTextMeshEditor : Editor
 			}
 			if (GUILayout.Button("VFlip"))
 			{
-				UndoableAction( delegate(blaze2dTextMesh tm) {
+				UndoableAction( delegate(tk2dTextMesh tm) {
 					Vector3 s = tm.scale;
 					s.y *= -1.0f;
 					tm.scale = s;
@@ -454,7 +454,7 @@ class tk2dTextMeshEditor : Editor
 			GUIContent pixelPerfectButton = new GUIContent("1:1", "Make Pixel Perfect");
 			if ( GUILayout.Button(pixelPerfectButton ))
 			{
-				if (blaze2dPixelPerfectHelper.inst) blaze2dPixelPerfectHelper.inst.Setup();
+				if (tk2dPixelPerfectHelper.inst) tk2dPixelPerfectHelper.inst.Setup();
 				UndoableAction( tm => tm.MakePixelPerfect() );
 				GUI.changed = true;
 			}
@@ -485,7 +485,7 @@ class tk2dTextMeshEditor : Editor
 
 			if (GUI.changed)
 			{
-				foreach (blaze2dTextMesh tm in targetTextMeshes) {
+				foreach (tk2dTextMesh tm in targetTextMeshes) {
 					tm.ForceBuild();
 					EditorUtility.SetDirty(tm);
 				}
@@ -496,10 +496,10 @@ class tk2dTextMeshEditor : Editor
     [MenuItem("GameObject/Create Other/tk2d/TextMesh", false, 13905)]
     static void DoCreateTextMesh()
     {
-		blaze2dFontData fontData = null;
+		tk2dFontData fontData = null;
 		
 		// Find reference in scene
-        blaze2dTextMesh dupeMesh = GameObject.FindObjectOfType(typeof(blaze2dTextMesh)) as blaze2dTextMesh;
+        tk2dTextMesh dupeMesh = GameObject.FindObjectOfType(typeof(tk2dTextMesh)) as tk2dTextMesh;
 		if (dupeMesh) 
 			fontData = dupeMesh.font;
 		
@@ -510,7 +510,7 @@ class tk2dTextMeshEditor : Editor
 			foreach (var v in allFontEntries)
 			{
 				if (v.managed) continue;
-				blaze2dFontData data = v.GetData<blaze2dFontData>();
+				tk2dFontData data = v.GetData<tk2dFontData>();
 				if (data != null)
 				{
 					fontData = data;
@@ -526,7 +526,7 @@ class tk2dTextMeshEditor : Editor
 		}
 
 		GameObject go = tk2dEditorUtility.CreateGameObjectInScene("TextMesh");
-        blaze2dTextMesh textMesh = go.AddComponent<blaze2dTextMesh>();
+        tk2dTextMesh textMesh = go.AddComponent<tk2dTextMesh>();
 		textMesh.font = fontData;
 		textMesh.text = "New TextMesh";
 		textMesh.Commit();

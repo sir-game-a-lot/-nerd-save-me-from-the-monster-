@@ -240,7 +240,7 @@ public class tk2dTileMapEditorData : ScriptableObject
 
 	public List<tk2dTileMapScratchpad> scratchpads = new List<tk2dTileMapScratchpad>();
 	
-	public void InitBrushes(blaze2dSpriteCollectionData spriteCollection)
+	public void InitBrushes(tk2dSpriteCollectionData spriteCollection)
 	{
 		if (defaultBrush == null || defaultBrush.Empty)
 		{
@@ -274,7 +274,7 @@ public class tk2dTileMapEditorData : ScriptableObject
 		}
 	}
 	
-	public void CreateDefaultPalette(blaze2dSpriteCollectionData spriteCollection, tk2dTileMapEditorBrush brush, int numTilesX)
+	public void CreateDefaultPalette(tk2dSpriteCollectionData spriteCollection, tk2dTileMapEditorBrush brush, int numTilesX)
 	{
 		List<tk2dSparseTile> tiles = new List<tk2dSparseTile>();
 		

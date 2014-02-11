@@ -486,15 +486,15 @@ public static class tk2dSceneHelper {
 		return result;
 	}
 
-	public static List<int> getAnchorHidePtList(blaze2dBaseSprite.Anchor anchor, Rect r, Transform t) {
+	public static List<int> getAnchorHidePtList(tk2dBaseSprite.Anchor anchor, Rect r, Transform t) {
 		List<int> hidePts = new List<int>();
 		int x = 0;
 		int y = 0;
 		switch (anchor) {
-			case blaze2dBaseSprite.Anchor.LowerLeft: x = -1; y = -1; break;
-			case blaze2dBaseSprite.Anchor.LowerRight: x = 1; y = -1; break;
-			case blaze2dBaseSprite.Anchor.UpperLeft: x = -1; y = 1; break;
-			case blaze2dBaseSprite.Anchor.UpperRight: x = 1; y = 1; break;
+			case tk2dBaseSprite.Anchor.LowerLeft: x = -1; y = -1; break;
+			case tk2dBaseSprite.Anchor.LowerRight: x = 1; y = -1; break;
+			case tk2dBaseSprite.Anchor.UpperLeft: x = -1; y = 1; break;
+			case tk2dBaseSprite.Anchor.UpperRight: x = 1; y = 1; break;
 		}
 		if (r.width < 0.0f) x = -x;
 		if (r.height < 0.0f) y = -y;
@@ -508,24 +508,24 @@ public static class tk2dSceneHelper {
 	}
 
 	// Rect origin as offset from Anchor
-	public static Vector2 GetAnchorOffset( Vector2 rectSize, blaze2dBaseSprite.Anchor anchor ) {
+	public static Vector2 GetAnchorOffset( Vector2 rectSize, tk2dBaseSprite.Anchor anchor ) {
 		Vector2 anchorOffset = Vector3.zero;
 		switch (anchor)
 		{
-			case blaze2dBaseSprite.Anchor.LowerLeft: case blaze2dBaseSprite.Anchor.MiddleLeft: case blaze2dBaseSprite.Anchor.UpperLeft: 
+			case tk2dBaseSprite.Anchor.LowerLeft: case tk2dBaseSprite.Anchor.MiddleLeft: case tk2dBaseSprite.Anchor.UpperLeft: 
 				break;
-			case blaze2dBaseSprite.Anchor.LowerCenter: case blaze2dBaseSprite.Anchor.MiddleCenter: case blaze2dBaseSprite.Anchor.UpperCenter: 
+			case tk2dBaseSprite.Anchor.LowerCenter: case tk2dBaseSprite.Anchor.MiddleCenter: case tk2dBaseSprite.Anchor.UpperCenter: 
 				anchorOffset.x = -(rectSize.x / 2.0f); break;
-			case blaze2dBaseSprite.Anchor.LowerRight: case blaze2dBaseSprite.Anchor.MiddleRight: case blaze2dBaseSprite.Anchor.UpperRight: 
+			case tk2dBaseSprite.Anchor.LowerRight: case tk2dBaseSprite.Anchor.MiddleRight: case tk2dBaseSprite.Anchor.UpperRight: 
 				anchorOffset.x = -(rectSize.x); break;
 		}
 		switch (anchor)
 		{
-			case blaze2dBaseSprite.Anchor.LowerLeft: case blaze2dBaseSprite.Anchor.LowerCenter: case blaze2dBaseSprite.Anchor.LowerRight:
+			case tk2dBaseSprite.Anchor.LowerLeft: case tk2dBaseSprite.Anchor.LowerCenter: case tk2dBaseSprite.Anchor.LowerRight:
 				break;
-			case blaze2dBaseSprite.Anchor.MiddleLeft: case blaze2dBaseSprite.Anchor.MiddleCenter: case blaze2dBaseSprite.Anchor.MiddleRight:
+			case tk2dBaseSprite.Anchor.MiddleLeft: case tk2dBaseSprite.Anchor.MiddleCenter: case tk2dBaseSprite.Anchor.MiddleRight:
 				anchorOffset.y = -(rectSize.y / 2.0f); break;
-			case blaze2dBaseSprite.Anchor.UpperLeft: case blaze2dBaseSprite.Anchor.UpperCenter: case blaze2dBaseSprite.Anchor.UpperRight:
+			case tk2dBaseSprite.Anchor.UpperLeft: case tk2dBaseSprite.Anchor.UpperCenter: case tk2dBaseSprite.Anchor.UpperRight:
 				anchorOffset.y = -(rectSize.y); break;
 		}
 		return anchorOffset;

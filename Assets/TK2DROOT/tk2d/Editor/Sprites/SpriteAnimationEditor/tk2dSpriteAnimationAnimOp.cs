@@ -30,15 +30,15 @@ namespace tk2dEditor.SpriteAnimationEditor
 
 		// Called by system when one of the anim tools menu above is selected
 		// Return new selection if selection changed.
-		public virtual blaze2dSpriteAnimationClip OnAnimMenu(string menuEntry, List<blaze2dSpriteAnimationClip> allClips, blaze2dSpriteAnimationClip selectedClip) { return selectedClip; }
+		public virtual tk2dSpriteAnimationClip OnAnimMenu(string menuEntry, List<tk2dSpriteAnimationClip> allClips, tk2dSpriteAnimationClip selectedClip) { return selectedClip; }
 
 		// Drawn in the clip inspector GUI for the selected clip.
 		// Return true when data has changed.
-		public virtual bool OnClipInspectorGUI(blaze2dSpriteAnimationClip selectedClip, List<ClipEditor.FrameGroup> frameGroups, TimelineEditor.State state) { return false; }
+		public virtual bool OnClipInspectorGUI(tk2dSpriteAnimationClip selectedClip, List<ClipEditor.FrameGroup> frameGroups, TimelineEditor.State state) { return false; }
 
 		// Drawn in the frame group inspector GUI for the selected clip.
 		// Return true when data has changed.
-		public virtual bool OnFrameGroupInspectorGUI(blaze2dSpriteAnimationClip selectedClip, List<ClipEditor.FrameGroup> frameGroups, TimelineEditor.State state ) { return false; }
+		public virtual bool OnFrameGroupInspectorGUI(tk2dSpriteAnimationClip selectedClip, List<ClipEditor.FrameGroup> frameGroups, TimelineEditor.State state ) { return false; }
 	}
 
 	public static class AnimOperatorUtil
@@ -49,14 +49,14 @@ namespace tk2dEditor.SpriteAnimationEditor
 			ClipEditor.FrameGroup fg = new ClipEditor.FrameGroup();
 			fg.spriteCollection = src.spriteCollection;
 			fg.spriteId = src.spriteId;
-			blaze2dSpriteAnimationFrame f = new blaze2dSpriteAnimationFrame();
+			tk2dSpriteAnimationFrame f = new tk2dSpriteAnimationFrame();
 			f.spriteCollection = fg.spriteCollection;
 			f.spriteId = fg.spriteId;
 			fg.frames.Add(f);
 			return fg;
 		}
 
-		public static string UniqueClipName(List<blaze2dSpriteAnimationClip> allClips, string baseName)
+		public static string UniqueClipName(List<tk2dSpriteAnimationClip> allClips, string baseName)
 		{
 			bool found = false;
 			for (int i = 0; i < allClips.Count; ++i)
@@ -90,9 +90,9 @@ namespace tk2dEditor.SpriteAnimationEditor
 	public class CopyAnimation : AnimOperator
 	{
 		public override string[] AnimToolsMenu { get { return new string[] { "Copy" }; } }
-		public override blaze2dSpriteAnimationClip OnAnimMenu(string menuEntry, List<blaze2dSpriteAnimationClip> allClips, blaze2dSpriteAnimationClip selectedClip)
+		public override tk2dSpriteAnimationClip OnAnimMenu(string menuEntry, List<tk2dSpriteAnimationClip> allClips, tk2dSpriteAnimationClip selectedClip)
 		{
-			blaze2dSpriteAnimationClip newClip = new blaze2dSpriteAnimationClip();
+			tk2dSpriteAnimationClip newClip = new tk2dSpriteAnimationClip();
 			newClip.CopyFrom(selectedClip);
 			newClip.name = AnimOperatorUtil.UniqueClipName( allClips, "Copy of " + selectedClip.name );
 			allClips.Add(newClip);
@@ -113,7 +113,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 		bool textToggle = false;
 		string textNames = "";
 
-		public override bool OnClipInspectorGUI(blaze2dSpriteAnimationClip selectedClip, List<ClipEditor.FrameGroup> frameGroups, TimelineEditor.State state )
+		public override bool OnClipInspectorGUI(tk2dSpriteAnimationClip selectedClip, List<ClipEditor.FrameGroup> frameGroups, TimelineEditor.State state )
 		{
 			GUILayout.BeginHorizontal();
 
@@ -139,7 +139,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 				}
 				changed = true;
 			}
-			if (selectedClip.wrapMode != blaze2dSpriteAnimationClip.WrapMode.Single)
+			if (selectedClip.wrapMode != tk2dSpriteAnimationClip.WrapMode.Single)
 			{
 				bool newTextToggle = GUILayout.Toggle(textToggle, "Text", EditorStyles.miniButton);
 				if (newTextToggle != textToggle)
@@ -180,11 +180,11 @@ namespace tk2dEditor.SpriteAnimationEditor
 		{
 			bool fromSameCollection = true;
 			bool areNamesValid = true;
-			blaze2dSpriteCollectionData coll = null;
+			tk2dSpriteCollectionData coll = null;
 			List<string> s = new List<string>();
 			foreach (ClipEditor.FrameGroup frameGroup in frameGroups)
 			{
-				blaze2dSpriteDefinition def = frameGroup.spriteCollection.spriteDefinitions[frameGroup.spriteId];
+				tk2dSpriteDefinition def = frameGroup.spriteCollection.spriteDefinitions[frameGroup.spriteId];
 				if (coll == null) coll = frameGroup.spriteCollection;
 				if (coll != frameGroup.spriteCollection) fromSameCollection = false;
 				string spriteName = def.name;
@@ -211,7 +211,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 
 		bool ProcessSpriteImport(List<ClipEditor.FrameGroup> frameGroups, string spriteNames)
 		{
-			blaze2dSpriteCollectionData coll = frameGroups[0].spriteCollection;
+			tk2dSpriteCollectionData coll = frameGroups[0].spriteCollection;
 
 			// make new list
 			List<int> spriteIds = new List<int>();
@@ -284,7 +284,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 			sortId = -50;
 		}
 
-		public override bool OnFrameGroupInspectorGUI(blaze2dSpriteAnimationClip selectedClip, List<ClipEditor.FrameGroup> frameGroups, TimelineEditor.State state )
+		public override bool OnFrameGroupInspectorGUI(tk2dSpriteAnimationClip selectedClip, List<ClipEditor.FrameGroup> frameGroups, TimelineEditor.State state )
 		{
 			bool changed = false;
 			if (frameGroups.Count > 1)
@@ -314,9 +314,9 @@ namespace tk2dEditor.SpriteAnimationEditor
 			sortId = -100;
 		}
 
-		public override bool OnFrameGroupInspectorGUI(blaze2dSpriteAnimationClip selectedClip, List<ClipEditor.FrameGroup> frameGroups, TimelineEditor.State state )
+		public override bool OnFrameGroupInspectorGUI(tk2dSpriteAnimationClip selectedClip, List<ClipEditor.FrameGroup> frameGroups, TimelineEditor.State state )
 		{
-			if (selectedClip.wrapMode == blaze2dSpriteAnimationClip.WrapMode.Single)
+			if (selectedClip.wrapMode == tk2dSpriteAnimationClip.WrapMode.Single)
 				return false;
 
 			bool changed = false;
@@ -350,7 +350,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 		// Finds a sprite with the name and id
 		// matches "baseName" [ 0..9 ]* as id
 		// todo rewrite with regex
-		int GetFrameIndex(blaze2dSpriteDefinition def, string baseName)
+		int GetFrameIndex(tk2dSpriteDefinition def, string baseName)
 		{
 			if (System.String.Compare(baseName, 0, def.name, 0, baseName.Length, true) == 0)
 			{
@@ -363,7 +363,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 			return -1;
 		}
 		
-		int FindFrameIndex(blaze2dSpriteDefinition[] spriteDefs, string baseName, int frameId)
+		int FindFrameIndex(tk2dSpriteDefinition[] spriteDefs, string baseName, int frameId)
 		{
 			for (int j = 0; j < spriteDefs.Length; ++j)
 			{
@@ -436,9 +436,9 @@ namespace tk2dEditor.SpriteAnimationEditor
 			return false;
 		}		
 
-		public override bool OnFrameGroupInspectorGUI(blaze2dSpriteAnimationClip selectedClip, List<ClipEditor.FrameGroup> frameGroups, TimelineEditor.State state)
+		public override bool OnFrameGroupInspectorGUI(tk2dSpriteAnimationClip selectedClip, List<ClipEditor.FrameGroup> frameGroups, TimelineEditor.State state)
 		{
-			if (selectedClip.wrapMode == blaze2dSpriteAnimationClip.WrapMode.Single)
+			if (selectedClip.wrapMode == tk2dSpriteAnimationClip.WrapMode.Single)
 				return false;
 
 			bool changed = false;

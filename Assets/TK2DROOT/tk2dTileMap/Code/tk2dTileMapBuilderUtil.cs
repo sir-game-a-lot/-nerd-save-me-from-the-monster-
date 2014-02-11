@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 #if UNITY_EDITOR || !UNITY_FLASH
 
-namespace blaze2dRuntime.TileMap
+namespace tk2dRuntime.TileMap
 {
 	public static class BuilderUtil
 	{
 		/// Syncs layer data and makes sure data is valid
-		public static bool InitDataStore(blaze2dTileMap tileMap)
+		public static bool InitDataStore(tk2dTileMap tileMap)
 		{
 			bool dataChanged = false;
 			int numLayers = tileMap.data.NumLayers;
@@ -76,7 +76,7 @@ namespace blaze2dRuntime.TileMap
 		static List<int> TilePrefabsLayer;
 		static List<GameObject> TilePrefabsInstance;
 
-		static GameObject GetExistingTilePrefabInstance(blaze2dTileMap tileMap, int tileX, int tileY, int tileLayer) {
+		static GameObject GetExistingTilePrefabInstance(tk2dTileMap tileMap, int tileX, int tileY, int tileLayer) {
 			int n = tileMap.GetTilePrefabsListCount();
 			for (int i = 0; i < n; ++i) {
 				int x, y, layer;
@@ -90,7 +90,7 @@ namespace blaze2dRuntime.TileMap
 		
 		/// Spawns all prefabs for a given chunk
 		/// Expects the chunk to have a valid GameObject
-		public static void SpawnPrefabsForChunk(blaze2dTileMap tileMap, SpriteChunk chunk, int baseX, int baseY, int layer, int[] prefabCounts)
+		public static void SpawnPrefabsForChunk(tk2dTileMap tileMap, SpriteChunk chunk, int baseX, int baseY, int layer, int[] prefabCounts)
 		{
 			var chunkData = chunk.spriteIds;
 			var tilePrefabs = tileMap.data.tilePrefabs;
@@ -153,7 +153,7 @@ namespace blaze2dRuntime.TileMap
 							if (!foundExisting)
 								instance.name = prefab.name + " " + prefabCounts[tile].ToString();
 
-							blaze2dUtil.SetTransformParent(instance.transform, parent);
+							tk2dUtil.SetTransformParent(instance.transform, parent);
 							instance.transform.localPosition = pos;
 
 							// Add to tilePrefabs list
@@ -169,7 +169,7 @@ namespace blaze2dRuntime.TileMap
 		
 		/// Spawns all prefabs for a given tilemap
 		/// Expects populated chunks to have valid GameObjects
-		public static void SpawnPrefabs(blaze2dTileMap tileMap, bool forceBuild) 
+		public static void SpawnPrefabs(tk2dTileMap tileMap, bool forceBuild) 
 		{
 			// Restart these lists that will be stored in the tileMap tilePrefabsList
 			TilePrefabsX = new List<int>();
@@ -212,14 +212,14 @@ namespace blaze2dRuntime.TileMap
 		/// <summary>
 		/// Moves the chunk's gameobject's children to the prefab root
 		/// </summary>
-		public static void HideTileMapPrefabs(blaze2dTileMap tileMap) {
+		public static void HideTileMapPrefabs(tk2dTileMap tileMap) {
 			if (tileMap.renderData == null || tileMap.Layers == null) {
 				// No Render Data to parent Prefab Root to
 				return;
 			}
 
 			if (tileMap.PrefabsRoot == null) {
-				var go = tileMap.PrefabsRoot = blaze2dUtil.CreateGameObject("Prefabs");
+				var go = tileMap.PrefabsRoot = tk2dUtil.CreateGameObject("Prefabs");
 				go.transform.parent = tileMap.renderData.transform;
 				go.transform.localPosition = Vector3.zero;
 				go.transform.localRotation = Quaternion.identity;
@@ -277,24 +277,24 @@ namespace blaze2dRuntime.TileMap
 					tileLayer.Add(layerIdx);
 					tileInst.Add(instance);
 
-					blaze2dUtil.SetTransformParent(instance.transform, tileMap.PrefabsRoot.transform);
+					tk2dUtil.SetTransformParent(instance.transform, tileMap.PrefabsRoot.transform);
 				}
 			}
 			
 			tileMap.SetTilePrefabsList(tileX, tileY, tileLayer, tileInst);
 		}
 		
-		static Vector3 GetTilePosition(blaze2dTileMap tileMap, int x, int y)
+		static Vector3 GetTilePosition(tk2dTileMap tileMap, int x, int y)
 		{
 			return new Vector3(tileMap.data.tileSize.x * x, tileMap.data.tileSize.y * y, 0.0f);	
 		}
 
 		/// Creates render data for given tilemap
-		public static void CreateRenderData(blaze2dTileMap tileMap, bool editMode, Dictionary<Layer, bool> layersActive)
+		public static void CreateRenderData(tk2dTileMap tileMap, bool editMode, Dictionary<Layer, bool> layersActive)
 		{
 			// Create render data
 			if (tileMap.renderData == null)
-				tileMap.renderData = blaze2dUtil.CreateGameObject(tileMap.name + " Render Data");
+				tileMap.renderData = tk2dUtil.CreateGameObject(tileMap.name + " Render Data");
 	
 			tileMap.renderData.transform.position = tileMap.transform.position;
 			
@@ -311,12 +311,12 @@ namespace blaze2dRuntime.TileMap
 				
 				if (layer.IsEmpty && layer.gameObject != null)
 				{
-					blaze2dUtil.DestroyImmediate(layer.gameObject);
+					tk2dUtil.DestroyImmediate(layer.gameObject);
 					layer.gameObject = null;
 				}
 				else if (!layer.IsEmpty && layer.gameObject == null)
 				{
-					var go = layer.gameObject = blaze2dUtil.CreateGameObject("");
+					var go = layer.gameObject = tk2dUtil.CreateGameObject("");
 					go.transform.parent = tileMap.renderData.transform;
 				}
 				
@@ -364,13 +364,13 @@ namespace blaze2dRuntime.TileMap
 						else if (!isEmpty && chunk.gameObject == null)
 						{
 							string chunkName = "Chunk " + y.ToString() + " " + x.ToString();
-							var go = chunk.gameObject = blaze2dUtil.CreateGameObject(chunkName);
+							var go = chunk.gameObject = tk2dUtil.CreateGameObject(chunkName);
 							go.transform.parent = layer.gameObject.transform;
 							
 							// render mesh
-							MeshFilter meshFilter = blaze2dUtil.AddComponent<MeshFilter>(go);
-							blaze2dUtil.AddComponent<MeshRenderer>(go);
-							chunk.mesh = blaze2dUtil.CreateMesh();
+							MeshFilter meshFilter = tk2dUtil.AddComponent<MeshFilter>(go);
+							tk2dUtil.AddComponent<MeshRenderer>(go);
+							chunk.mesh = tk2dUtil.CreateMesh();
 							meshFilter.mesh = chunk.mesh;
 						}
 						
@@ -398,29 +398,29 @@ namespace blaze2dRuntime.TileMap
 			}
 		}
 		
-		public static void GetLoopOrder(blaze2dTileMapData.SortMethod sortMethod, int w, int h, out int x0, out int x1, out int dx, out int y0, out int y1, out int dy)
+		public static void GetLoopOrder(tk2dTileMapData.SortMethod sortMethod, int w, int h, out int x0, out int x1, out int dx, out int y0, out int y1, out int dy)
 		{
 			switch (sortMethod)
 			{
-			case blaze2dTileMapData.SortMethod.BottomLeft: 
+			case tk2dTileMapData.SortMethod.BottomLeft: 
 				x0 = 0; x1 = w; dx = 1;
 				y0 = 0; y1 = h; dy = 1;
 				break;
-			case blaze2dTileMapData.SortMethod.BottomRight:
+			case tk2dTileMapData.SortMethod.BottomRight:
 				x0 = w - 1; x1 = -1; dx = -1;
 				y0 = 0; y1 = h; dy = 1;
 				break;
-			case blaze2dTileMapData.SortMethod.TopLeft:
+			case tk2dTileMapData.SortMethod.TopLeft:
 				x0 = 0; x1 = w; dx = 1;
 				y0 = h - 1; y1 = -1; dy = -1;
 				break;
-			case blaze2dTileMapData.SortMethod.TopRight:
+			case tk2dTileMapData.SortMethod.TopRight:
 				x0 = w - 1; x1 = -1; dx = -1;
 				y0 = h - 1; y1 = -1; dy = -1;
 				break;
 			default:
 				Debug.LogError("Unhandled sort method");
-				goto case blaze2dTileMapData.SortMethod.BottomLeft;
+				goto case tk2dTileMapData.SortMethod.BottomLeft;
 			}
 		}
 
@@ -431,23 +431,23 @@ namespace blaze2dRuntime.TileMap
 			return rawTile & tileMask;
 		}
 
-		public static bool IsRawTileFlagSet(int rawTile, blaze2dTileFlags flag) {
+		public static bool IsRawTileFlagSet(int rawTile, tk2dTileFlags flag) {
 			if (rawTile == -1) return false;
 			return (rawTile & (int)flag) != 0;
 		}
 
-		public static void SetRawTileFlag(ref int rawTile, blaze2dTileFlags flag, bool setValue) {
+		public static void SetRawTileFlag(ref int rawTile, tk2dTileFlags flag, bool setValue) {
 			if (rawTile == -1) return;
 			rawTile = setValue ? (rawTile | (int)flag) : (rawTile & (int)(~flag));
 		}
 
-		public static void InvertRawTileFlag(ref int rawTile, blaze2dTileFlags flag) {
+		public static void InvertRawTileFlag(ref int rawTile, tk2dTileFlags flag) {
 			if (rawTile == -1) return;
 			bool setValue = (rawTile & (int)flag) == 0;
 			rawTile = setValue ? (rawTile | (int)flag) : (rawTile & (int)(~flag));
 		}
 
-		public static Vector3 ApplySpriteVertexTileFlags(blaze2dTileMap tileMap, blaze2dSpriteDefinition spriteDef, Vector3 pos, bool flipH, bool flipV, bool rot90) {
+		public static Vector3 ApplySpriteVertexTileFlags(tk2dTileMap tileMap, tk2dSpriteDefinition spriteDef, Vector3 pos, bool flipH, bool flipV, bool rot90) {
 			float cx = tileMap.data.tileOrigin.x + 0.5f * tileMap.data.tileSize.x;
 			float cy = tileMap.data.tileOrigin.y + 0.5f * tileMap.data.tileSize.y;
 			float dx = pos.x - cx;
@@ -464,7 +464,7 @@ namespace blaze2dRuntime.TileMap
 			return pos;
 		}
 
-		public static Vector2 ApplySpriteVertexTileFlags(blaze2dTileMap tileMap, blaze2dSpriteDefinition spriteDef, Vector2 pos, bool flipH, bool flipV, bool rot90) {
+		public static Vector2 ApplySpriteVertexTileFlags(tk2dTileMap tileMap, tk2dSpriteDefinition spriteDef, Vector2 pos, bool flipH, bool flipV, bool rot90) {
 			float cx = tileMap.data.tileOrigin.x + 0.5f * tileMap.data.tileSize.x;
 			float cy = tileMap.data.tileOrigin.y + 0.5f * tileMap.data.tileSize.y;
 			float dx = pos.x - cx;

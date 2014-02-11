@@ -1,7 +1,7 @@
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(blaze2dUILayoutContainerSizer))]
+[CustomEditor(typeof(tk2dUILayoutContainerSizer))]
 public class tk2dUILayoutContainerSizerEditor : tk2dUILayoutContainerEditor {
 	new void OnEnable() {
 		base.OnEnable();
@@ -12,14 +12,14 @@ public class tk2dUILayoutContainerSizerEditor : tk2dUILayoutContainerEditor {
 	bool hasNonLayouts = false;
 
 	void UpdateChildren() {
-		blaze2dUILayoutContainerSizer sizer = (blaze2dUILayoutContainerSizer)target;
+		tk2dUILayoutContainerSizer sizer = (tk2dUILayoutContainerSizer)target;
 		Transform t = sizer.transform;
 
 		allActive = true;
 
 		for (int i = 0; i < t.childCount; ++i) {
 			Transform c = t.GetChild(i);
-			blaze2dUILayout layout = c.GetComponent<blaze2dUILayout>();
+			tk2dUILayout layout = c.GetComponent<tk2dUILayout>();
 
 			if (layout == null) {
 				hasNonLayouts = true;
@@ -27,7 +27,7 @@ public class tk2dUILayoutContainerSizerEditor : tk2dUILayoutContainerEditor {
 			}
 		}
 
-		foreach (blaze2dUILayoutItem item in itemsList) {
+		foreach (tk2dUILayoutItem item in itemsList) {
 			if (!item.inLayoutList) {
 				allActive = false;
 			}
@@ -35,8 +35,8 @@ public class tk2dUILayoutContainerSizerEditor : tk2dUILayoutContainerEditor {
 	}
 
 	void AddMissingLayoutChildren(bool fixedSize) {
-		blaze2dUILayoutContainerSizer sizer = (blaze2dUILayoutContainerSizer)target;
-		foreach (blaze2dUILayoutItem item in itemsList) {
+		tk2dUILayoutContainerSizer sizer = (tk2dUILayoutContainerSizer)target;
+		foreach (tk2dUILayoutItem item in itemsList) {
 			if (!item.inLayoutList) {
 				item.inLayoutList = true;
 				item.fixedSize = fixedSize;
@@ -47,7 +47,7 @@ public class tk2dUILayoutContainerSizerEditor : tk2dUILayoutContainerEditor {
 	}
 
 	public override void OnInspectorGUI() {
-		var sizer = (blaze2dUILayoutContainerSizer)target;
+		var sizer = (tk2dUILayoutContainerSizer)target;
 		tk2dGuiUtility.LookLikeControls();
 
 		GUILayout.Space(8);
@@ -94,9 +94,9 @@ public class tk2dUILayoutContainerSizerEditor : tk2dUILayoutContainerEditor {
 		}
 	}
 
-	protected override void ItemInspector(blaze2dUILayoutItem item) {
+	protected override void ItemInspector(tk2dUILayoutItem item) {
 		var layout = item.layout;
-		var sizer = (blaze2dUILayoutContainerSizer)target;
+		var sizer = (tk2dUILayoutContainerSizer)target;
 
 		int selection = 0;
 		if (item.fixedSize) selection = 1;

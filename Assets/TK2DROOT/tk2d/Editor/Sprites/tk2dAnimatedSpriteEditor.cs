@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dAnimatedSprite))]
+[CustomEditor(typeof(tk2dAnimatedSprite))]
 class tk2dAnimatedSpriteEditor : tk2dSpriteEditor
 {
     public override void OnInspectorGUI()
@@ -40,10 +40,10 @@ class tk2dAnimatedSpriteEditor : tk2dSpriteEditor
 #endif
 
 			foreach (Object target in targets) {
-				blaze2dAnimatedSprite animSprite = target as blaze2dAnimatedSprite;
+				tk2dAnimatedSprite animSprite = target as tk2dAnimatedSprite;
 				GameObject animSpriteGameObject = animSprite.gameObject;
 				if (animSprite != null) {
-					blaze2dSprite sprite = animSprite.gameObject.AddComponent<blaze2dSprite>();
+					tk2dSprite sprite = animSprite.gameObject.AddComponent<tk2dSprite>();
 #if !(UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
 					Undo.RegisterCreatedObjectUndo(sprite, "Create Sprite Animator");
 #endif
@@ -51,8 +51,8 @@ class tk2dAnimatedSpriteEditor : tk2dSpriteEditor
 					sprite.color = animSprite.color;
 					sprite.scale = animSprite.scale;
 					// If this is not null, we assume it is already set up properly
-					if (animSprite.GetComponent<blaze2dSpriteAnimator>() == null) {
-						blaze2dSpriteAnimator spriteAnimator = animSprite.gameObject.AddComponent<blaze2dSpriteAnimator>();
+					if (animSprite.GetComponent<tk2dSpriteAnimator>() == null) {
+						tk2dSpriteAnimator spriteAnimator = animSprite.gameObject.AddComponent<tk2dSpriteAnimator>();
 #if !(UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
 						Undo.RegisterCreatedObjectUndo(spriteAnimator, "Create Sprite Animator");
 #endif

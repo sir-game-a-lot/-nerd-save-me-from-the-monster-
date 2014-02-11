@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace blaze2dRuntime.TileMap
+namespace tk2dRuntime.TileMap
 {
 	[System.Serializable]
 	public class LayerInfo
@@ -41,7 +41,7 @@ namespace blaze2dRuntime.TileMap
 	}
 }
 
-public class blaze2dTileMapData : ScriptableObject 
+public class tk2dTileMapData : ScriptableObject 
 {
 	// Start at this point
 	public enum SortMethod
@@ -71,10 +71,10 @@ public class blaze2dTileMapData : ScriptableObject
 	
 	public GameObject[] tilePrefabs = new GameObject[0];
 	[SerializeField]
-	blaze2dRuntime.TileMap.TileInfo[] tileInfo = new blaze2dRuntime.TileMap.TileInfo[0];
+	tk2dRuntime.TileMap.TileInfo[] tileInfo = new tk2dRuntime.TileMap.TileInfo[0];
 
 	[SerializeField]
-	public List<blaze2dRuntime.TileMap.LayerInfo> tileMapLayers = new List<blaze2dRuntime.TileMap.LayerInfo>();
+	public List<tk2dRuntime.TileMap.LayerInfo> tileMapLayers = new List<tk2dRuntime.TileMap.LayerInfo>();
 	
 	public int NumLayers
 	{
@@ -86,7 +86,7 @@ public class blaze2dTileMapData : ScriptableObject
 		}
 	}
 	
-	public blaze2dRuntime.TileMap.LayerInfo[] Layers
+	public tk2dRuntime.TileMap.LayerInfo[] Layers
 	{
 		get 
 		{
@@ -96,7 +96,7 @@ public class blaze2dTileMapData : ScriptableObject
 		}
 	}
 	
-	public blaze2dRuntime.TileMap.TileInfo GetTileInfoForSprite(int tileId)
+	public tk2dRuntime.TileMap.TileInfo GetTileInfoForSprite(int tileId)
 	{
 		if (tileInfo == null || tileId < 0 || tileId >= tileInfo.Length)
 			return null;
@@ -104,13 +104,13 @@ public class blaze2dTileMapData : ScriptableObject
 		return tileInfo[tileId];
 	}
 	
-	public blaze2dRuntime.TileMap.TileInfo[] GetOrCreateTileInfo(int numTiles)
+	public tk2dRuntime.TileMap.TileInfo[] GetOrCreateTileInfo(int numTiles)
 	{
 #if UNITY_EDITOR || !UNITY_FLASH
 		bool needInit = false;
 		if (tileInfo == null)
 		{
-			tileInfo = new blaze2dRuntime.TileMap.TileInfo[numTiles];
+			tileInfo = new tk2dRuntime.TileMap.TileInfo[numTiles];
 			needInit = true;
 		}
 		else if (tileInfo.Length != numTiles)
@@ -124,7 +124,7 @@ public class blaze2dTileMapData : ScriptableObject
 			for (int i = 0; i < tileInfo.Length; ++i)
 			{
 				if (tileInfo[i] == null)
-					tileInfo[i] = new blaze2dRuntime.TileMap.TileInfo();
+					tileInfo[i] = new tk2dRuntime.TileMap.TileInfo();
 			}
 		}
 #endif
@@ -147,9 +147,9 @@ public class blaze2dTileMapData : ScriptableObject
 	
 	void InitLayers()
 	{
-		tileMapLayers = new List<blaze2dRuntime.TileMap.LayerInfo>();
-		var newLayer = new blaze2dRuntime.TileMap.LayerInfo();
-		newLayer = new blaze2dRuntime.TileMap.LayerInfo();
+		tileMapLayers = new List<tk2dRuntime.TileMap.LayerInfo>();
+		var newLayer = new tk2dRuntime.TileMap.LayerInfo();
+		newLayer = new tk2dRuntime.TileMap.LayerInfo();
 		newLayer.name = "Layer 0";
 		newLayer.hash = 0x70d32b98;
 		newLayer.z = 0.0f;

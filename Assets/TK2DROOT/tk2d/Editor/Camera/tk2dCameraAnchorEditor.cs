@@ -3,13 +3,13 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
-[CustomEditor(typeof(blaze2dCameraAnchor))]
+[CustomEditor(typeof(tk2dCameraAnchor))]
 public class tk2dCameraAnchorEditor : Editor 
 {
-	static string GetAnchorPointName( blaze2dBaseSprite.Anchor anchor ) {
+	static string GetAnchorPointName( tk2dBaseSprite.Anchor anchor ) {
 		return "Anchor (" + anchor.ToString() + ")";
 	}
-	public static void UpdateAnchorName(blaze2dCameraAnchor anchor) {
+	public static void UpdateAnchorName(tk2dCameraAnchor anchor) {
 		anchor.gameObject.name = GetAnchorPointName(anchor.AnchorPoint);
 	}
 
@@ -20,13 +20,13 @@ public class tk2dCameraAnchorEditor : Editor
 
 	public override void OnInspectorGUI()
 	{
-		blaze2dCameraAnchor _target = (blaze2dCameraAnchor)this.target;
+		tk2dCameraAnchor _target = (tk2dCameraAnchor)this.target;
 
-		blaze2dBaseSprite.Anchor prevAnchorPoint = _target.AnchorPoint;
+		tk2dBaseSprite.Anchor prevAnchorPoint = _target.AnchorPoint;
 		_target.AnchorCamera = EditorGUILayout.ObjectField("Camera", _target.AnchorCamera, typeof(Camera), true) as Camera;
-		_target.AnchorPoint = (blaze2dBaseSprite.Anchor)EditorGUILayout.EnumPopup("Anchor Point", _target.AnchorPoint);
+		_target.AnchorPoint = (tk2dBaseSprite.Anchor)EditorGUILayout.EnumPopup("Anchor Point", _target.AnchorPoint);
 
-		if (_target.AnchorCamera != null && _target.AnchorCamera.GetComponent<blaze2dCamera>() != null) {
+		if (_target.AnchorCamera != null && _target.AnchorCamera.GetComponent<tk2dCamera>() != null) {
 			EditorGUI.indentLevel++;
 
 			GUILayout.BeginHorizontal();
@@ -69,7 +69,7 @@ public class tk2dCameraAnchorEditor : Editor
 			go.transform.localPosition = new Vector3(0, 0, 10);
 			go.transform.localRotation = Quaternion.identity;
 			go.transform.localScale = Vector3.one;
-			blaze2dCameraAnchor anchor = go.AddComponent<blaze2dCameraAnchor>();
+			tk2dCameraAnchor anchor = go.AddComponent<tk2dCameraAnchor>();
 			anchor.AnchorCamera = Selection.activeGameObject.camera;
 			UpdateAnchorName(anchor);
 

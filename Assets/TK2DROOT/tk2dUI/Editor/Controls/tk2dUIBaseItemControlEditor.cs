@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dUIBaseItemControl))]
+[CustomEditor(typeof(tk2dUIBaseItemControl))]
 public class tk2dUIBaseItemControlEditor : Editor
 {
     protected bool hasBtnCheckBeenDone = false;
     public override void OnInspectorGUI()
     {
         tk2dGuiUtility.LookLikeInspector();
-        blaze2dUIBaseItemControl baseButtonControl = (blaze2dUIBaseItemControl)target;
+        tk2dUIBaseItemControl baseButtonControl = (tk2dUIBaseItemControl)target;
 
         baseButtonControl.uiItem = tk2dUICustomEditorGUILayout.SceneObjectField("UIItem", baseButtonControl.uiItem,target);
 
@@ -38,7 +38,7 @@ public class tk2dUIBaseItemControlEditor : Editor
 
     // Convenient non-essential wrappers
     protected void BeginMessageGUI() {
-        blaze2dUIBaseItemControl baseButtonControl = (blaze2dUIBaseItemControl)target;
+        tk2dUIBaseItemControl baseButtonControl = (tk2dUIBaseItemControl)target;
         GameObject newSendMessageTarget = methodBindingUtil.BeginMessageGUI( baseButtonControl.SendMessageTarget );
         if (newSendMessageTarget != baseButtonControl.SendMessageTarget) {
             baseButtonControl.SendMessageTarget = newSendMessageTarget;

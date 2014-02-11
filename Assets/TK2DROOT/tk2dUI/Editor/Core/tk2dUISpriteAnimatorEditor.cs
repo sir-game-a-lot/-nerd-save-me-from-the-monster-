@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dUISpriteAnimator))]
+[CustomEditor(typeof(tk2dUISpriteAnimator))]
 public class tk2dUISpriteAnimatorEditor : tk2dSpriteAnimatorEditor {
 	[MenuItem("CONTEXT/tk2dSpriteAnimator/Convert to UI Sprite Animator")]
 	static void DoConvertUISpriteAnimator() {
@@ -14,9 +14,9 @@ public class tk2dUISpriteAnimatorEditor : tk2dSpriteAnimatorEditor {
 #endif
 
 		foreach (GameObject go in Selection.gameObjects) {
-			blaze2dSpriteAnimator animator = go.GetComponent<blaze2dSpriteAnimator>();
+			tk2dSpriteAnimator animator = go.GetComponent<tk2dSpriteAnimator>();
 			if (animator != null) {
-				blaze2dUISpriteAnimator UIanimator = go.AddComponent<blaze2dUISpriteAnimator>();
+				tk2dUISpriteAnimator UIanimator = go.AddComponent<tk2dUISpriteAnimator>();
 				UIanimator.Library = animator.Library;
 				UIanimator.DefaultClipId = animator.DefaultClipId;
 				UIanimator.playAutomatically = animator.playAutomatically;

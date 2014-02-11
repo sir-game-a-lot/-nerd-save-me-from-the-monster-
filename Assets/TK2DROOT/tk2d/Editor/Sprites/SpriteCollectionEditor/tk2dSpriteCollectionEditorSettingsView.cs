@@ -85,7 +85,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 						for (int j = 1; j < SpriteCollection.platforms.Count; ++j)
 						{
 							if (!SpriteCollection.platforms[j].Valid) continue;
-							blaze2dSpriteCollection data = SpriteCollection.platforms[j].spriteCollection;
+							tk2dSpriteCollection data = SpriteCollection.platforms[j].spriteCollection;
 							System.Array.Resize(ref data.altMaterials, SpriteCollection.altMaterials.Length);
 							data.altMaterials[i] = DuplicateMaterial(data.altMaterials[sourceIndex]);
 							EditorUtility.SetDirty(data);
@@ -177,7 +177,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 							for (int j = 0; j < SpriteCollection.platforms.Count; ++j)
 							{
 								if (!SpriteCollection.platforms[j].Valid) continue;
-								blaze2dSpriteCollection data = SpriteCollection.platforms[j].spriteCollection;
+								tk2dSpriteCollection data = SpriteCollection.platforms[j].spriteCollection;
 								data.altMaterials[i] = null;
 								
 								for (int lastIndex = data.altMaterials.Length - 1; lastIndex >= 0; --lastIndex)
@@ -271,7 +271,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 				{
 					SpriteCollection.ClearReferences();
 
-					foreach (blaze2dSpriteCollectionPlatform plat in SpriteCollection.platforms)
+					foreach (tk2dSpriteCollectionPlatform plat in SpriteCollection.platforms)
 						plat.spriteCollection = null;
 				}
 			}
@@ -285,17 +285,17 @@ namespace tk2dEditor.SpriteCollectionEditor
 		{
 			// Asset Platform
 			BeginHeader("Platforms");
-			blaze2dSystem system = blaze2dSystem.inst_NoCreate;
+			tk2dSystem system = tk2dSystem.inst_NoCreate;
 
 			if (system == null && GUILayout.Button("Add Platform Support"))
-				system = blaze2dSystem.inst; // force creation
+				system = tk2dSystem.inst; // force creation
 
 			if (system)
 			{
 				int toDelete = -1;
 				for (int i = 0; i < SpriteCollection.platforms.Count; ++i)
 				{
-					blaze2dSpriteCollectionPlatform currentPlatform = SpriteCollection.platforms[i];
+					tk2dSpriteCollectionPlatform currentPlatform = SpriteCollection.platforms[i];
 
 					GUILayout.BeginHorizontal();
 					string label = (i==0)?"Current platform":"Platform";
@@ -308,7 +308,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 
 				if (toDelete != -1)
 				{
-					blaze2dSpriteCollection deletedSpriteCollection = null;
+					tk2dSpriteCollection deletedSpriteCollection = null;
 					if (SpriteCollection.platforms.Count == 1)
 					{
 						if (SpriteCollection.platforms[0].spriteCollection != null && SpriteCollection.platforms[0].spriteCollection.spriteCollection != null)
@@ -324,7 +324,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 					}
 					if (deletedSpriteCollection != null)
 					{
-						foreach (blaze2dSpriteCollectionFont f in deletedSpriteCollection.fonts)
+						foreach (tk2dSpriteCollectionFont f in deletedSpriteCollection.fonts)
 							tk2dSystemUtility.UnmakeLoadableAsset(f.data);	
 						tk2dSystemUtility.UnmakeLoadableAsset(deletedSpriteCollection.spriteCollection);
 					}
@@ -336,7 +336,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 					GUILayout.BeginHorizontal();
 					EditorGUILayout.PrefixLabel(" ");
 					if (GUILayout.Button("Add new platform", EditorStyles.miniButton))
-						SpriteCollection.platforms.Add(new blaze2dSpriteCollectionPlatform());
+						SpriteCollection.platforms.Add(new tk2dSpriteCollectionPlatform());
 					GUILayout.EndHorizontal();
 				}
 			}
@@ -348,10 +348,10 @@ namespace tk2dEditor.SpriteCollectionEditor
 		{
 			BeginHeader("Texture Settings");
 
-			SpriteCollection.atlasFormat = (blaze2dSpriteCollection.AtlasFormat)EditorGUILayout.EnumPopup("Atlas Format", SpriteCollection.atlasFormat);
-			if (SpriteCollection.atlasFormat == blaze2dSpriteCollection.AtlasFormat.UnityTexture) {
+			SpriteCollection.atlasFormat = (tk2dSpriteCollection.AtlasFormat)EditorGUILayout.EnumPopup("Atlas Format", SpriteCollection.atlasFormat);
+			if (SpriteCollection.atlasFormat == tk2dSpriteCollection.AtlasFormat.UnityTexture) {
 				SpriteCollection.filterMode = (FilterMode)EditorGUILayout.EnumPopup("Filter Mode", SpriteCollection.filterMode);
-				SpriteCollection.textureCompression = (blaze2dSpriteCollection.TextureCompression)EditorGUILayout.EnumPopup("Compression", SpriteCollection.textureCompression);
+				SpriteCollection.textureCompression = (tk2dSpriteCollection.TextureCompression)EditorGUILayout.EnumPopup("Compression", SpriteCollection.textureCompression);
 				SpriteCollection.userDefinedTextureSettings = EditorGUILayout.Toggle("User Defined", SpriteCollection.userDefinedTextureSettings);
 				if (SpriteCollection.userDefinedTextureSettings) GUI.enabled = false;
 				EditorGUI.indentLevel++;
@@ -361,7 +361,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 				EditorGUI.indentLevel--;
 				GUI.enabled = true;
 			}
-			else if (SpriteCollection.atlasFormat == blaze2dSpriteCollection.AtlasFormat.Png) {
+			else if (SpriteCollection.atlasFormat == tk2dSpriteCollection.AtlasFormat.Png) {
 				tk2dGuiUtility.InfoBox("Png atlases will decrease on disk game asset sizes, at the expense of increased load times.",
 					tk2dGuiUtility.WarningLevel.Warning);
 				SpriteCollection.filterMode = (FilterMode)EditorGUILayout.EnumPopup("Filter Mode", SpriteCollection.filterMode);
@@ -403,7 +403,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 			SpriteCollection.disableTrimming = EditorGUILayout.Toggle("Disable Trimming", SpriteCollection.disableTrimming);
 			GUIContent gc = new GUIContent("Disable rotation", "Disable rotation of sprites in atlas. Use this if you need consistent UV direction for shader special effects.");
 			SpriteCollection.disableRotation = EditorGUILayout.Toggle(gc, SpriteCollection.disableRotation);
-			SpriteCollection.normalGenerationMode = (blaze2dSpriteCollection.NormalGenerationMode)EditorGUILayout.EnumPopup("Normal Generation", SpriteCollection.normalGenerationMode);
+			SpriteCollection.normalGenerationMode = (tk2dSpriteCollection.NormalGenerationMode)EditorGUILayout.EnumPopup("Normal Generation", SpriteCollection.normalGenerationMode);
 
 			EndHeader();
 		}
@@ -416,11 +416,11 @@ namespace tk2dEditor.SpriteCollectionEditor
 			GUI.enabled = false;
 			SpriteCollection.physicsEngine = tk2dSpriteDefinition.PhysicsEngine.Physics3D;
 #endif
-			SpriteCollection.physicsEngine = (blaze2dSpriteDefinition.PhysicsEngine)EditorGUILayout.EnumPopup("Physics Engine", SpriteCollection.physicsEngine);
+			SpriteCollection.physicsEngine = (tk2dSpriteDefinition.PhysicsEngine)EditorGUILayout.EnumPopup("Physics Engine", SpriteCollection.physicsEngine);
 #if (UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2)
 			GUI.enabled = false;
 #endif
-			GUI.enabled = SpriteCollection.physicsEngine == blaze2dSpriteDefinition.PhysicsEngine.Physics3D;
+			GUI.enabled = SpriteCollection.physicsEngine == tk2dSpriteDefinition.PhysicsEngine.Physics3D;
 			SpriteCollection.physicsDepth = EditorGUILayout.FloatField("Collider depth", SpriteCollection.physicsDepth);
 			GUI.enabled = true;
 
@@ -498,7 +498,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 				EditorGUILayout.LabelField("Atlas Wastage", SpriteCollection.atlasWastage.ToString("0.00") + "%");
 			}
 
-			if (SpriteCollection.atlasFormat == blaze2dSpriteCollection.AtlasFormat.Png) {
+			if (SpriteCollection.atlasFormat == tk2dSpriteCollection.AtlasFormat.Png) {
 				int totalAtlasSize = 0;
 				foreach (TextAsset ta in SpriteCollection.atlasTextureFiles) {
 					if (ta != null) {
@@ -548,7 +548,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 	
 			GUILayout.BeginVertical(tk2dEditorSkin.SC_InspectorHeaderBG, GUILayout.ExpandWidth(true));
 			GUILayout.Label("Settings", EditorStyles.largeLabel);
-			SpriteCollection.spriteCollection = EditorGUILayout.ObjectField("Data object", SpriteCollection.spriteCollection, typeof(blaze2dSpriteCollectionData), false) as blaze2dSpriteCollectionData;
+			SpriteCollection.spriteCollection = EditorGUILayout.ObjectField("Data object", SpriteCollection.spriteCollection, typeof(tk2dSpriteCollectionData), false) as tk2dSpriteCollectionData;
 			GUILayout.EndVertical();
 			
 			GUILayout.BeginVertical(tk2dEditorSkin.SC_InspectorBG, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));

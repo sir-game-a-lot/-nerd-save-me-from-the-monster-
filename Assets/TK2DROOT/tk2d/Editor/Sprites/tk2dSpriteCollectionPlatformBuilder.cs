@@ -7,12 +7,12 @@ namespace tk2dEditor.SpriteCollectionBuilder
 {
 	public static class PlatformBuilder
 	{
-		public static void InitializeSpriteCollectionPlatforms(blaze2dSpriteCollection gen, string root)
+		public static void InitializeSpriteCollectionPlatforms(tk2dSpriteCollection gen, string root)
 		{
 			// Create all missing platform directories and sprite collection objects
 			for (int i = 0; i < gen.platforms.Count; ++i)
 			{
-				blaze2dSpriteCollectionPlatform plat = gen.platforms[i];
+				tk2dSpriteCollectionPlatform plat = gen.platforms[i];
 				if (plat.name.Length > 0 && !plat.spriteCollection)
 				{
 					plat.spriteCollection = tk2dSpriteCollectionEditor.CreateSpriteCollection(root, gen.name + "@" + plat.name);
@@ -89,7 +89,7 @@ namespace tk2dEditor.SpriteCollectionBuilder
 		}
 
 		// Update target platforms
-		public static void UpdatePlatformSpriteCollection(blaze2dSpriteCollection source, blaze2dSpriteCollection target, string dataPath, bool root, float scale, string platformName)
+		public static void UpdatePlatformSpriteCollection(tk2dSpriteCollection source, tk2dSpriteCollection target, string dataPath, bool root, float scale, string platformName)
 		{
 			tk2dEditor.SpriteCollectionEditor.SpriteCollectionProxy proxy = new tk2dEditor.SpriteCollectionEditor.SpriteCollectionProxy(source);
 			
@@ -102,7 +102,7 @@ namespace tk2dEditor.SpriteCollectionBuilder
 
 			// This must always be zero, as children cannot have nested platforms.
 			// That would open the door to a lot of unnecessary insanity
-			proxy.platforms = new List<blaze2dSpriteCollectionPlatform>();
+			proxy.platforms = new List<tk2dSpriteCollectionPlatform>();
 
 			// Update atlas sizes
 			proxy.atlasWidth = (int)(proxy.atlasWidth * scale);
@@ -118,7 +118,7 @@ namespace tk2dEditor.SpriteCollectionBuilder
 			if (!root)
 			{
 				// Update textures
-				foreach (blaze2dSpriteCollectionDefinition param in proxy.textureParams)
+				foreach (tk2dSpriteCollectionDefinition param in proxy.textureParams)
 				{
 					if (param.texture == null) continue;
 					
@@ -151,7 +151,7 @@ namespace tk2dEditor.SpriteCollectionBuilder
 						param.regionH = (int)(param.regionH * scale);
 					}
 
-					if (param.anchor == blaze2dSpriteCollectionDefinition.Anchor.Custom)
+					if (param.anchor == tk2dSpriteCollectionDefinition.Anchor.Custom)
 					{
 						param.anchorX = (int)(param.anchorX * scale);
 						param.anchorY = (int)(param.anchorY * scale);
@@ -159,7 +159,7 @@ namespace tk2dEditor.SpriteCollectionBuilder
 
 					if (param.customSpriteGeometry)
 					{
-						foreach (blaze2dSpriteColliderIsland geom in param.geometryIslands)
+						foreach (tk2dSpriteColliderIsland geom in param.geometryIslands)
 						{
 							for (int p = 0; p < geom.points.Length; ++p)
 								geom.points[p] *= scale;
@@ -171,15 +171,15 @@ namespace tk2dEditor.SpriteCollectionBuilder
 						param.diceUnitY = (int)(param.diceUnitY * scale);
 					}
 
-					if (param.colliderType == blaze2dSpriteCollectionDefinition.ColliderType.Polygon)
+					if (param.colliderType == tk2dSpriteCollectionDefinition.ColliderType.Polygon)
 					{
-						foreach (blaze2dSpriteColliderIsland geom in param.polyColliderIslands)
+						foreach (tk2dSpriteColliderIsland geom in param.polyColliderIslands)
 						{
 							for (int p = 0; p < geom.points.Length; ++p)
 								geom.points[p] *= scale;
 						}
 					}
-					else if (param.colliderType == blaze2dSpriteCollectionDefinition.ColliderType.BoxCustom)
+					else if (param.colliderType == tk2dSpriteCollectionDefinition.ColliderType.BoxCustom)
 					{
 						param.boxColliderMax *= scale;
 						param.boxColliderMin *= scale;
@@ -192,17 +192,17 @@ namespace tk2dEditor.SpriteCollectionBuilder
 			}
 
 			// We ALWAYS duplicate fonts
-			if (target.fonts == null) target.fonts = new blaze2dSpriteCollectionFont[0];
+			if (target.fonts == null) target.fonts = new tk2dSpriteCollectionFont[0];
 			for (int i = 0; i < proxy.fonts.Count; ++i)
 			{
-				blaze2dSpriteCollectionFont font = proxy.fonts[i];
+				tk2dSpriteCollectionFont font = proxy.fonts[i];
 				if (!font.InUse || font.texture == null || font.data == null || font.editorData == null || font.bmFont == null) continue; // not valid for some reason or other
 				bool needFontData = true;
 				bool needFontEditorData = true;
 				bool hasCorrespondingData = i < target.fonts.Length && target.fonts[i] != null;
 				if (hasCorrespondingData)
 				{
-					blaze2dSpriteCollectionFont targetFont = target.fonts[i];
+					tk2dSpriteCollectionFont targetFont = target.fonts[i];
 					if (targetFont.data != null) { font.data = targetFont.data; needFontData = false; }
 					if (targetFont.editorData != null) { font.editorData = targetFont.editorData; needFontEditorData = false; }
 				}
@@ -241,7 +241,7 @@ namespace tk2dEditor.SpriteCollectionBuilder
 					string destPath = AssetDatabase.GenerateUniqueAssetPath(GetCopyAtTargetPath(platformName, targetDir, srcPath));
 					AssetDatabase.CopyAsset(srcPath, destPath);
 					AssetDatabase.Refresh();
-					font.data = AssetDatabase.LoadAssetAtPath(destPath, typeof(blaze2dFontData)) as blaze2dFontData;
+					font.data = AssetDatabase.LoadAssetAtPath(destPath, typeof(tk2dFontData)) as tk2dFontData;
 				}
 				if (needFontEditorData) 
 				{
@@ -249,7 +249,7 @@ namespace tk2dEditor.SpriteCollectionBuilder
 					string destPath = AssetDatabase.GenerateUniqueAssetPath(GetCopyAtTargetPath(platformName, targetDir, srcPath));
 					AssetDatabase.CopyAsset(srcPath, destPath);
 					AssetDatabase.Refresh();
-					font.editorData = AssetDatabase.LoadAssetAtPath(destPath, typeof(blaze2dFont)) as blaze2dFont;
+					font.editorData = AssetDatabase.LoadAssetAtPath(destPath, typeof(tk2dFont)) as tk2dFont;
 				}
 				
 				if (font.editorData.bmFont != font.bmFont ||

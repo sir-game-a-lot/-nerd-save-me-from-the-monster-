@@ -28,7 +28,7 @@ public class tk2dSpriteAnimationPreview
 		Repaint();
 	}
 
-	public void Draw(Rect r, blaze2dSpriteDefinition sprite)
+	public void Draw(Rect r, tk2dSpriteDefinition sprite)
 	{
 		Init();
 

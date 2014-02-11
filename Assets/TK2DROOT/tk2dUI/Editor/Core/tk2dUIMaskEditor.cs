@@ -3,10 +3,10 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
-[CustomEditor(typeof(blaze2dUIMask))]
+[CustomEditor(typeof(tk2dUIMask))]
 public class tk2dUIMaskEditor : Editor {
 	public override void OnInspectorGUI() {
-		blaze2dUIMask mask = (blaze2dUIMask)target;
+		tk2dUIMask mask = (tk2dUIMask)target;
 
 		DrawDefaultInspector();
 
@@ -37,7 +37,7 @@ public class tk2dUIMaskEditor : Editor {
     {
 		if (tk2dPreferences.inst.enableSpriteHandles == false) return;
 
-    	blaze2dUIMask mask = (blaze2dUIMask)target;
+    	tk2dUIMask mask = (tk2dUIMask)target;
 		Transform t = mask.transform;
 		Vector3 anchorOffset = tk2dSceneHelper.GetAnchorOffset(mask.size, mask.anchor);
 		Rect localRect = new Rect(anchorOffset.x, anchorOffset.y, mask.size.x, mask.size.y);

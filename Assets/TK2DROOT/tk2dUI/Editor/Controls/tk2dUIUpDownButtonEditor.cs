@@ -3,14 +3,14 @@ using UnityEditor;
 using System.Collections;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dUIUpDownButton))]
+[CustomEditor(typeof(tk2dUIUpDownButton))]
 public class tk2dUIUpDownButtonEditor : tk2dUIBaseItemControlEditor
 {
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
 
-        blaze2dUIUpDownButton upDownButton = (blaze2dUIUpDownButton)target;
+        tk2dUIUpDownButton upDownButton = (tk2dUIUpDownButton)target;
 
         upDownButton.upStateGO = tk2dUICustomEditorGUILayout.SceneObjectField("Up State GameObject", upDownButton.upStateGO,target);
         upDownButton.downStateGO = tk2dUICustomEditorGUILayout.SceneObjectField("Down State GameObject", upDownButton.downStateGO,target);

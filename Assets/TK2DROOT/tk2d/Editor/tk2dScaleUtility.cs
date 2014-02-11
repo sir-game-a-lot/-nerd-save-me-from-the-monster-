@@ -11,8 +11,8 @@ public static class tk2dScaleUtility
 									   accumulatedScale.y * node.localScale.y,
 									   accumulatedScale.z * node.localScale.z);
 		
-		blaze2dBaseSprite sprite = node.GetComponent<blaze2dBaseSprite>();
-		blaze2dTextMesh textMesh = node.GetComponent<blaze2dTextMesh>();
+		tk2dBaseSprite sprite = node.GetComponent<tk2dBaseSprite>();
+		tk2dTextMesh textMesh = node.GetComponent<tk2dTextMesh>();
 		if (sprite)
 		{
 			Vector3 spriteAccumScale = new Vector3(accumulatedScale.x * sprite.scale.x,
@@ -41,8 +41,8 @@ public static class tk2dScaleUtility
 	{
 		List<UnityEngine.Object> undoObjects = new List<UnityEngine.Object>();
 		undoObjects.AddRange( rootObject.GetComponentsInChildren<Transform>() );
-		undoObjects.AddRange( rootObject.GetComponentsInChildren<blaze2dTextMesh>() );
-		undoObjects.AddRange( rootObject.GetComponentsInChildren<blaze2dBaseSprite>() );
+		undoObjects.AddRange( rootObject.GetComponentsInChildren<tk2dTextMesh>() );
+		undoObjects.AddRange( rootObject.GetComponentsInChildren<tk2dBaseSprite>() );
 		MeshFilter[] meshFilters = rootObject.GetComponentsInChildren<MeshFilter>();
 		foreach (MeshFilter mf in meshFilters) {
 			if (mf.sharedMesh != null) {

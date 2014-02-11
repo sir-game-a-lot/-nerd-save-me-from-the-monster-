@@ -3,10 +3,10 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 
-[CustomEditor(typeof(blaze2dStaticSpriteBatcher))]
+[CustomEditor(typeof(tk2dStaticSpriteBatcher))]
 class tk2dStaticSpriteBatcherEditor : Editor
 {
-	blaze2dStaticSpriteBatcher batcher { get { return (blaze2dStaticSpriteBatcher)target; } }
+	tk2dStaticSpriteBatcher batcher { get { return (tk2dStaticSpriteBatcher)target; } }
 	
 	// Like GetComponentsInChildren, but doesn't include self
 	T[] GetComponentsInChildrenExcludeSelf<T>(Transform root) where T : Component {
@@ -23,8 +23,8 @@ class tk2dStaticSpriteBatcherEditor : Editor
 			allTransforms = (from t in allTransforms where t != batcher.transform select t).ToArray();
 			
 			// sort sprites, smaller to larger z
-			if (batcher.CheckFlag(blaze2dStaticSpriteBatcher.Flags.SortToCamera)) {
-				blaze2dCamera tk2dCam = blaze2dCamera.CameraForLayer( batcher.gameObject.layer );
+			if (batcher.CheckFlag(tk2dStaticSpriteBatcher.Flags.SortToCamera)) {
+				tk2dCamera tk2dCam = tk2dCamera.CameraForLayer( batcher.gameObject.layer );
 				Camera cam = tk2dCam ? tk2dCam.camera : Camera.main;
 				allTransforms = (from t in allTransforms orderby cam.WorldToScreenPoint((t.renderer != null) ? t.renderer.bounds.center : t.position).z descending select t).ToArray();
 			}
@@ -59,16 +59,16 @@ class tk2dStaticSpriteBatcherEditor : Editor
 			Matrix4x4 batcherWorldToLocal = batcher.transform.worldToLocalMatrix;
 			
 			batcher.spriteCollection = null;
-			batcher.batchedSprites = new blaze2dBatchedSprite[allTransforms.Length];
-			List<blaze2dTextMeshData> allTextMeshData = new List<blaze2dTextMeshData>();
+			batcher.batchedSprites = new tk2dBatchedSprite[allTransforms.Length];
+			List<tk2dTextMeshData> allTextMeshData = new List<tk2dTextMeshData>();
 
 			int currBatchedSprite = 0;
 			foreach (var t in allTransforms)
 			{
-				blaze2dBaseSprite baseSprite = t.GetComponent<blaze2dBaseSprite>();
-				blaze2dTextMesh textmesh = t.GetComponent<blaze2dTextMesh>();
+				tk2dBaseSprite baseSprite = t.GetComponent<tk2dBaseSprite>();
+				tk2dTextMesh textmesh = t.GetComponent<tk2dTextMesh>();
 
-				blaze2dBatchedSprite bs = new blaze2dBatchedSprite();
+				tk2dBatchedSprite bs = new tk2dBatchedSprite();
 				bs.name = t.gameObject.name;
 				bs.position = t.localPosition;
 				bs.rotation = t.localRotation;
@@ -87,14 +87,14 @@ class tk2dStaticSpriteBatcherEditor : Editor
 				{
 					bs.spriteCollection = null;
 
-					bs.type = blaze2dBatchedSprite.Type.TextMesh;
+					bs.type = tk2dBatchedSprite.Type.TextMesh;
 					bs.color = textmesh.color;
 					bs.baseScale = textmesh.scale;
 					bs.renderLayer = textmesh.SortingOrder;
 					bs.localScale = new Vector3(t.localScale.x * textmesh.scale.x, t.localScale.y * textmesh.scale.y, t.localScale.z * textmesh.scale.z);
 					bs.FormattedText = textmesh.FormattedText;
 
-					blaze2dTextMeshData tmd = new blaze2dTextMeshData();
+					tk2dTextMeshData tmd = new tk2dTextMeshData();
 					tmd.font = textmesh.font;
 					tmd.text = textmesh.text;
 					tmd.color = textmesh.color;
@@ -119,7 +119,7 @@ class tk2dStaticSpriteBatcherEditor : Editor
 					bs.spriteId = -1;
 					bs.baseScale = Vector3.one;
 					bs.localScale = t.localScale;
-					bs.type = blaze2dBatchedSprite.Type.EmptyGameObject;
+					bs.type = tk2dBatchedSprite.Type.EmptyGameObject;
 				}
 
 				
@@ -163,13 +163,13 @@ class tk2dStaticSpriteBatcherEditor : Editor
 		}
 	}
 	
-	public static void FillBatchedSprite(blaze2dBatchedSprite bs, GameObject go) {
-		blaze2dSprite srcSprite = go.transform.GetComponent<blaze2dSprite>();
-		blaze2dTiledSprite srcTiledSprite = go.transform.GetComponent<blaze2dTiledSprite>();
-		blaze2dSlicedSprite srcSlicedSprite = go.transform.GetComponent<blaze2dSlicedSprite>();
-		blaze2dClippedSprite srcClippedSprite = go.transform.GetComponent<blaze2dClippedSprite>();
+	public static void FillBatchedSprite(tk2dBatchedSprite bs, GameObject go) {
+		tk2dSprite srcSprite = go.transform.GetComponent<tk2dSprite>();
+		tk2dTiledSprite srcTiledSprite = go.transform.GetComponent<tk2dTiledSprite>();
+		tk2dSlicedSprite srcSlicedSprite = go.transform.GetComponent<tk2dSlicedSprite>();
+		tk2dClippedSprite srcClippedSprite = go.transform.GetComponent<tk2dClippedSprite>();
 
-		blaze2dBaseSprite baseSprite = go.GetComponent<blaze2dBaseSprite>();
+		tk2dBaseSprite baseSprite = go.GetComponent<tk2dBaseSprite>();
 		bs.spriteId = baseSprite.spriteId;
 		bs.spriteCollection = baseSprite.Collection;
 		bs.baseScale = baseSprite.scale;
@@ -186,77 +186,77 @@ class tk2dStaticSpriteBatcherEditor : Editor
 		}
 
 		if (srcSprite) {
-			bs.type = blaze2dBatchedSprite.Type.Sprite;
+			bs.type = tk2dBatchedSprite.Type.Sprite;
 		}
 		else if (srcTiledSprite) {
-			bs.type = blaze2dBatchedSprite.Type.TiledSprite;
+			bs.type = tk2dBatchedSprite.Type.TiledSprite;
 			bs.Dimensions = srcTiledSprite.dimensions;
 			bs.anchor = srcTiledSprite.anchor;
-			bs.SetFlag(blaze2dBatchedSprite.Flags.Sprite_CreateBoxCollider, srcTiledSprite.CreateBoxCollider);
+			bs.SetFlag(tk2dBatchedSprite.Flags.Sprite_CreateBoxCollider, srcTiledSprite.CreateBoxCollider);
 		}
 		else if (srcSlicedSprite) {
-			bs.type = blaze2dBatchedSprite.Type.SlicedSprite;
+			bs.type = tk2dBatchedSprite.Type.SlicedSprite;
 			bs.Dimensions = srcSlicedSprite.dimensions;
 			bs.anchor = srcSlicedSprite.anchor;
-			bs.SetFlag(blaze2dBatchedSprite.Flags.Sprite_CreateBoxCollider, srcSlicedSprite.CreateBoxCollider);
-			bs.SetFlag(blaze2dBatchedSprite.Flags.SlicedSprite_BorderOnly, srcSlicedSprite.BorderOnly);
+			bs.SetFlag(tk2dBatchedSprite.Flags.Sprite_CreateBoxCollider, srcSlicedSprite.CreateBoxCollider);
+			bs.SetFlag(tk2dBatchedSprite.Flags.SlicedSprite_BorderOnly, srcSlicedSprite.BorderOnly);
 			bs.SlicedSpriteBorderBottomLeft = new Vector2(srcSlicedSprite.borderLeft, srcSlicedSprite.borderBottom);
 			bs.SlicedSpriteBorderTopRight = new Vector2(srcSlicedSprite.borderRight, srcSlicedSprite.borderTop);
 		}
 		else if (srcClippedSprite) {
-			bs.type = blaze2dBatchedSprite.Type.ClippedSprite;
+			bs.type = tk2dBatchedSprite.Type.ClippedSprite;
 			bs.ClippedSpriteRegionBottomLeft = srcClippedSprite.clipBottomLeft;
 			bs.ClippedSpriteRegionTopRight = srcClippedSprite.clipTopRight;
-			bs.SetFlag(blaze2dBatchedSprite.Flags.Sprite_CreateBoxCollider, srcClippedSprite.CreateBoxCollider);
+			bs.SetFlag(tk2dBatchedSprite.Flags.Sprite_CreateBoxCollider, srcClippedSprite.CreateBoxCollider);
 		}
 	}
 
 	// This is used by other parts of code
-	public static void RestoreBatchedSprite(GameObject go, blaze2dBatchedSprite bs) {
-		blaze2dBaseSprite baseSprite = null;
+	public static void RestoreBatchedSprite(GameObject go, tk2dBatchedSprite bs) {
+		tk2dBaseSprite baseSprite = null;
 		switch (bs.type) {
-			case blaze2dBatchedSprite.Type.EmptyGameObject:
+			case tk2dBatchedSprite.Type.EmptyGameObject:
 				{
 					break;
 				}
-			case blaze2dBatchedSprite.Type.Sprite:
+			case tk2dBatchedSprite.Type.Sprite:
 				{
-					blaze2dSprite s = blaze2dBaseSprite.AddComponent<blaze2dSprite>(go, bs.spriteCollection, bs.spriteId);
+					tk2dSprite s = tk2dBaseSprite.AddComponent<tk2dSprite>(go, bs.spriteCollection, bs.spriteId);
 					baseSprite = s;
 					break;
 				}
-			case blaze2dBatchedSprite.Type.TiledSprite:
+			case tk2dBatchedSprite.Type.TiledSprite:
 				{
-					blaze2dTiledSprite s = blaze2dBaseSprite.AddComponent<blaze2dTiledSprite>(go, bs.spriteCollection, bs.spriteId);
+					tk2dTiledSprite s = tk2dBaseSprite.AddComponent<tk2dTiledSprite>(go, bs.spriteCollection, bs.spriteId);
 					baseSprite = s;
 					s.dimensions = bs.Dimensions;
 					s.anchor = bs.anchor;
-					s.CreateBoxCollider = bs.CheckFlag(blaze2dBatchedSprite.Flags.Sprite_CreateBoxCollider);
+					s.CreateBoxCollider = bs.CheckFlag(tk2dBatchedSprite.Flags.Sprite_CreateBoxCollider);
 					RestoreBoxColliderSettings(s.gameObject, bs.BoxColliderOffsetZ, bs.BoxColliderExtentZ);
 					break;
 				}
-			case blaze2dBatchedSprite.Type.SlicedSprite:
+			case tk2dBatchedSprite.Type.SlicedSprite:
 				{
-					blaze2dSlicedSprite s = blaze2dBaseSprite.AddComponent<blaze2dSlicedSprite>(go, bs.spriteCollection, bs.spriteId);
+					tk2dSlicedSprite s = tk2dBaseSprite.AddComponent<tk2dSlicedSprite>(go, bs.spriteCollection, bs.spriteId);
 					baseSprite = s;
 					s.dimensions = bs.Dimensions;
 					s.anchor = bs.anchor;
 
-					s.BorderOnly = bs.CheckFlag(blaze2dBatchedSprite.Flags.SlicedSprite_BorderOnly);
+					s.BorderOnly = bs.CheckFlag(tk2dBatchedSprite.Flags.SlicedSprite_BorderOnly);
 					s.SetBorder(bs.SlicedSpriteBorderBottomLeft.x, bs.SlicedSpriteBorderBottomLeft.y, bs.SlicedSpriteBorderTopRight.x, bs.SlicedSpriteBorderTopRight.y);
 
-					s.CreateBoxCollider = bs.CheckFlag(blaze2dBatchedSprite.Flags.Sprite_CreateBoxCollider);
+					s.CreateBoxCollider = bs.CheckFlag(tk2dBatchedSprite.Flags.Sprite_CreateBoxCollider);
 					RestoreBoxColliderSettings(s.gameObject, bs.BoxColliderOffsetZ, bs.BoxColliderExtentZ);
 					break;
 				}
-			case blaze2dBatchedSprite.Type.ClippedSprite:
+			case tk2dBatchedSprite.Type.ClippedSprite:
 				{
-					blaze2dClippedSprite s = blaze2dBaseSprite.AddComponent<blaze2dClippedSprite>(go, bs.spriteCollection, bs.spriteId);
+					tk2dClippedSprite s = tk2dBaseSprite.AddComponent<tk2dClippedSprite>(go, bs.spriteCollection, bs.spriteId);
 					baseSprite = s;
 					s.clipBottomLeft = bs.ClippedSpriteRegionBottomLeft;
 					s.clipTopRight = bs.ClippedSpriteRegionTopRight;
 
-					s.CreateBoxCollider = bs.CheckFlag(blaze2dBatchedSprite.Flags.Sprite_CreateBoxCollider);
+					s.CreateBoxCollider = bs.CheckFlag(tk2dBatchedSprite.Flags.Sprite_CreateBoxCollider);
 					RestoreBoxColliderSettings(s.gameObject, bs.BoxColliderOffsetZ, bs.BoxColliderExtentZ);
 					break;
 				}
@@ -320,13 +320,13 @@ class tk2dStaticSpriteBatcherEditor : Editor
 					go.transform.localScale = new Vector3(sx, sy, sz);
 				}
 
-				if (bs.type == blaze2dBatchedSprite.Type.TextMesh) {
-					blaze2dTextMesh s = go.AddComponent<blaze2dTextMesh>();
+				if (bs.type == tk2dBatchedSprite.Type.TextMesh) {
+					tk2dTextMesh s = go.AddComponent<tk2dTextMesh>();
 					if (batcher.allTextMeshData == null || bs.xRefId == -1) {
 						Debug.LogError("Unable to find text mesh ref");
 					}
 					else {
-						blaze2dTextMeshData tmd = batcher.allTextMeshData[bs.xRefId];
+						tk2dTextMeshData tmd = batcher.allTextMeshData[bs.xRefId];
 						s.font = tmd.font;
 						s.scale = bs.baseScale;
 						s.SortingOrder = bs.renderLayer;
@@ -364,9 +364,9 @@ class tk2dStaticSpriteBatcherEditor : Editor
 
 		batcher.scale = EditorGUILayout.Vector3Field("Scale", batcher.scale);
 
-		batcher.SetFlag(blaze2dStaticSpriteBatcher.Flags.GenerateCollider, EditorGUILayout.Toggle("Generate Collider", batcher.CheckFlag(blaze2dStaticSpriteBatcher.Flags.GenerateCollider)));
-		batcher.SetFlag(blaze2dStaticSpriteBatcher.Flags.FlattenDepth, EditorGUILayout.Toggle("Flatten Depth", batcher.CheckFlag(blaze2dStaticSpriteBatcher.Flags.FlattenDepth)));
-		batcher.SetFlag(blaze2dStaticSpriteBatcher.Flags.SortToCamera, EditorGUILayout.Toggle("Sort to Camera", batcher.CheckFlag(blaze2dStaticSpriteBatcher.Flags.SortToCamera)));
+		batcher.SetFlag(tk2dStaticSpriteBatcher.Flags.GenerateCollider, EditorGUILayout.Toggle("Generate Collider", batcher.CheckFlag(tk2dStaticSpriteBatcher.Flags.GenerateCollider)));
+		batcher.SetFlag(tk2dStaticSpriteBatcher.Flags.FlattenDepth, EditorGUILayout.Toggle("Flatten Depth", batcher.CheckFlag(tk2dStaticSpriteBatcher.Flags.FlattenDepth)));
+		batcher.SetFlag(tk2dStaticSpriteBatcher.Flags.SortToCamera, EditorGUILayout.Toggle("Sort to Camera", batcher.CheckFlag(tk2dStaticSpriteBatcher.Flags.SortToCamera)));
 
 		MeshFilter meshFilter = batcher.GetComponent<MeshFilter>();
 		MeshRenderer meshRenderer = batcher.GetComponent<MeshRenderer>();
@@ -396,8 +396,8 @@ class tk2dStaticSpriteBatcherEditor : Editor
     static void DoCreateSpriteObject()
     {
 		GameObject go = tk2dEditorUtility.CreateGameObjectInScene("Static Sprite Batcher");
-		blaze2dStaticSpriteBatcher batcher = go.AddComponent<blaze2dStaticSpriteBatcher>();
-		batcher.version = blaze2dStaticSpriteBatcher.CURRENT_VERSION;
+		tk2dStaticSpriteBatcher batcher = go.AddComponent<tk2dStaticSpriteBatcher>();
+		batcher.version = tk2dStaticSpriteBatcher.CURRENT_VERSION;
 		
 		Selection.activeGameObject = go;
 		Undo.RegisterCreatedObjectUndo(go, "Create Static Sprite Batcher");

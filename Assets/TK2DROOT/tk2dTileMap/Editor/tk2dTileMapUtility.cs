@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 
-using blaze2dRuntime.TileMap;
+using tk2dRuntime.TileMap;
 
 namespace tk2dEditor.TileMap
 {
@@ -12,7 +12,7 @@ namespace tk2dEditor.TileMap
 		public static int MaxHeight = 1024;
 		public static int MaxLayers = 32;
 		
-		public static void ResizeTileMap(blaze2dTileMap tileMap, int width, int height, int partitionSizeX, int partitionSizeY)
+		public static void ResizeTileMap(tk2dTileMap tileMap, int width, int height, int partitionSizeX, int partitionSizeY)
 		{
 			int w = Mathf.Clamp(width, 1, MaxWidth);
 			int h = Mathf.Clamp(height, 1, MaxHeight);
@@ -28,7 +28,7 @@ namespace tk2dEditor.TileMap
 			foreach (Layer layer in tileMap.Layers) {
 				layer.DestroyGameData(tileMap);
 				if (layer.gameObject != null) {
-					blaze2dUtil.DestroyImmediate(layer.gameObject);
+					tk2dUtil.DestroyImmediate(layer.gameObject);
 					layer.gameObject = null;
 				}
 			}
@@ -87,7 +87,7 @@ namespace tk2dEditor.TileMap
 		}
 		
 		// Returns index of newly added layer
-		public static int AddNewLayer(blaze2dTileMap tileMap)
+		public static int AddNewLayer(tk2dTileMap tileMap)
 		{
 			var existingLayers = tileMap.data.Layers;
 			// find a unique hash
@@ -107,16 +107,16 @@ namespace tk2dEditor.TileMap
 			objectsToUndo.Add(tileMap.data);
 			tk2dUndo.RecordObjects(objectsToUndo.ToArray(), "Add layer");
 			
-			var newLayer = new blaze2dRuntime.TileMap.LayerInfo();
+			var newLayer = new tk2dRuntime.TileMap.LayerInfo();
 			newLayer.name = "New Layer";
 			newLayer.hash = hash;
 			newLayer.z = 0.1f;
 			tileMap.data.tileMapLayers.Add(newLayer);
 			
 			// remap tilemap
-			blaze2dRuntime.TileMap.BuilderUtil.InitDataStore(tileMap);
+			tk2dRuntime.TileMap.BuilderUtil.InitDataStore(tileMap);
 
-			GameObject layerGameObject = blaze2dUtil.CreateGameObject(newLayer.name);
+			GameObject layerGameObject = tk2dUtil.CreateGameObject(newLayer.name);
 			layerGameObject.transform.parent = tileMap.renderData.transform;
 			layerGameObject.transform.localPosition = Vector3.zero;
 			layerGameObject.transform.localScale = Vector3.one;
@@ -128,7 +128,7 @@ namespace tk2dEditor.TileMap
 			return tileMap.data.NumLayers - 1;
 		}
 		
-		public static int FindOrCreateLayer(blaze2dTileMap tileMap, string name)
+		public static int FindOrCreateLayer(tk2dTileMap tileMap, string name)
 		{
 			int index = 0;
 			foreach (var v in tileMap.data.Layers)
@@ -142,7 +142,7 @@ namespace tk2dEditor.TileMap
 			return index;
 		}
 		
-		public static void DeleteLayer(blaze2dTileMap tileMap, int layerToDelete)
+		public static void DeleteLayer(tk2dTileMap tileMap, int layerToDelete)
 		{
 			// Just in case
 			if (tileMap.data.NumLayers <= 1)
@@ -157,9 +157,9 @@ namespace tk2dEditor.TileMap
 
 			tileMap.data.tileMapLayers.RemoveAt(layerToDelete);
 			if (tileMap.Layers[layerToDelete].gameObject != null) {
-				blaze2dUtil.DestroyImmediate( tileMap.Layers[layerToDelete].gameObject );
+				tk2dUtil.DestroyImmediate( tileMap.Layers[layerToDelete].gameObject );
 			}
-			blaze2dRuntime.TileMap.BuilderUtil.InitDataStore(tileMap);
+			tk2dRuntime.TileMap.BuilderUtil.InitDataStore(tileMap);
 			tileMap.ForceBuild();
 		}
 
@@ -172,7 +172,7 @@ namespace tk2dEditor.TileMap
 			}
 		}
 		
-		public static void MoveLayer(blaze2dTileMap tileMap, int layer, int direction)
+		public static void MoveLayer(tk2dTileMap tileMap, int layer, int direction)
 		{
 			List<Object> objectsToUndo = new List<Object>();
 			objectsToUndo.Add(tileMap);
@@ -183,7 +183,7 @@ namespace tk2dEditor.TileMap
 
 			// Move all prefabs to new layer
 			int targetLayer = layer + direction;
-			foreach (blaze2dTileMap.TilemapPrefabInstance v in tileMap.TilePrefabsList) {
+			foreach (tk2dTileMap.TilemapPrefabInstance v in tileMap.TilePrefabsList) {
 				if (v.layer == layer) {
 					v.layer = targetLayer;
 				}
@@ -195,12 +195,12 @@ namespace tk2dEditor.TileMap
 			LayerInfo tmp = tileMap.data.tileMapLayers[layer];
 			tileMap.data.tileMapLayers[layer] = tileMap.data.tileMapLayers[targetLayer];
 			tileMap.data.tileMapLayers[targetLayer] = tmp;
-			blaze2dRuntime.TileMap.BuilderUtil.InitDataStore(tileMap);
+			tk2dRuntime.TileMap.BuilderUtil.InitDataStore(tileMap);
 			tileMap.ForceBuild();
 		}
 
 		/// Deletes all generated instances
-		public static void MakeUnique(blaze2dTileMap tileMap)
+		public static void MakeUnique(tk2dTileMap tileMap)
 		{
 			if (tileMap.renderData == null)
 				return;
@@ -213,11 +213,11 @@ namespace tk2dEditor.TileMap
 			tk2dUndo.RecordObjects( objectsToUndo.ToArray(), "Make Unique");
 
 			if (tileMap.renderData != null) {
-				blaze2dUtil.DestroyImmediate(tileMap.renderData);
+				tk2dUtil.DestroyImmediate(tileMap.renderData);
 				tileMap.renderData = null;
 			}
 			if (tileMap.PrefabsRoot != null) {
-				blaze2dUtil.DestroyImmediate(tileMap.PrefabsRoot);
+				tk2dUtil.DestroyImmediate(tileMap.PrefabsRoot);
 				tileMap.PrefabsRoot = null;
 			}
 

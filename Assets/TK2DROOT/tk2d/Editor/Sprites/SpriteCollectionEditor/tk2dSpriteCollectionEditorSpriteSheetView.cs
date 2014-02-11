@@ -43,7 +43,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 			return (y << 16) + x;
 		}
 		
-		void AddSprites(blaze2dSpriteSheetSource spriteSheet)
+		void AddSprites(tk2dSpriteSheetSource spriteSheet)
 		{
 			int spriteSheetId = SpriteCollection.GetSpriteSheetId(spriteSheet);
 			List<int> usedSpriteCoordinates = new List<int>();
@@ -99,20 +99,20 @@ namespace tk2dEditor.SpriteCollectionEditor
 			host.OnSpriteCollectionChanged(true);
 		}
 		
-		void GetNumTilesForSpriteSheet(blaze2dSpriteSheetSource spriteSheet, out int numTilesX, out int numTilesY)
+		void GetNumTilesForSpriteSheet(tk2dSpriteSheetSource spriteSheet, out int numTilesX, out int numTilesY)
 		{
 			var tex = spriteSheet.texture;
 			numTilesX = (tex.width - spriteSheet.tileMarginX + spriteSheet.tileSpacingX) / (spriteSheet.tileSpacingX + spriteSheet.tileWidth);
 			numTilesY = (tex.height - spriteSheet.tileMarginY + spriteSheet.tileSpacingY) / (spriteSheet.tileSpacingY + spriteSheet.tileHeight);
 		}
 		
-		void GetTileCoordinateForSpriteSheet(blaze2dSpriteSheetSource spriteSheet, int tileX, int tileY, out int coordX, out int coordY)
+		void GetTileCoordinateForSpriteSheet(tk2dSpriteSheetSource spriteSheet, int tileX, int tileY, out int coordX, out int coordY)
 		{
 			coordX = spriteSheet.tileMarginX + (spriteSheet.tileSpacingX + spriteSheet.tileWidth) * tileX;
 			coordY = spriteSheet.tileMarginY + (spriteSheet.tileSpacingY + spriteSheet.tileHeight) * tileY;
 		}
 		
-		void DrawGridOverlay(blaze2dSpriteSheetSource spriteSheet, Rect rect)
+		void DrawGridOverlay(tk2dSpriteSheetSource spriteSheet, Rect rect)
 		{
 			if (spriteSheet.tileWidth > 0 && spriteSheet.tileHeight > 0)
 			{
@@ -154,7 +154,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 			}			
 		}
 		
-		void ProcessSpriteSelectionUI(blaze2dSpriteSheetSource spriteSheet, Rect rect)
+		void ProcessSpriteSelectionUI(tk2dSpriteSheetSource spriteSheet, Rect rect)
 		{
 			int spriteSheetId = SpriteCollection.GetSpriteSheetId(spriteSheet);
 			if (rect.Contains(Event.current.mousePosition))
@@ -236,7 +236,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 		}
 		
 		float zoomAmount = 1.0f;
-		void DrawTextureView(blaze2dSpriteSheetSource spriteSheet)
+		void DrawTextureView(tk2dSpriteSheetSource spriteSheet)
 		{
 			int spriteSheetId = SpriteCollection.GetSpriteSheetId(spriteSheet);
 			var tex = spriteSheet.texture;
@@ -295,7 +295,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 			}
 		}
 		
-		public void Select(blaze2dSpriteSheetSource spriteSheet, int[] ids)
+		public void Select(tk2dSpriteSheetSource spriteSheet, int[] ids)
 		{
 			selectedSprites.Clear();
 			activeSelectedSprites.Clear();
@@ -323,7 +323,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 		List<SpriteCollectionEditorEntry> activeSelectedSprites = new List<SpriteCollectionEditorEntry>();
 		int rectSelectX = -1, rectSelectY = -1;
 		
-		blaze2dSpriteSheetSource activeSpriteSheetSource = null;
+		tk2dSpriteSheetSource activeSpriteSheetSource = null;
 		EditMode selectedMode = EditMode.Edit;
 		Vector2 textureViewScrollBar;
 		Vector2 inspectorScrollBar;
@@ -446,8 +446,8 @@ namespace tk2dEditor.SpriteCollectionEditor
 					spriteSheet.tileSpacingX = EditorGUILayout.IntField("Tile Spacing X", spriteSheet.tileSpacingX);
 					spriteSheet.tileSpacingY = EditorGUILayout.IntField("Tile Spacing Y", spriteSheet.tileSpacingY);
 					
-					spriteSheet.pad = (blaze2dSpriteCollectionDefinition.Pad)EditorGUILayout.EnumPopup("Pad", spriteSheet.pad);
-					if (spriteSheet.pad == blaze2dSpriteCollectionDefinition.Pad.Default)
+					spriteSheet.pad = (tk2dSpriteCollectionDefinition.Pad)EditorGUILayout.EnumPopup("Pad", spriteSheet.pad);
+					if (spriteSheet.pad == tk2dSpriteCollectionDefinition.Pad.Default)
 					{
 						tk2dGuiUtility.InfoBox("The sprite sheet is configured to use default padding mode. " +
 							"It is advised to select an explicit padding mode depending on the usage of the " +

@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(blaze2dSpriteFromTexture))]
+[CustomEditor(typeof(tk2dSpriteFromTexture))]
 class tk2dSpriteFromTextureEditor : Editor {
 
 	public override void OnInspectorGUI() {
-		blaze2dSpriteFromTexture target = (blaze2dSpriteFromTexture)this.target;
+		tk2dSpriteFromTexture target = (tk2dSpriteFromTexture)this.target;
 		tk2dGuiUtility.LookLikeInspector();
 
 		EditorGUI.BeginChangeCheck();
@@ -17,12 +17,12 @@ class tk2dSpriteFromTextureEditor : Editor {
 			tk2dGuiUtility.InfoBox("Drag a texture into the texture slot above.", tk2dGuiUtility.WarningLevel.Error);
 		}
 
-		blaze2dBaseSprite.Anchor anchor = target.anchor;
-		blaze2dSpriteCollectionSize spriteCollectionSize = new blaze2dSpriteCollectionSize();
+		tk2dBaseSprite.Anchor anchor = target.anchor;
+		tk2dSpriteCollectionSize spriteCollectionSize = new tk2dSpriteCollectionSize();
 		spriteCollectionSize.CopyFrom( target.spriteCollectionSize );
 
 		if (texture != null) {
-			anchor = (blaze2dBaseSprite.Anchor)EditorGUILayout.EnumPopup("Anchor", target.anchor);
+			anchor = (tk2dBaseSprite.Anchor)EditorGUILayout.EnumPopup("Anchor", target.anchor);
 			tk2dGuiUtility.SpriteCollectionSize(spriteCollectionSize);
 		}
 
@@ -51,14 +51,14 @@ class tk2dSpriteFromTextureEditor : Editor {
     	Texture tex = Selection.activeObject as Texture;
  
  		GameObject go = tk2dEditorUtility.CreateGameObjectInScene("Sprite");
-		go.AddComponent<blaze2dSprite>();
-		blaze2dSpriteFromTexture sft = go.AddComponent<blaze2dSpriteFromTexture>();
+		go.AddComponent<tk2dSprite>();
+		tk2dSpriteFromTexture sft = go.AddComponent<tk2dSpriteFromTexture>();
 		if (tex != null) {
-			blaze2dSpriteCollectionSize scs = blaze2dSpriteCollectionSize.Default();
-			if (blaze2dCamera.Instance != null) {
-				scs = blaze2dSpriteCollectionSize.ForTk2dCamera(blaze2dCamera.Instance);
+			tk2dSpriteCollectionSize scs = tk2dSpriteCollectionSize.Default();
+			if (tk2dCamera.Instance != null) {
+				scs = tk2dSpriteCollectionSize.ForTk2dCamera(tk2dCamera.Instance);
 			}
-			sft.Create( scs, tex, blaze2dBaseSprite.Anchor.MiddleCenter );
+			sft.Create( scs, tex, tk2dBaseSprite.Anchor.MiddleCenter );
 		}
 		Selection.activeGameObject = go;
 		Undo.RegisterCreatedObjectUndo(go, "Create Sprite From Texture");

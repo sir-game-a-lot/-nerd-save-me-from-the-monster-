@@ -5,7 +5,7 @@ using System.Collections;
 //[CustomEditor(typeof(tk2dResource))]
 public class tk2dResourceEditor : Editor
 {
-	new blaze2dResource target { get { return base.target as blaze2dResource; } }
+	new tk2dResource target { get { return base.target as tk2dResource; } }
 
 	public override void OnInspectorGUI()
 	{

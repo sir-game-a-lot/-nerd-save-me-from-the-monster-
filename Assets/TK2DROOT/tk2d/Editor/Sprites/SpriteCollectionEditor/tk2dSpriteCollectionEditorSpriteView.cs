@@ -54,8 +54,8 @@ namespace tk2dEditor.SpriteCollectionEditor
 			EditorGUILayout.EndVertical();
 		}
 		
-		delegate bool SpriteCollectionEntryComparerDelegate(blaze2dSpriteCollectionDefinition a, blaze2dSpriteCollectionDefinition b);
-		delegate void SpriteCollectionEntryAssignerDelegate(blaze2dSpriteCollectionDefinition a, blaze2dSpriteCollectionDefinition b);
+		delegate bool SpriteCollectionEntryComparerDelegate(tk2dSpriteCollectionDefinition a, tk2dSpriteCollectionDefinition b);
+		delegate void SpriteCollectionEntryAssignerDelegate(tk2dSpriteCollectionDefinition a, tk2dSpriteCollectionDefinition b);
 		void HandleMultiSelection(List<SpriteCollectionEditorEntry> entries, SpriteCollectionEntryComparerDelegate comparer, SpriteCollectionEntryAssignerDelegate assigner)
 		{
 			if (entries.Count <= 1) return;
@@ -88,7 +88,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 		
 		// Only call this when both a AND b have poly colliders and all other comparisons 
 		// are successful prior to calling this, its a waste of time otherwise
-		bool ComparePolyCollider(blaze2dSpriteColliderIsland[] a, blaze2dSpriteColliderIsland[] b)
+		bool ComparePolyCollider(tk2dSpriteColliderIsland[] a, tk2dSpriteColliderIsland[] b)
 		{
 			if (a.Length != b.Length)
 				return false;
@@ -97,12 +97,12 @@ namespace tk2dEditor.SpriteCollectionEditor
 			return true;
 		}
 		
-		void CopyPolyCollider(blaze2dSpriteColliderIsland[] src, ref blaze2dSpriteColliderIsland[] dest)
+		void CopyPolyCollider(tk2dSpriteColliderIsland[] src, ref tk2dSpriteColliderIsland[] dest)
 		{
-			dest = new blaze2dSpriteColliderIsland[src.Length];
+			dest = new tk2dSpriteColliderIsland[src.Length];
 			for (int i = 0; i < dest.Length; ++i)
 			{
-				dest[i] = new blaze2dSpriteColliderIsland();
+				dest[i] = new tk2dSpriteColliderIsland();
 				dest[i].CopyFrom(src[i]);
 			}
 		}
@@ -223,16 +223,16 @@ namespace tk2dEditor.SpriteCollectionEditor
 			HandleMultiSelection(entries, (a,b) => a.scale == b.scale, (a,b) => b.scale = a.scale);
 			
 			// Anchor
-			var newAnchor = (blaze2dSpriteCollectionDefinition.Anchor)EditorGUILayout.EnumPopup("Anchor", param.anchor);
+			var newAnchor = (tk2dSpriteCollectionDefinition.Anchor)EditorGUILayout.EnumPopup("Anchor", param.anchor);
 			if (param.anchor != newAnchor)
 			{
 				// When anchor type is changed to custom, switch the editor to edit anchors
-				if (newAnchor == blaze2dSpriteCollectionDefinition.Anchor.Custom)
+				if (newAnchor == tk2dSpriteCollectionDefinition.Anchor.Custom)
 					textureEditor.SetMode(tk2dEditor.SpriteCollectionEditor.TextureEditor.Mode.Anchor);
 				param.anchor = newAnchor;
 			}
 
-			if (param.anchor == blaze2dSpriteCollectionDefinition.Anchor.Custom)
+			if (param.anchor == tk2dSpriteCollectionDefinition.Anchor.Custom)
 			{
 				EditorGUI.indentLevel++;
 				EditorGUILayout.BeginHorizontal();
@@ -252,7 +252,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 				
 				HandleMultiSelection(entries, 
 					(a,b) => (a.anchor == b.anchor && a.anchorX == b.anchorX && a.anchorY == b.anchorY),
-					delegate(blaze2dSpriteCollectionDefinition a, blaze2dSpriteCollectionDefinition b) {
+					delegate(tk2dSpriteCollectionDefinition a, tk2dSpriteCollectionDefinition b) {
 						b.anchor = a.anchor;
 						b.anchorX = a.anchorX;
 						b.anchorY = a.anchorY;
@@ -263,17 +263,17 @@ namespace tk2dEditor.SpriteCollectionEditor
 				HandleMultiSelection(entries, (a,b) => a.anchor == b.anchor, (a,b) => b.anchor = a.anchor);
 			}
 	
-			var newColliderType = (blaze2dSpriteCollectionDefinition.ColliderType)EditorGUILayout.EnumPopup("Collider Type", param.colliderType);
+			var newColliderType = (tk2dSpriteCollectionDefinition.ColliderType)EditorGUILayout.EnumPopup("Collider Type", param.colliderType);
 			if (param.colliderType != newColliderType)
 			{
 				// when switching to custom collider mode, automatically switch editor mode
-				if (newColliderType == blaze2dSpriteCollectionDefinition.ColliderType.BoxCustom ||
-					newColliderType == blaze2dSpriteCollectionDefinition.ColliderType.Polygon)
+				if (newColliderType == tk2dSpriteCollectionDefinition.ColliderType.BoxCustom ||
+					newColliderType == tk2dSpriteCollectionDefinition.ColliderType.Polygon)
 					textureEditor.SetMode(tk2dEditor.SpriteCollectionEditor.TextureEditor.Mode.Collider);
 				param.colliderType = newColliderType;
 			}
 
-			if (param.colliderType == blaze2dSpriteCollectionDefinition.ColliderType.BoxCustom)
+			if (param.colliderType == tk2dSpriteCollectionDefinition.ColliderType.BoxCustom)
 			{
 				EditorGUI.indentLevel++;
 				param.boxColliderMin = EditorGUILayout.Vector2Field("Min", param.boxColliderMin);
@@ -283,16 +283,16 @@ namespace tk2dEditor.SpriteCollectionEditor
 
 				HandleMultiSelection(entries, 
 					(a,b) => (a.colliderType == b.colliderType && a.boxColliderMin == b.boxColliderMin && a.boxColliderMax == b.boxColliderMax),
-					delegate(blaze2dSpriteCollectionDefinition a, blaze2dSpriteCollectionDefinition b) {
+					delegate(tk2dSpriteCollectionDefinition a, tk2dSpriteCollectionDefinition b) {
 						b.colliderType = a.colliderType;
 						b.boxColliderMin = a.boxColliderMin;
 						b.boxColliderMax = a.boxColliderMax;
 					});				
 			}
-			else if (param.colliderType == blaze2dSpriteCollectionDefinition.ColliderType.Polygon)
+			else if (param.colliderType == tk2dSpriteCollectionDefinition.ColliderType.Polygon)
 			{
 				EditorGUI.indentLevel++;
-				param.polyColliderCap = (blaze2dSpriteCollectionDefinition.PolygonColliderCap)EditorGUILayout.EnumPopup("Collider Cap", param.polyColliderCap);
+				param.polyColliderCap = (tk2dSpriteCollectionDefinition.PolygonColliderCap)EditorGUILayout.EnumPopup("Collider Cap", param.polyColliderCap);
 				param.colliderConvex = EditorGUILayout.Toggle("Convex", param.colliderConvex);
 				param.colliderSmoothSphereCollisions = EditorGUILayout.Toggle(new GUIContent("SmoothSphereCollisions", "Smooth Sphere Collisions"), param.colliderSmoothSphereCollisions);
 				EditorGUI.indentLevel--;
@@ -302,7 +302,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 					(a,b) => (a.colliderType == b.colliderType && a.polyColliderCap == b.polyColliderCap 
 							&& a.colliderConvex == b.colliderConvex && a.colliderSmoothSphereCollisions == b.colliderSmoothSphereCollisions
 							&& ComparePolyCollider(a.polyColliderIslands, b.polyColliderIslands)),
-					delegate(blaze2dSpriteCollectionDefinition a, blaze2dSpriteCollectionDefinition b) {
+					delegate(tk2dSpriteCollectionDefinition a, tk2dSpriteCollectionDefinition b) {
 						b.colliderType = a.colliderType;
 						b.polyColliderCap = a.polyColliderCap;
 						b.colliderConvex = a.colliderConvex;
@@ -361,14 +361,14 @@ namespace tk2dEditor.SpriteCollectionEditor
 				GUIContent diceFilter = new GUIContent("Dice Filter", 
 					"Dice Filter lets you dice and only store a subset of the dices. This lets you perform more optimizations, drawing solid dices with a solid shader.\n\n"+
 					"Complete - Draw all dices (Default).\nSolidOnly - Only draw the solid dices.\nTransparent Only - Only draw transparent dices.");
-				param.diceFilter = (blaze2dSpriteCollectionDefinition.DiceFilter)EditorGUILayout.EnumPopup(diceFilter, param.diceFilter);
+				param.diceFilter = (tk2dSpriteCollectionDefinition.DiceFilter)EditorGUILayout.EnumPopup(diceFilter, param.diceFilter);
 				EditorGUI.indentLevel--;
 				EditorGUILayout.Separator();
 			}
 			
 			HandleMultiSelection(entries, 
 				(a,b) => a.customSpriteGeometry == b.customSpriteGeometry && a.dice == b.dice && a.diceUnitX == b.diceUnitX && a.diceUnitY == b.diceUnitY && a.diceFilter == b.diceFilter, 
-				delegate(blaze2dSpriteCollectionDefinition a, blaze2dSpriteCollectionDefinition b) {
+				delegate(tk2dSpriteCollectionDefinition a, tk2dSpriteCollectionDefinition b) {
 					b.customSpriteGeometry = a.customSpriteGeometry;
 					b.dice = a.dice;
 					b.diceUnitX = a.diceUnitX;
@@ -388,7 +388,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 			}
 			
 			// Pad amount
-			param.pad = (blaze2dSpriteCollectionDefinition.Pad)EditorGUILayout.EnumPopup("Pad method", param.pad);
+			param.pad = (tk2dSpriteCollectionDefinition.Pad)EditorGUILayout.EnumPopup("Pad method", param.pad);
 			HandleMultiSelection(entries, (a,b) => a.pad == b.pad, (a,b) => b.pad = a.pad);
 			
 			// Extra padding
@@ -411,7 +411,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 			{
 				foreach (var e in entries)
 				{
-					SpriteCollection.textureParams[e.index] = new blaze2dSpriteCollectionDefinition();
+					SpriteCollection.textureParams[e.index] = new tk2dSpriteCollectionDefinition();
 				}
 				SpriteCollection.Trim();
 				if (editingSpriteSheet)

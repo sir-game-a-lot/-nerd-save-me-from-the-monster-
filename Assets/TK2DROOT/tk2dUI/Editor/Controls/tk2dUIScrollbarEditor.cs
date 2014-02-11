@@ -3,7 +3,7 @@ using UnityEditor;
 using System.Collections;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dUIScrollbar))]
+[CustomEditor(typeof(tk2dUIScrollbar))]
 public class tk2dUIScrollbarEditor : Editor
 {
     tk2dUIMethodBindingHelper methodBindingUtil = new tk2dUIMethodBindingHelper();
@@ -13,11 +13,11 @@ public class tk2dUIScrollbarEditor : Editor
         tk2dGuiUtility.LookLikeInspector();
         base.OnInspectorGUI();
 
-		blaze2dUIScrollbar scrollbar = (blaze2dUIScrollbar)target;
-		scrollbar.BarLayoutItem = EditorGUILayout.ObjectField("Bar LayoutItem", scrollbar.BarLayoutItem, typeof(blaze2dUILayout), true) as blaze2dUILayout;
+		tk2dUIScrollbar scrollbar = (tk2dUIScrollbar)target;
+		scrollbar.BarLayoutItem = EditorGUILayout.ObjectField("Bar LayoutItem", scrollbar.BarLayoutItem, typeof(tk2dUILayout), true) as tk2dUILayout;
 
         scrollbar.SendMessageTarget = methodBindingUtil.BeginMessageGUI(scrollbar.SendMessageTarget);
-        methodBindingUtil.MethodBinding( "On Scroll", typeof(blaze2dUIScrollbar), scrollbar.SendMessageTarget, ref scrollbar.SendMessageOnScrollMethodName );
+        methodBindingUtil.MethodBinding( "On Scroll", typeof(tk2dUIScrollbar), scrollbar.SendMessageTarget, ref scrollbar.SendMessageOnScrollMethodName );
         methodBindingUtil.EndMessageGUI();
 
         if (GUI.changed)
@@ -29,8 +29,8 @@ public class tk2dUIScrollbarEditor : Editor
     public void OnSceneGUI()
     {
         bool wasChange=false;
-        blaze2dUIScrollbar scrollbar = (blaze2dUIScrollbar)target;
-        bool isYAxis = scrollbar.scrollAxes == blaze2dUIScrollbar.Axes.YAxis;
+        tk2dUIScrollbar scrollbar = (tk2dUIScrollbar)target;
+        bool isYAxis = scrollbar.scrollAxes == tk2dUIScrollbar.Axes.YAxis;
 
 		// Get rescaled transforms
 		Matrix4x4 m = scrollbar.transform.localToWorldMatrix;

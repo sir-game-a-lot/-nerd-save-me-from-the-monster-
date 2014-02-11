@@ -3,14 +3,14 @@ using UnityEditor;
 using System.Collections;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dUIProgressBar))]
+[CustomEditor(typeof(tk2dUIProgressBar))]
 public class tk2dUIProgressBarEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         tk2dGuiUtility.LookLikeInspector();
         bool markAsDirty = false;
-        blaze2dUIProgressBar progressBar = (blaze2dUIProgressBar)target;
+        tk2dUIProgressBar progressBar = (tk2dUIProgressBar)target;
 
         if (progressBar.clippedSpriteBar != null) //can only be one
         {
@@ -24,7 +24,7 @@ public class tk2dUIProgressBarEditor : Editor
             progressBar.scalableBar = null;
         }
 
-        blaze2dClippedSprite tempClippedSpriteBar = tk2dUICustomEditorGUILayout.SceneObjectField("Clipped Sprite Bar", progressBar.clippedSpriteBar, target);
+        tk2dClippedSprite tempClippedSpriteBar = tk2dUICustomEditorGUILayout.SceneObjectField("Clipped Sprite Bar", progressBar.clippedSpriteBar, target);
         if (tempClippedSpriteBar != progressBar.clippedSpriteBar)
         {
             markAsDirty = true;
@@ -33,7 +33,7 @@ public class tk2dUIProgressBarEditor : Editor
             progressBar.slicedSpriteBar = null;
         }
 
-        blaze2dSlicedSprite tempSlicedSpriteBar = tk2dUICustomEditorGUILayout.SceneObjectField("Sliced Sprite Bar", progressBar.slicedSpriteBar, target);
+        tk2dSlicedSprite tempSlicedSpriteBar = tk2dUICustomEditorGUILayout.SceneObjectField("Sliced Sprite Bar", progressBar.slicedSpriteBar, target);
         if (tempSlicedSpriteBar != progressBar.slicedSpriteBar)
         {
             markAsDirty = true;
@@ -60,7 +60,7 @@ public class tk2dUIProgressBarEditor : Editor
 
         tk2dUIMethodBindingHelper methodBindingUtil = new tk2dUIMethodBindingHelper();
         progressBar.sendMessageTarget = methodBindingUtil.BeginMessageGUI(progressBar.sendMessageTarget);
-        methodBindingUtil.MethodBinding( "On Progress Complete", typeof(blaze2dUIProgressBar), progressBar.sendMessageTarget, ref progressBar.SendMessageOnProgressCompleteMethodName );
+        methodBindingUtil.MethodBinding( "On Progress Complete", typeof(tk2dUIProgressBar), progressBar.sendMessageTarget, ref progressBar.SendMessageOnProgressCompleteMethodName );
         methodBindingUtil.EndMessageGUI();
 
         if (markAsDirty || GUI.changed)

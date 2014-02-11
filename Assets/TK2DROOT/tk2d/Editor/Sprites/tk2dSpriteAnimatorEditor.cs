@@ -3,14 +3,14 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(blaze2dSpriteAnimator))]
+[CustomEditor(typeof(tk2dSpriteAnimator))]
 public class tk2dSpriteAnimatorEditor : Editor
 {
 	tk2dGenericIndexItem[] animLibs = null;
 	string[] animLibNames = null;
 	bool initialized = false;
 
-	blaze2dSpriteAnimator[] targetAnimators = new blaze2dSpriteAnimator[0];
+	tk2dSpriteAnimator[] targetAnimators = new tk2dSpriteAnimator[0];
 
     protected T[] GetTargetsOfType<T>( Object[] objects ) where T : UnityEngine.Object {
     	List<T> ts = new List<T>();
@@ -23,7 +23,7 @@ public class tk2dSpriteAnimatorEditor : Editor
     }
 	
 	void OnEnable() {
-		targetAnimators = GetTargetsOfType<blaze2dSpriteAnimator>( targets );
+		targetAnimators = GetTargetsOfType<tk2dSpriteAnimator>( targets );
 	}
 
 	void Init()
@@ -57,14 +57,14 @@ public class tk2dSpriteAnimatorEditor : Editor
 		}
 		else
 		{
-	        blaze2dSpriteAnimator sprite = (blaze2dSpriteAnimator)target;
+	        tk2dSpriteAnimator sprite = (tk2dSpriteAnimator)target;
 			
 			tk2dGuiUtility.LookLikeInspector();
 			EditorGUI.indentLevel = 1;
 
 			if (sprite.Library == null)
 			{
-				sprite.Library = animLibs[0].GetAsset<blaze2dSpriteAnimation>();
+				sprite.Library = animLibs[0].GetAsset<tk2dSpriteAnimation>();
 				GUI.changed = true;
 			}
 			
@@ -84,8 +84,8 @@ public class tk2dSpriteAnimatorEditor : Editor
 			if (newAnimLib != selAnimLib)
 			{
 				tk2dUndo.RecordObjects(targetAnimators, "Sprite Anim Lib");
-				foreach (blaze2dSpriteAnimator animator in targetAnimators) {
-					animator.Library = animLibs[newAnimLib].GetAsset<blaze2dSpriteAnimation>();
+				foreach (tk2dSpriteAnimator animator in targetAnimators) {
+					animator.Library = animLibs[newAnimLib].GetAsset<tk2dSpriteAnimation>();
 					animator.DefaultClipId = 0;
 					
 					if (animator.Library.clips.Length > 0)
@@ -132,7 +132,7 @@ public class tk2dSpriteAnimatorEditor : Editor
 				if (newClipId != sprite.DefaultClipId)
 				{
 					tk2dUndo.RecordObjects(targetAnimators, "Sprite Anim Clip");
-					foreach (blaze2dSpriteAnimator animator in targetAnimators) {
+					foreach (tk2dSpriteAnimator animator in targetAnimators) {
 						animator.DefaultClipId = newClipId;
 
 						if (animator.Sprite != null) {
@@ -148,27 +148,27 @@ public class tk2dSpriteAnimatorEditor : Editor
 			bool newPlayAutomatically = EditorGUILayout.Toggle("Play automatically", sprite.playAutomatically);
 			if (newPlayAutomatically != sprite.playAutomatically) {
 				tk2dUndo.RecordObjects(targetAnimators, "Sprite Anim Play Automatically");
-				foreach (blaze2dSpriteAnimator animator in targetAnimators) {
+				foreach (tk2dSpriteAnimator animator in targetAnimators) {
 					animator.playAutomatically = newPlayAutomatically;
 				}
 			}
 
 			if (GUI.changed)
 			{
-				foreach (blaze2dSpriteAnimator spr in targetAnimators) {
+				foreach (tk2dSpriteAnimator spr in targetAnimators) {
 					EditorUtility.SetDirty(spr);
 				}
 			}
 		}
     }
 
-    public static bool GetDefaultSpriteAnimation(out blaze2dSpriteAnimation anim, out int clipId) {
+    public static bool GetDefaultSpriteAnimation(out tk2dSpriteAnimation anim, out int clipId) {
 		tk2dGenericIndexItem[] animIndex = tk2dEditorUtility.GetOrCreateIndex().GetSpriteAnimations();
     	anim = null;
     	clipId = -1;
 		foreach (var animIndexItem in animIndex)
 		{
-			blaze2dSpriteAnimation a = animIndexItem.GetAsset<blaze2dSpriteAnimation>();
+			tk2dSpriteAnimation a = animIndexItem.GetAsset<tk2dSpriteAnimation>();
 			if (a != null && a.clips != null && a.clips.Length > 0)
 			{
 				for (int i = 0; i < a.clips.Length; ++i) {
@@ -193,7 +193,7 @@ public class tk2dSpriteAnimatorEditor : Editor
     [MenuItem("GameObject/Create Other/tk2d/Sprite With Animator", false, 12951)]
     static void DoCreateSpriteObject()
     {
-		blaze2dSpriteAnimation anim = null;
+		tk2dSpriteAnimation anim = null;
 		int clipId = -1;
 		if (!GetDefaultSpriteAnimation(out anim, out clipId)) {
 			EditorUtility.DisplayDialog("Create Sprite Animation", "Unable to create animated sprite as no SpriteAnimations have been found.", "Ok");
@@ -202,10 +202,10 @@ public class tk2dSpriteAnimatorEditor : Editor
 		
 		GameObject go = tk2dEditorUtility.CreateGameObjectInScene("AnimatedSprite");
 
-		blaze2dSprite sprite = go.AddComponent<blaze2dSprite>();
+		tk2dSprite sprite = go.AddComponent<tk2dSprite>();
 		sprite.SetSprite(anim.clips[clipId].frames[0].spriteCollection, anim.clips[clipId].frames[0].spriteId);
 
-		blaze2dSpriteAnimator animator = go.AddComponent<blaze2dSpriteAnimator>();
+		tk2dSpriteAnimator animator = go.AddComponent<tk2dSpriteAnimator>();
 		animator.Library = anim;
 		animator.DefaultClipId = clipId;
 		

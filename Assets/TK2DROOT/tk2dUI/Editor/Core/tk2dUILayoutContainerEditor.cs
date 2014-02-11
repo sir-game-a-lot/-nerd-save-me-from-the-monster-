@@ -1,18 +1,18 @@
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 
-[CustomEditor(typeof(blaze2dUILayoutContainer))]
+[CustomEditor(typeof(tk2dUILayoutContainer))]
 public class tk2dUILayoutContainerEditor : tk2dUILayoutEditor {
-	blaze2dUILayout My {
-		get {return (blaze2dUILayout)target;}
+	tk2dUILayout My {
+		get {return (tk2dUILayout)target;}
 	}
 
 	protected override void GetItems(Transform t) {
-		blaze2dUILayout objLayout = t.GetComponent<blaze2dUILayout>();
+		tk2dUILayout objLayout = t.GetComponent<tk2dUILayout>();
 
 		if (objLayout != null) {
-			blaze2dUILayoutItem curItem = null;
+			tk2dUILayoutItem curItem = null;
 			foreach (var item in My.layoutItems) {
 				if (t.gameObject == item.gameObj) {
 					curItem = item;
@@ -21,7 +21,7 @@ public class tk2dUILayoutContainerEditor : tk2dUILayoutEditor {
 				}
 			}
 			if (curItem == null)
-				curItem = new blaze2dUILayoutItem();
+				curItem = new tk2dUILayoutItem();
 			itemsList.Add(curItem);
 			curItem.layout = objLayout;
 			curItem.gameObj = t.gameObject;
@@ -36,7 +36,7 @@ public class tk2dUILayoutContainerEditor : tk2dUILayoutEditor {
 	public override void OnInspectorGUI() {
 		GUILayout.BeginVertical();
 
-		if (My.GetComponent<blaze2dBaseSprite>() != null) {
+		if (My.GetComponent<tk2dBaseSprite>() != null) {
 			EditorGUILayout.HelpBox("Please remove Sprite from this Object\nin order to use Layout!", MessageType.Error);
 			GUILayout.EndVertical();
 			return;
@@ -65,7 +65,7 @@ public class tk2dUILayoutContainerEditor : tk2dUILayoutEditor {
 			if (item.inLayoutList) {
 				GUI.color = Color.green;
 
-				if (item.layout != null && item.gameObj.GetComponent<blaze2dBaseSprite>() != null) {
+				if (item.layout != null && item.gameObj.GetComponent<tk2dBaseSprite>() != null) {
 					warnLayoutHasSprite = true;
 					warnLayoutName = item.gameObj.name;
 				}
@@ -113,7 +113,7 @@ public class tk2dUILayoutContainerEditor : tk2dUILayoutEditor {
 		GUILayout.EndVertical();
 	}
 
-	protected void SetItemInLayoutList(blaze2dUILayoutItem item, bool value) {
+	protected void SetItemInLayoutList(tk2dUILayoutItem item, bool value) {
 		if (value && !My.layoutItems.Contains(item)) {
 			item.fixedSize = true; // default to fixed size
 			My.layoutItems.Add(item);
@@ -125,7 +125,7 @@ public class tk2dUILayoutContainerEditor : tk2dUILayoutEditor {
 		}
 	}
 
-	protected virtual void ItemInspector(blaze2dUILayoutItem item) {
+	protected virtual void ItemInspector(tk2dUILayoutItem item) {
 		bool newInLayoutList = GUILayout.Toggle(item.inLayoutList, "Active");
 
 		if (newInLayoutList && !My.layoutItems.Contains(item)) {

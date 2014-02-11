@@ -20,7 +20,7 @@ public class tk2dSystemUtility
 		if (isLoadable)
 		{
 			// Update name if it is different
-			foreach (blaze2dResourceTocEntry t in blaze2dSystem.inst.Editor__Toc)
+			foreach (tk2dResourceTocEntry t in tk2dSystem.inst.Editor__Toc)
 			{
 				if (t.assetGUID == guid)
 				{
@@ -29,7 +29,7 @@ public class tk2dSystemUtility
 				}
 			}
 
-			EditorUtility.SetDirty(blaze2dSystem.inst);
+			EditorUtility.SetDirty(tk2dSystem.inst);
 
 			// Already loadable
 			return true;
@@ -37,21 +37,21 @@ public class tk2dSystemUtility
 
 		// Create resource object
 		string resourcePath = GetOrCreateResourcesDir() + "/" + "tk2d_" + guid + ".asset";
-		blaze2dResource resource = ScriptableObject.CreateInstance<blaze2dResource>();
+		tk2dResource resource = ScriptableObject.CreateInstance<tk2dResource>();
 		resource.objectReference = obj;
 		AssetDatabase.CreateAsset(resource, resourcePath);
 		AssetDatabase.SaveAssets();
 
 		// Add index entry
-		blaze2dResourceTocEntry tocEntry = new blaze2dResourceTocEntry();
+		tk2dResourceTocEntry tocEntry = new tk2dResourceTocEntry();
 		tocEntry.resourceGUID = AssetDatabase.AssetPathToGUID(resourcePath);
 		tocEntry.assetName = (name.Length == 0)?obj.name:name;
 		tocEntry.assetGUID = guid;
-		List<blaze2dResourceTocEntry> toc = new List<blaze2dResourceTocEntry>(blaze2dSystem.inst.Editor__Toc);
+		List<tk2dResourceTocEntry> toc = new List<tk2dResourceTocEntry>(tk2dSystem.inst.Editor__Toc);
 		toc.Add(tocEntry);
-		blaze2dSystem.inst.Editor__Toc = toc.ToArray();
+		tk2dSystem.inst.Editor__Toc = toc.ToArray();
 
-		EditorUtility.SetDirty(blaze2dSystem.inst);
+		EditorUtility.SetDirty(tk2dSystem.inst);
 		AssetDatabase.SaveAssets();
 
 		return true;
@@ -62,8 +62,8 @@ public class tk2dSystemUtility
 	public static bool UnmakeLoadableAsset(Object obj)
 	{
 		string guid = GetObjectGUID(obj);
-		List<blaze2dResourceTocEntry> toc = new List<blaze2dResourceTocEntry>(blaze2dSystem.inst.Editor__Toc);
-		foreach (blaze2dResourceTocEntry entry in toc)
+		List<tk2dResourceTocEntry> toc = new List<tk2dResourceTocEntry>(tk2dSystem.inst.Editor__Toc);
+		foreach (tk2dResourceTocEntry entry in toc)
 		{
 			if (entry.assetGUID == guid)
 			{
@@ -77,15 +77,15 @@ public class tk2dSystemUtility
 			}
 		}
 
-		if (blaze2dSystem.inst.Editor__Toc.Length == toc.Count)
+		if (tk2dSystem.inst.Editor__Toc.Length == toc.Count)
 		{
 			Debug.LogError("tk2dSystem.UnmakeLoadableAsset - Unable to delete asset");
 			return false;
 		}
 		else
 		{
-			blaze2dSystem.inst.Editor__Toc = toc.ToArray();
-			EditorUtility.SetDirty(blaze2dSystem.inst);
+			tk2dSystem.inst.Editor__Toc = toc.ToArray();
+			EditorUtility.SetDirty(tk2dSystem.inst);
 			AssetDatabase.SaveAssets();
 			
 			return true;
@@ -115,7 +115,7 @@ public class tk2dSystemUtility
 	// When the tk2dSystem object exists, the path to the object will be returned
 	public static string GetOrCreateResourcesDir()
 	{
-		blaze2dSystem inst = blaze2dSystem.inst;
+		tk2dSystem inst = tk2dSystem.inst;
 		string assetPath = AssetDatabase.GetAssetPath(inst);
 		if (assetPath.Length > 0)
 		{
@@ -131,7 +131,7 @@ public class tk2dSystemUtility
 			const string basePath = resPath + "/tk2d";
 			if (!System.IO.Directory.Exists(basePath)) System.IO.Directory.CreateDirectory(basePath);
 
-			assetPath = basePath + "/" + blaze2dSystem.assetFileName;
+			assetPath = basePath + "/" + tk2dSystem.assetFileName;
 			AssetDatabase.CreateAsset(inst, assetPath);
 			
 			return basePath;
@@ -142,7 +142,7 @@ public class tk2dSystemUtility
 	// Will not create if it doesn't exists
 	static string GetResourcesDir()
 	{
-		blaze2dSystem inst = blaze2dSystem.inst_NoCreate;
+		tk2dSystem inst = tk2dSystem.inst_NoCreate;
 		if (inst == null) 
 			return "";
 		else return GetOrCreateResourcesDir(); // this already exists, so this function will follow the correct path
@@ -151,9 +151,9 @@ public class tk2dSystemUtility
 	// Call when platform has changed
 	public static void PlatformChanged()
 	{
-		List<blaze2dSpriteCollectionData> changedSpriteCollections = new List<blaze2dSpriteCollectionData>();
-		blaze2dSpriteCollectionData[] allSpriteCollections = Resources.FindObjectsOfTypeAll(typeof(blaze2dSpriteCollectionData)) as blaze2dSpriteCollectionData[];
-		foreach (blaze2dSpriteCollectionData scd in allSpriteCollections)
+		List<tk2dSpriteCollectionData> changedSpriteCollections = new List<tk2dSpriteCollectionData>();
+		tk2dSpriteCollectionData[] allSpriteCollections = Resources.FindObjectsOfTypeAll(typeof(tk2dSpriteCollectionData)) as tk2dSpriteCollectionData[];
+		foreach (tk2dSpriteCollectionData scd in allSpriteCollections)
 		{
 			if (scd.hasPlatformData)
 			{
@@ -163,8 +163,8 @@ public class tk2dSystemUtility
 		}
 		allSpriteCollections = null;
 
-		blaze2dFontData[] allFontDatas = Resources.FindObjectsOfTypeAll(typeof(blaze2dFontData)) as blaze2dFontData[];
-		foreach (blaze2dFontData fd in allFontDatas)
+		tk2dFontData[] allFontDatas = Resources.FindObjectsOfTypeAll(typeof(tk2dFontData)) as tk2dFontData[];
+		foreach (tk2dFontData fd in allFontDatas)
 		{
 			if (fd.hasPlatformData)
 			{
@@ -184,7 +184,7 @@ public class tk2dSystemUtility
 				System.Type[] types = assembly.GetTypes();
 				foreach (var type in types)
 				{
-					if (type.GetInterface("blaze2dRuntime.ISpriteCollectionForceBuild") != null)
+					if (type.GetInterface("tk2dRuntime.ISpriteCollectionForceBuild") != null)
 					{
 						Object[] objects = Resources.FindObjectsOfTypeAll(type);
 
@@ -195,7 +195,7 @@ public class tk2dSystemUtility
 								if (tk2dEditorUtility.IsPrefab(o))
 									continue;
 
-								blaze2dRuntime.ISpriteCollectionForceBuild isc = o as blaze2dRuntime.ISpriteCollectionForceBuild;
+								tk2dRuntime.ISpriteCollectionForceBuild isc = o as tk2dRuntime.ISpriteCollectionForceBuild;
 								if (isc.UsesSpriteCollection(spriteCollectionData))
 									isc.ForceBuild();
 							}
@@ -210,7 +210,7 @@ public class tk2dSystemUtility
 	public static void RebuildResources()
 	{
 		// Delete all existing resources
-		string systemFileName = blaze2dSystem.assetFileName.ToLower();
+		string systemFileName = tk2dSystem.assetFileName.ToLower();
 		string tk2dIndexDir = "Assets/Resources/tk2d";
 		if (System.IO.Directory.Exists(tk2dIndexDir))
 		{
@@ -229,17 +229,17 @@ public class tk2dSystemUtility
 		}
 
 		// Delete all referenced resources, in the event they've been moved out of the directory
-		if (blaze2dSystem.inst_NoCreate != null)
+		if (tk2dSystem.inst_NoCreate != null)
 		{
-			blaze2dSystem sys = blaze2dSystem.inst;
-			blaze2dResourceTocEntry[] toc = sys.Editor__Toc;
+			tk2dSystem sys = tk2dSystem.inst;
+			tk2dResourceTocEntry[] toc = sys.Editor__Toc;
 			for (int i = 0; i < toc.Length; ++i)
 			{
 				string path = AssetDatabase.GUIDToAssetPath(toc[i].resourceGUID);
 				if (path.Length > 0)
 					AssetDatabase.DeleteAsset(path);
 			}
-			sys.Editor__Toc = new blaze2dResourceTocEntry[0]; // clear index
+			sys.Editor__Toc = new tk2dResourceTocEntry[0]; // clear index
 			EditorUtility.SetDirty(sys);
 			AssetDatabase.SaveAssets();
 		}
@@ -257,7 +257,7 @@ public class tk2dSystemUtility
 		if (numLoadableAssets > 0)
 		{
 			// If it already existed, the index would have been cleared by now
-			blaze2dSystem sys = blaze2dSystem.inst;
+			tk2dSystem sys = tk2dSystem.inst;
 
 			foreach (tk2dGenericIndexItem font in fontIndex)
 			{
@@ -279,7 +279,7 @@ public class tk2dSystemUtility
 	static void AddSpriteCollectionFromIndex(tk2dSpriteCollectionIndex indexEntry)
 	{
 		string path = AssetDatabase.GUIDToAssetPath( indexEntry.spriteCollectionDataGUID );
-		blaze2dSpriteCollectionData data = AssetDatabase.LoadAssetAtPath(path, typeof(blaze2dSpriteCollectionData)) as blaze2dSpriteCollectionData;
+		tk2dSpriteCollectionData data = AssetDatabase.LoadAssetAtPath(path, typeof(tk2dSpriteCollectionData)) as tk2dSpriteCollectionData;
 		if (data == null)
 		{
 			Debug.LogError(string.Format("Unable to load sprite collection '{0}' at path '{1}'", indexEntry.name, path));
@@ -292,7 +292,7 @@ public class tk2dSystemUtility
 	static void AddFontFromIndex(tk2dGenericIndexItem indexEntry)
 	{
 		string path = AssetDatabase.GUIDToAssetPath( indexEntry.dataGUID );
-		blaze2dFontData data = AssetDatabase.LoadAssetAtPath(path, typeof(blaze2dFontData)) as blaze2dFontData;
+		tk2dFontData data = AssetDatabase.LoadAssetAtPath(path, typeof(tk2dFontData)) as tk2dFontData;
 		if (data == null)
 		{
 			Debug.LogError(string.Format("Unable to load font data '{0}' at path '{1}'", indexEntry.AssetName, path));

@@ -11,7 +11,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 		{
 		}
 		
-		public SpriteCollectionProxy(blaze2dSpriteCollection obj)
+		public SpriteCollectionProxy(tk2dSpriteCollection obj)
 		{
 			this.obj = obj;
 			CopyFromSource();
@@ -21,20 +21,20 @@ namespace tk2dEditor.SpriteCollectionEditor
 		{
 			this.obj.Upgrade(); // make sure its up to date
 
-			textureParams = new List<blaze2dSpriteCollectionDefinition>(obj.textureParams.Length);
+			textureParams = new List<tk2dSpriteCollectionDefinition>(obj.textureParams.Length);
 			foreach (var v in obj.textureParams)
 			{
 				if (v == null) 
 					textureParams.Add(null);
 				else 
 				{
-					var t = new blaze2dSpriteCollectionDefinition();
+					var t = new tk2dSpriteCollectionDefinition();
 					t.CopyFrom(v);
 					textureParams.Add(t);
 				}
 			}
 			
-			spriteSheets = new List<blaze2dSpriteSheetSource>();
+			spriteSheets = new List<tk2dSpriteSheetSource>();
 			if (obj.spriteSheets != null)
 			{
 				foreach (var v in obj.spriteSheets)
@@ -43,14 +43,14 @@ namespace tk2dEditor.SpriteCollectionEditor
 						spriteSheets.Add(null);
 					else
 					{
-						var t = new blaze2dSpriteSheetSource();
+						var t = new tk2dSpriteSheetSource();
 						t.CopyFrom(v);
 						spriteSheets.Add(t);
 					}
 				}
 			}
 			
-			fonts = new List<blaze2dSpriteCollectionFont>();
+			fonts = new List<tk2dSpriteCollectionFont>();
 			if (obj.fonts != null)
 			{
 				foreach (var v in obj.fonts)
@@ -59,7 +59,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 						fonts.Add(null);
 					else
 					{
-						var t = new blaze2dSpriteCollectionFont();
+						var t = new tk2dSpriteCollectionFont();
 						t.CopyFrom(v);
 						fonts.Add(t);
 					}
@@ -69,7 +69,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 			attachPointTestSprites.Clear();
 			foreach (var v in obj.attachPointTestSprites) {
 				if (v.spriteCollection != null && v.spriteCollection.IsValidSpriteId(v.spriteId)) {
-					blaze2dSpriteCollection.AttachPointTestSprite ap = new blaze2dSpriteCollection.AttachPointTestSprite();
+					tk2dSpriteCollection.AttachPointTestSprite ap = new tk2dSpriteCollection.AttachPointTestSprite();
 					ap.CopyFrom(v);
 					attachPointTestSprites[v.attachPointName] = v;
 				}
@@ -80,16 +80,16 @@ namespace tk2dEditor.SpriteCollectionEditor
 			var target = this;
 			var source = obj;
 			
-			target.platforms = new List<blaze2dSpriteCollectionPlatform>();
-			foreach (blaze2dSpriteCollectionPlatform plat in source.platforms)
+			target.platforms = new List<tk2dSpriteCollectionPlatform>();
+			foreach (tk2dSpriteCollectionPlatform plat in source.platforms)
 			{
-				blaze2dSpriteCollectionPlatform p = new blaze2dSpriteCollectionPlatform();
+				tk2dSpriteCollectionPlatform p = new tk2dSpriteCollectionPlatform();
 				p.CopyFrom(plat);
 				target.platforms.Add(p);
 			}
 			if (target.platforms.Count == 0)
 			{
-				blaze2dSpriteCollectionPlatform plat = new blaze2dSpriteCollectionPlatform(); // add a null platform
+				tk2dSpriteCollectionPlatform plat = new tk2dSpriteCollectionPlatform(); // add a null platform
 				target.platforms.Add(plat);
 			}
 
@@ -186,7 +186,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 							}
 						}
 						
-						spriteSheet.version = blaze2dSpriteSheetSource.CURRENT_VERSION;
+						spriteSheet.version = tk2dSpriteSheetSource.CURRENT_VERSION;
 					}
 				}				
 			}
@@ -194,10 +194,10 @@ namespace tk2dEditor.SpriteCollectionEditor
 
 		public void DeleteUnusedData()
 		{
-			foreach (blaze2dSpriteCollectionFont font in obj.fonts)
+			foreach (tk2dSpriteCollectionFont font in obj.fonts)
 			{
 				bool found = false;
-				foreach (blaze2dSpriteCollectionFont f in fonts)
+				foreach (tk2dSpriteCollectionFont f in fonts)
 				{
 					if (f.data == font.data && f.editorData == font.editorData)
 					{
@@ -233,10 +233,10 @@ namespace tk2dEditor.SpriteCollectionEditor
 				}
 			}
 
-			List<blaze2dSpriteCollectionPlatform> platformsToDelete = new List<blaze2dSpriteCollectionPlatform>();
+			List<tk2dSpriteCollectionPlatform> platformsToDelete = new List<tk2dSpriteCollectionPlatform>();
 			if (obj.HasPlatformData && !this.HasPlatformData)
 			{
-				platformsToDelete = new List<blaze2dSpriteCollectionPlatform>(obj.platforms);
+				platformsToDelete = new List<tk2dSpriteCollectionPlatform>(obj.platforms);
 				atlasTextures = new Texture2D[0]; // clear all references
 				atlasTextureFiles = new TextAsset[0];
 				atlasMaterials = new Material[0];
@@ -253,10 +253,10 @@ namespace tk2dEditor.SpriteCollectionEditor
 			}
 			else if (obj.HasPlatformData && this.HasPlatformData)
 			{
-				foreach (blaze2dSpriteCollectionPlatform platform in obj.platforms)
+				foreach (tk2dSpriteCollectionPlatform platform in obj.platforms)
 				{
 					bool found = false;
-					foreach (blaze2dSpriteCollectionPlatform p in platforms)
+					foreach (tk2dSpriteCollectionPlatform p in platforms)
 					{
 						if (p.spriteCollection == platform.spriteCollection)
 						{
@@ -269,10 +269,10 @@ namespace tk2dEditor.SpriteCollectionEditor
 				}
 			}
 
-			foreach (blaze2dSpriteCollectionPlatform platform in platformsToDelete)
+			foreach (tk2dSpriteCollectionPlatform platform in platformsToDelete)
 			{
 				if (platform.spriteCollection == null) continue;
-				blaze2dSpriteCollection sc = platform.spriteCollection;
+				tk2dSpriteCollection sc = platform.spriteCollection;
 				string path = AssetDatabase.GetAssetPath(sc.spriteCollection);
 
 				tk2dEditorUtility.DeleteAsset(sc.spriteCollection);
@@ -282,7 +282,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 					tk2dEditorUtility.DeleteAsset(texture);
 				foreach (TextAsset textureFiles in sc.atlasTextureFiles)
 					tk2dEditorUtility.DeleteAsset(textureFiles);
-				foreach (blaze2dSpriteCollectionFont font in sc.fonts)
+				foreach (tk2dSpriteCollectionFont font in sc.fonts)
 				{
 					tk2dEditorUtility.DeleteAsset(font.editorData);
 					tk2dEditorUtility.DeleteAsset(font.data);
@@ -315,17 +315,17 @@ namespace tk2dEditor.SpriteCollectionEditor
 			CopyToTarget(obj);
 		}
 		
-		public void CopyToTarget(blaze2dSpriteCollection target)
+		public void CopyToTarget(tk2dSpriteCollection target)
 		{
 			target.textureParams = textureParams.ToArray();
 			target.spriteSheets = spriteSheets.ToArray();
 			target.fonts = fonts.ToArray();
 
 			var source = this;
-			target.platforms = new List<blaze2dSpriteCollectionPlatform>();
-			foreach (blaze2dSpriteCollectionPlatform plat in source.platforms)
+			target.platforms = new List<tk2dSpriteCollectionPlatform>();
+			foreach (tk2dSpriteCollectionPlatform plat in source.platforms)
 			{
-				blaze2dSpriteCollectionPlatform p = new blaze2dSpriteCollectionPlatform();
+				tk2dSpriteCollectionPlatform p = new tk2dSpriteCollectionPlatform();
 				p.CopyFrom(plat);
 				target.platforms.Add(p);
 			}
@@ -376,15 +376,15 @@ namespace tk2dEditor.SpriteCollectionEditor
 			// Attach point test data
 			// Make sure we only store relevant data
 			HashSet<string> attachPointNames = new HashSet<string>();
-			foreach (blaze2dSpriteCollectionDefinition def in textureParams) {
-				foreach (blaze2dSpriteDefinition.AttachPoint ap in def.attachPoints) {
+			foreach (tk2dSpriteCollectionDefinition def in textureParams) {
+				foreach (tk2dSpriteDefinition.AttachPoint ap in def.attachPoints) {
 					attachPointNames.Add(ap.name);
 				}
 			}
 			target.attachPointTestSprites.Clear();
 			foreach (string name in attachPointTestSprites.Keys) {
 				if (attachPointNames.Contains(name)) {
-					blaze2dSpriteCollection.AttachPointTestSprite lut = new blaze2dSpriteCollection.AttachPointTestSprite();
+					tk2dSpriteCollection.AttachPointTestSprite lut = new tk2dSpriteCollection.AttachPointTestSprite();
 					lut.CopyFrom( attachPointTestSprites[name] );
 					lut.attachPointName = name;
 					target.attachPointTestSprites.Add(lut);
@@ -407,7 +407,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 				if (textureParams[index].texture == null && textureParams[index].name.Length == 0)
 					return index;
 			}
-			textureParams.Add(new blaze2dSpriteCollectionDefinition());
+			textureParams.Add(new tk2dSpriteCollectionDefinition());
 			return textureParams.Count - 1;
 		}
 		
@@ -421,7 +421,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 					return index;
 				}
 			}
-			var font = new blaze2dSpriteCollectionFont();
+			var font = new tk2dSpriteCollectionFont();
 			font.active = true;
 			fonts.Add(font);
 			return fonts.Count - 1;
@@ -434,13 +434,13 @@ namespace tk2dEditor.SpriteCollectionEditor
 				if (!spriteSheets[index].active)
 				{
 					spriteSheets[index].active = true;
-					spriteSheets[index].version = blaze2dSpriteSheetSource.CURRENT_VERSION;
+					spriteSheets[index].version = tk2dSpriteSheetSource.CURRENT_VERSION;
 					return index;
 				}
 			}
-			var spriteSheet = new blaze2dSpriteSheetSource();
+			var spriteSheet = new tk2dSpriteSheetSource();
 			spriteSheet.active = true;
-			spriteSheet.version = blaze2dSpriteSheetSource.CURRENT_VERSION;
+			spriteSheet.version = tk2dSpriteSheetSource.CURRENT_VERSION;
 			spriteSheets.Add(spriteSheet);
 			return spriteSheets.Count - 1;
 		}
@@ -529,7 +529,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 				System.Array.Resize(ref atlasMaterials, lastIndex + 1);
 		}
 		
-		public int GetSpriteSheetId(blaze2dSpriteSheetSource spriteSheet)
+		public int GetSpriteSheetId(tk2dSpriteSheetSource spriteSheet)
 		{
 			for (int index = 0; index < spriteSheets.Count; ++index)
 				if (spriteSheets[index] == spriteSheet) return index;
@@ -537,7 +537,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 		}
 		
 		// Delete all sprites from a spritesheet
-		public void DeleteSpriteSheet(blaze2dSpriteSheetSource spriteSheet)
+		public void DeleteSpriteSheet(tk2dSpriteSheetSource spriteSheet)
 		{
 			int index = GetSpriteSheetId(spriteSheet);
 			
@@ -545,11 +545,11 @@ namespace tk2dEditor.SpriteCollectionEditor
 			{
 				if (textureParams[i].hasSpriteSheetId && textureParams[i].spriteSheetId == index)
 				{
-					textureParams[i] = new blaze2dSpriteCollectionDefinition();
+					textureParams[i] = new tk2dSpriteCollectionDefinition();
 				}
 			}
 			
-			spriteSheets[index] = new blaze2dSpriteSheetSource();
+			spriteSheets[index] = new tk2dSpriteSheetSource();
 			Trim();
 		}
 		
@@ -564,28 +564,28 @@ namespace tk2dEditor.SpriteCollectionEditor
 		}
 
 		public bool Ready { get { return obj != null; } }
-		blaze2dSpriteCollection obj;
+		tk2dSpriteCollection obj;
 		
 
 		// Mirrored data objects
-		public List<blaze2dSpriteCollectionDefinition> textureParams = new List<blaze2dSpriteCollectionDefinition>();
-		public List<blaze2dSpriteSheetSource> spriteSheets = new List<blaze2dSpriteSheetSource>();
-		public List<blaze2dSpriteCollectionFont> fonts = new List<blaze2dSpriteCollectionFont>();
+		public List<tk2dSpriteCollectionDefinition> textureParams = new List<tk2dSpriteCollectionDefinition>();
+		public List<tk2dSpriteSheetSource> spriteSheets = new List<tk2dSpriteSheetSource>();
+		public List<tk2dSpriteCollectionFont> fonts = new List<tk2dSpriteCollectionFont>();
 		
 		// Mirrored from sprite collection
 		public string assetName;
 		public int maxTextureSize;
-		public blaze2dSpriteCollection.TextureCompression textureCompression;
+		public tk2dSpriteCollection.TextureCompression textureCompression;
 		public int atlasWidth, atlasHeight;
 		public bool forceSquareAtlas;
 		public float atlasWastage;
 		public bool allowMultipleAtlases;
 		public bool disableRotation;
 		public bool removeDuplicates;
-		public blaze2dSpriteCollectionData spriteCollection;
+		public tk2dSpriteCollectionData spriteCollection;
 	    public bool premultipliedAlpha;
 
-	    public List<blaze2dSpriteCollectionPlatform> platforms = new List<blaze2dSpriteCollectionPlatform>();
+	    public List<tk2dSpriteCollectionPlatform> platforms = new List<tk2dSpriteCollectionPlatform>();
 		public bool HasPlatformData { get { return platforms.Count > 1; } }
 		
 		public Material[] altMaterials;
@@ -593,13 +593,13 @@ namespace tk2dEditor.SpriteCollectionEditor
 		public Texture2D[] atlasTextures;
 		public TextAsset[] atlasTextureFiles;
 		
-		public blaze2dSpriteCollectionSize sizeDef = new blaze2dSpriteCollectionSize();
+		public tk2dSpriteCollectionSize sizeDef = new tk2dSpriteCollectionSize();
 
 		public float globalScale;
 		public float globalTextureRescale;
 
 		// Attach point test data
-		public Dictionary<string, blaze2dSpriteCollection.AttachPointTestSprite> attachPointTestSprites = new Dictionary<string, blaze2dSpriteCollection.AttachPointTestSprite>();
+		public Dictionary<string, tk2dSpriteCollection.AttachPointTestSprite> attachPointTestSprites = new Dictionary<string, tk2dSpriteCollection.AttachPointTestSprite>();
 
 		// Texture settings
 		public FilterMode filterMode;
@@ -608,7 +608,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 		public bool mipmapEnabled = true;
 		public int anisoLevel = 1;
 
-		public blaze2dSpriteDefinition.PhysicsEngine physicsEngine;
+		public tk2dSpriteDefinition.PhysicsEngine physicsEngine;
 		public float physicsDepth;
 		public bool disableTrimming;
 		
@@ -616,11 +616,11 @@ namespace tk2dEditor.SpriteCollectionEditor
 		public int forcedTextureWidth = 1024;
 		public int forcedTextureHeight = 1024;
 		
-		public blaze2dSpriteCollection.NormalGenerationMode normalGenerationMode;
+		public tk2dSpriteCollection.NormalGenerationMode normalGenerationMode;
 		public int padAmount;
 		public bool autoUpdate;
 		public bool loadable;
-		public blaze2dSpriteCollection.AtlasFormat atlasFormat;
+		public tk2dSpriteCollection.AtlasFormat atlasFormat;
 		
 		public float editorDisplayScale;
 	}

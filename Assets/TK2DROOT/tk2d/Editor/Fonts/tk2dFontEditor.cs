@@ -3,7 +3,7 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
-[CustomEditor(typeof(blaze2dFont))]
+[CustomEditor(typeof(tk2dFont))]
 public class tk2dFontEditor : Editor 
 {
 	public Shader GetShader(bool gradient)
@@ -14,7 +14,7 @@ public class tk2dFontEditor : Editor
 	
 	public override void OnInspectorGUI()
 	{
-		blaze2dFont gen = (blaze2dFont)target;
+		tk2dFont gen = (tk2dFont)target;
 		if (gen.proxyFont)
 		{
 			GUILayout.Label("This font is managed by a Sprite Collection");
@@ -89,7 +89,7 @@ public class tk2dFontEditor : Editor
 				string bmFontPath = AssetDatabase.GetAssetPath(gen).Replace(".prefab", "data.prefab");
 				
 				GameObject go = new GameObject();
-				go.AddComponent<blaze2dFontData>();
+				go.AddComponent<tk2dFontData>();
 				tk2dEditorUtility.SetGameObjectActive(go, false);
 				
 				Object p = PrefabUtility.CreateEmptyPrefab(bmFontPath);
@@ -98,7 +98,7 @@ public class tk2dFontEditor : Editor
 				GameObject.DestroyImmediate(go);
 				AssetDatabase.SaveAssets();
 				
-				gen.data = AssetDatabase.LoadAssetAtPath(bmFontPath, typeof(blaze2dFontData)) as blaze2dFontData;
+				gen.data = AssetDatabase.LoadAssetAtPath(bmFontPath, typeof(tk2dFontData)) as tk2dFontData;
 			}
 			
 			ParseBMFont(AssetDatabase.GetAssetPath(gen.bmFont), gen.data, gen);
@@ -123,7 +123,7 @@ public class tk2dFontEditor : Editor
 				}
 			}
 			
-			gen.data.version = blaze2dFontData.CURRENT_VERSION;
+			gen.data.version = tk2dFontData.CURRENT_VERSION;
 
 			gen.data.material = gen.material;
 			gen.data.textureGradients = gen.gradientTexture != null;
@@ -134,8 +134,8 @@ public class tk2dFontEditor : Editor
 			gen.data.halfTargetHeight = gen.sizeDef.TargetHeight * 0.5f;
 			
             // Rebuild assets already present in the scene
-            blaze2dTextMesh[] sprs = Resources.FindObjectsOfTypeAll(typeof(blaze2dTextMesh)) as blaze2dTextMesh[];
-            foreach (blaze2dTextMesh spr in sprs)
+            tk2dTextMesh[] sprs = Resources.FindObjectsOfTypeAll(typeof(tk2dTextMesh)) as tk2dTextMesh[];
+            foreach (tk2dTextMesh spr in sprs)
             {
                 spr.Init(true);
             }
@@ -190,7 +190,7 @@ public class tk2dFontEditor : Editor
 	
 	
 	
-	bool ParseBMFont(string path, blaze2dFontData fontData, blaze2dFont source)
+	bool ParseBMFont(string path, tk2dFontData fontData, tk2dFont source)
 	{
 		float scale = 2.0f * source.sizeDef.OrthoSize / source.sizeDef.TargetHeight;
 		
@@ -208,11 +208,11 @@ public class tk2dFontEditor : Editor
 		if (path.Length != 0)
 		{
 			GameObject go = new GameObject();
-			blaze2dFont font = go.AddComponent<blaze2dFont>();
+			tk2dFont font = go.AddComponent<tk2dFont>();
 			font.manageMaterial = true;
-			font.version = blaze2dFont.CURRENT_VERSION;
-			if (blaze2dCamera.Editor__Inst != null) {
-				font.sizeDef.CopyFrom( blaze2dSpriteCollectionSize.ForTk2dCamera( blaze2dCamera.Editor__Inst ) );
+			font.version = tk2dFont.CURRENT_VERSION;
+			if (tk2dCamera.Editor__Inst != null) {
+				font.sizeDef.CopyFrom( tk2dSpriteCollectionSize.ForTk2dCamera( tk2dCamera.Editor__Inst ) );
 			}
 			tk2dEditorUtility.SetGameObjectActive(go, false);
 
