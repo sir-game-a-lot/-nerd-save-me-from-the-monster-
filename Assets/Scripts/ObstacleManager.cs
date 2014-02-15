@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class ObstacleManager : MonoBehaviour
 {
 	public static ObstacleManager instance;
-
-	public GameObject[] obstaclePrefabs;
+	
+	public GameObject obstaclePrefab;
 	public Transform spawnPoint;
 	public Transform destroyPoint;
 	public Vector3 speed;
@@ -55,8 +55,8 @@ public class ObstacleManager : MonoBehaviour
 		yield return new WaitForSeconds( initialDelay );
 		while(STATE.currentState == FlapperState.FLAPPABLE)
 		{
-			var randomObstacle = obstaclePrefabs[ Random.Range( 0, obstaclePrefabs.Length-1 ) ];
-			spawnnedObstacles.Add( Instantiate( randomObstacle, spawnPoint.position, Quaternion.identity ) as GameObject );
+			//var randomObstacle = obstaclePrefabs[ Random.Range( 0, obstaclePrefabs.Length-1 ) ];
+			spawnnedObstacles.Add( Instantiate( obstaclePrefab, spawnPoint.position, Quaternion.identity ) as GameObject );
 			yield return new WaitForSeconds( frequency );
 		}
 	}

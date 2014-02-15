@@ -7,15 +7,20 @@ public class StatsScreen : MonoBehaviour
 	public static StatsScreen instance;
 
 	public GameObject root;
-	public tk2dUIItem retryBut;
+	public TouchItem retryButton;
 	// Use this for initialization
 	void Awake ()
 	{
 		instance = this;
-		retryBut.OnClick += () => 
+	}
+
+	void Start ()
+	{
+		retryButton.onUp += (TouchItem) => 
 		{
 			root.gameObject.SetActive(false);
-			HUD.instance.ShowStartGameOverlay ();
+			GameManager.ToMainMenu();
+			//Debug.Log(this.name +"\t|\t"+Time.time);
 		};
 	}
 	

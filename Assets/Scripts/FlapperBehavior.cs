@@ -6,6 +6,8 @@ public class FlapperBehavior : MonoBehaviour
 	public AnimationCurve riseCurve;
 	public float riseCurveDur = 0.15f;
 	public AnimationCurve fallCurve;
+	public Transform upperBound;
+	public Transform lowerBound;
 
 	float riseCounter;
 	float fallCounter;
@@ -24,24 +26,24 @@ public class FlapperBehavior : MonoBehaviour
 		intrmdtPos = transform.position;
 		StartCoroutine( SetRotation() );
 
-		if( HUD.instance != null )
-		{
-			HUD.instance.startGameBut.OnClick += () =>
-			{
-				setDeadOnce = false;
-				STATE.currentState = FlapperState.FLAPPABLE;
-				ObstacleManager.instance.StartSpawning();
-			};
-		}
-
-		if( StatsScreen.instance != null )
-		{
-			StatsScreen.instance.retryBut.OnClick += () => 
-			{
-				ObstacleManager.instance.ClearObstacles();
-				Reset();
-			};
-		}
+//		if( HUD.instance != null )
+//		{
+//			HUD.instance.startGameBut.OnClick += () =>
+//			{
+//				setDeadOnce = false;
+//				STATE.currentState = FlapperState.FLAPPABLE;
+//				//ObstacleManager.instance.StartSpawning();
+//			};
+//		}
+//
+//		if( StatsScreen.instance != null )
+//		{
+//			StatsScreen.instance.retryBut.OnClick += () => 
+//			{
+//				ObstacleManager.instance.ClearObstacles();
+//				Reset();
+//			};
+//		}
 	}
 	
 	// Update is called once per frame
@@ -52,7 +54,7 @@ public class FlapperBehavior : MonoBehaviour
 
 		var tapDetected = Input.GetMouseButtonDown(0);
 
-		if( transform.position.y < -4.5 )
+		if( transform.position.y < lowerBound.position.y )
 		{
 			STATE.currentState = FlapperState.DEAD;
 		}
@@ -78,7 +80,7 @@ public class FlapperBehavior : MonoBehaviour
 		}
 		if( isRising )
 		{
-			if( transform.position.y < 6 )
+			if( transform.position.y < upperBound.position.y )
 			{
 				riseCounter += Time.deltaTime;
 				//Debug.Log(  );
@@ -150,15 +152,16 @@ public class FlapperBehavior : MonoBehaviour
 		}
 	}
 
-	void Reset()
+	public void Reset()
 	{
 		score = 0;
-		HUD.instance.ScoreText.text = score.ToString();
+		//HUD.instance.ScoreText.text = score.ToString();
 		STATE.currentState = FlapperState.INIT;
 		transform.position = initialPosition;
 		riseCounter = 0;
 		fallCounter = 0;
 		isRising = false;
 		intrmdtPos = transform.position;
+		setDeadOnce = false;
 	}
 }
