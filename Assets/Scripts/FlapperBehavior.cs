@@ -24,26 +24,6 @@ public class FlapperBehavior : MonoBehaviour
 		STATE.currentState = FlapperState.INIT;
 		initialPosition = transform.position;
 		intrmdtPos = transform.position;
-		StartCoroutine( SetRotation() );
-
-//		if( HUD.instance != null )
-//		{
-//			HUD.instance.startGameBut.OnClick += () =>
-//			{
-//				setDeadOnce = false;
-//				STATE.currentState = FlapperState.FLAPPABLE;
-//				//ObstacleManager.instance.StartSpawning();
-//			};
-//		}
-//
-//		if( StatsScreen.instance != null )
-//		{
-//			StatsScreen.instance.retryBut.OnClick += () => 
-//			{
-//				ObstacleManager.instance.ClearObstacles();
-//				Reset();
-//			};
-//		}
 	}
 	
 	// Update is called once per frame
@@ -111,30 +91,6 @@ public class FlapperBehavior : MonoBehaviour
 		}
 	}
 
-	IEnumerator SetRotation()
-	{
-//		while(true)
-//		{
-//			var pos0 = transform.position.y;
-//			yield return new WaitForEndOfFrame();
-//			if( STATE.currentState != FlapperState.INIT )
-//			{
-//				var posDel = transform.position.y - pos0;
-//				//Debug.Log( (posDel * 180) );
-//				transform.rotation =  Quaternion.Lerp( transform.rotation, Quaternion.Euler(0,0, (posDel * 90) ), Time.deltaTime * 5f );
-//			}
-////			if( posDel > 0 )
-////			{
-////				transform.rotation =  Quaternion.Lerp( transform.rotation, Quaternion.Euler(0,0, 20 ), Time.deltaTime * 5f );
-////			}
-////			else
-////			{
-////				transform.rotation =  Quaternion.Lerp( transform.rotation, Quaternion.Euler(0,0, -90 ), Time.deltaTime * 1.25f );
-////			}
-//		}
-		yield return null;
-	}
-
 	void OnTriggerEnter(Collider other)
 	{
 		if( STATE.currentState == FlapperState.FLAPPABLE )
@@ -156,7 +112,7 @@ public class FlapperBehavior : MonoBehaviour
 	public void Reset()
 	{
 		score = 0;
-		//HUD.instance.ScoreText.text = score.ToString();
+		HUD.instance.ScoreText.text = score.ToString();
 		STATE.currentState = FlapperState.INIT;
 		transform.position = initialPosition;
 		riseCounter = 0;
@@ -166,3 +122,23 @@ public class FlapperBehavior : MonoBehaviour
 		setDeadOnce = false;
 	}
 }
+
+//		while(true)
+//		{
+//			var pos0 = transform.position.y;
+//			yield return new WaitForEndOfFrame();
+//			if( STATE.currentState != FlapperState.INIT )
+//			{
+//				var posDel = transform.position.y - pos0;
+//				//Debug.Log( (posDel * 180) );
+//				transform.rotation =  Quaternion.Lerp( transform.rotation, Quaternion.Euler(0,0, (posDel * 90) ), Time.deltaTime * 5f );
+//			}
+////			if( posDel > 0 )
+////			{
+////				transform.rotation =  Quaternion.Lerp( transform.rotation, Quaternion.Euler(0,0, 20 ), Time.deltaTime * 5f );
+////			}
+////			else
+////			{
+////				transform.rotation =  Quaternion.Lerp( transform.rotation, Quaternion.Euler(0,0, -90 ), Time.deltaTime * 1.25f );
+////			}
+//		}

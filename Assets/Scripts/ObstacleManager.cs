@@ -14,6 +14,7 @@ public class ObstacleManager : MonoBehaviour
 	public Vector3 speed;
 	public float initialDelay = 2;
 	public float frequency = 2;
+	public TriggerSender clampPointTrigger;
 
 	public List<GameObject> spawnnedObstacles;
 
@@ -24,6 +25,13 @@ public class ObstacleManager : MonoBehaviour
 
 	void Start ()
 	{
+		clampPointTrigger.onTriggerEnter += (other) =>
+		{
+			if( other.tag == "Obstacle" )
+			{
+				other.transform.parent.parent.animation.Play();
+			}
+		};
 	}
 	
 	// Update is called once per frame
@@ -59,7 +67,12 @@ public class ObstacleManager : MonoBehaviour
 		{
 			var finalPosition = spawnPoint.position;
 			finalPosition.y = Random.Range( lowerBound.position.y, upperBound.position.y );
-			spawnnedObstacles.Add( Instantiate( obstaclePrefab, finalPosition, Quaternion.identity ) as GameObject );
+			var newObj = Instantiate( obstaclePrefab, finalPosition, Quaternion.identity ) as GameObject;
+//			foreach( AnimationState a in newObj.animation )
+//				a.normalizedTime = 0;
+//			newObj.animation.Play();
+			
+			spawnnedObstacles.Add( newObj );
 			yield return new WaitForSeconds( frequency );
 		}
 	}
