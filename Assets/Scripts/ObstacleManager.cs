@@ -9,6 +9,8 @@ public class ObstacleManager : MonoBehaviour
 	public GameObject obstaclePrefab;
 	public Transform spawnPoint;
 	public Transform destroyPoint;
+	public Transform lowerBound;
+	public Transform upperBound;
 	public Vector3 speed;
 	public float initialDelay = 2;
 	public float frequency = 2;
@@ -55,8 +57,9 @@ public class ObstacleManager : MonoBehaviour
 		yield return new WaitForSeconds( initialDelay );
 		while(STATE.currentState == FlapperState.FLAPPABLE)
 		{
-			//var randomObstacle = obstaclePrefabs[ Random.Range( 0, obstaclePrefabs.Length-1 ) ];
-			spawnnedObstacles.Add( Instantiate( obstaclePrefab, spawnPoint.position, Quaternion.identity ) as GameObject );
+			var finalPosition = spawnPoint.position;
+			finalPosition.y = Random.Range( lowerBound.position.y, upperBound.position.y );
+			spawnnedObstacles.Add( Instantiate( obstaclePrefab, finalPosition, Quaternion.identity ) as GameObject );
 			yield return new WaitForSeconds( frequency );
 		}
 	}

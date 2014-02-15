@@ -113,25 +113,26 @@ public class FlapperBehavior : MonoBehaviour
 
 	IEnumerator SetRotation()
 	{
-		while(true)
-		{
-			var pos0 = transform.position.y;
-			yield return new WaitForEndOfFrame();
-			if( STATE.currentState != FlapperState.INIT )
-			{
-				var posDel = transform.position.y - pos0;
-				//Debug.Log( (posDel * 180) );
-				transform.rotation =  Quaternion.Lerp( transform.rotation, Quaternion.Euler(0,0, (posDel * 90) ), Time.deltaTime * 5f );
-			}
-//			if( posDel > 0 )
+//		while(true)
+//		{
+//			var pos0 = transform.position.y;
+//			yield return new WaitForEndOfFrame();
+//			if( STATE.currentState != FlapperState.INIT )
 //			{
-//				transform.rotation =  Quaternion.Lerp( transform.rotation, Quaternion.Euler(0,0, 20 ), Time.deltaTime * 5f );
+//				var posDel = transform.position.y - pos0;
+//				//Debug.Log( (posDel * 180) );
+//				transform.rotation =  Quaternion.Lerp( transform.rotation, Quaternion.Euler(0,0, (posDel * 90) ), Time.deltaTime * 5f );
 //			}
-//			else
-//			{
-//				transform.rotation =  Quaternion.Lerp( transform.rotation, Quaternion.Euler(0,0, -90 ), Time.deltaTime * 1.25f );
-//			}
-		}
+////			if( posDel > 0 )
+////			{
+////				transform.rotation =  Quaternion.Lerp( transform.rotation, Quaternion.Euler(0,0, 20 ), Time.deltaTime * 5f );
+////			}
+////			else
+////			{
+////				transform.rotation =  Quaternion.Lerp( transform.rotation, Quaternion.Euler(0,0, -90 ), Time.deltaTime * 1.25f );
+////			}
+//		}
+		yield return null;
 	}
 
 	void OnTriggerEnter(Collider other)
